@@ -1,0 +1,82 @@
+% *-----------------------------------------------------------*
+% *         Page de Garde (basé sur le modèle UPMC) 
+% * Dernière modif le : 2012/02/13
+% *-----------------------------------------------------------*
+% * README: 
+% *   - se compile avec pdflatex
+% *   - l'entête de ce fichier sert pour générer une page
+% *     unique. Ce texte latex peut s'inclure (partie comprise 
+% *     entre les lignes et  ) dans un document existant.
+% *-----------------------------------------------------------*
+
+% - - - - - - - entête pour avoir une page unique 
+\documentclass[11pt]{book}
+\usepackage[english,french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{tabularx}
+
+\setlength{\textwidth}{16cm}
+\setlength{\textheight}{25cm}
+\setlength{\oddsidemargin}{-0cm}
+\setlength{\topmargin}{-1cm}
+
+\begin{document}
+
+% - - - - - - - début de la page 
+\thispagestyle{empty}
+
+\includegraphics[width=.15\linewidth]{pics/logo_UPMC}
+
+{\large
+
+\vspace*{1cm}
+
+\begin{center}
+
+{\bf TH{\`E}SE DE DOCTORAT DE \\ l'UNIVERSIT{\'E} PIERRE ET MARIE CURIE}
+
+\vspace*{0.5cm}
+
+Sp{\'e}cialit{\'e} \\ [2ex]
+{\bf Informatique}\ \\ 
+
+\vspace*{0.5cm}
+
+Ecole doctorale Informatique, T{\'e}l{\'e}communications et {\'e}lectronique (Paris)
+
+\vspace*{1cm}
+
+Pr{\'e}sent{\'e}e par \ \\
+
+\vspace*{0.5cm}
+
+{\Large {\bf Aur{\'e}lien CARLIER}}
+
+\vspace*{1cm}
+Pour obtenir le grade de \ \\[1ex]
+{\bf DOCTEUR de l'UNIVERSIT{\'E} PIERRE ET MARIE CURIE} \ \\
+
+\vspace*{1cm}
+
+\end{center}
+
+\flushleft{Sujet de la th{\`e}se :\ \\
+\ \\
+{\Large {\bf Titre\\ }}
+  
+\vspace*{1.5cm} 
+\flushleft{soutenue le DATE}\\[2ex]
+\flushleft{devant le jury compos{\'e} de :}\\[1ex]
+\flushleft{\hspace{-1.3ex}\begin{tabularx}{\textwidth}{XlX}
+Mme. Alix    {\sc Munier-Kordon} & Directrice de thèse  & Professeur at UPMC\\
+Mme. Safia   {\sc Kedad Sidhoum} & Rapporteur           & Professeur at UPMC\\
+M.   Roberto {\sc Wolfler Calvo} & Rapporteur           & Professeur at LIPN\\
+M.   Witold  {\sc Klaudel}       & Examinateur          & \\
+M.   Prénom  {\sc Nom}           & Examinateur          & \\
+M.   Prénom  {\sc Nom}           & Examinateur          & \\
+\end{tabularx}}
+
+}
+% - - - - - - - fin de la page
+\end{document}

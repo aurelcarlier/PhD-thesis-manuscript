@@ -1,0 +1,5 @@
+master.pdf
+*.jpg
+*.png
+*.db
+front_page/*.pdf

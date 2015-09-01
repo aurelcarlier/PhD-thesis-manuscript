@@ -1,0 +1,82 @@
+% *-----------------------------------------------------------*
+% *         Page de Garde (basé sur le modèle UPMC) 
+% * Dernière modif le : 2012/02/13
+% *-----------------------------------------------------------*
+% * README: 
+% *   - se compile avec pdflatex
+% *   - l'entête de ce fichier sert pour générer une page
+% *     unique. Ce texte latex peut s'inclure (partie comprise 
+% *     entre les lignes et  ) dans un document existant.
+% *-----------------------------------------------------------*
+
+% - - - - - - - entête pour avoir une page unique 
+\documentclass[11pt]{book}
+\usepackage[english,french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{tabularx}
+
+\setlength{\textwidth}{16cm}
+\setlength{\textheight}{25cm}
+\setlength{\oddsidemargin}{-0cm}
+\setlength{\topmargin}{-1cm}
+
+\begin{document}
+
+% - - - - - - - début de la page 
+\thispagestyle{empty}
+
+\includegraphics[width=.15\linewidth]{pics/logo_UPMC}
+
+{\large
+
+\vspace*{1cm}
+
+\begin{center}
+
+{\bf DOCTOR OF SCIENCE THESIS \\ UNIVERSIT{\'E} PIERRE ET MARIE CURIE}
+
+\vspace*{0.5cm}
+
+Specialization \\ [2ex]
+{\bf Computer science}\ \\ 
+
+\vspace*{0.5cm}
+
+Ecole doctorale Informatique, T{\'e}l{\'e}communications et {\'e}lectronique (Paris)
+
+\vspace*{1cm}
+
+Presented by \ \\
+
+\vspace*{0.5cm}
+
+{\Large {\bf Aur{\'e}lien CARLIER}}
+
+\vspace*{1cm}
+Pour obtenir le grade de \ \\[1ex]
+{\bf DOCTOR OF SCIENCE OF UPMC SORBONNE UNIVERSIT{\'E}S} \ \\
+
+\vspace*{1cm}
+
+\end{center}
+
+\flushleft{PhD thesis subject:\ \\
+\ \\
+{\Large {\bf Title of the thesis\\ }}
+  
+\vspace*{1.5cm} 
+\flushleft{Defended the DATE}\\[2ex]
+\flushleft{Committee in charge:}\\[1ex]
+\flushleft{\hspace{-1.3ex}\begin{tabularx}{\textwidth}{XlX}
+Mme. Alix    {\sc Munier-Kordon} & Doctoral supervisor  & Professor at UPMC\\
+Mme. Safia   {\sc Kedad Sidhoum} & Reviewer             & Professor at UPMC\\
+M.   Roberto {\sc Wolfler Calvo} & Reviewer             & Professor at LIPN\\
+M.   Witold  {\sc Klaudel}       & Examinateur          & \\
+M.   Prénom  {\sc Nom}           & Examinateur          & \\
+M.   Prénom  {\sc Nom}           & Examinateur          & \\
+\end{tabularx}}
+
+}
+% - - - - - - - fin de la page
+\end{document}

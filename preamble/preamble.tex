@@ -1,0 +1,115 @@
+\usepackage{lmodern}
+\usepackage[frenchb,english]{babel} % --------------------- gestion des langues
+\usepackage[utf8]{inputenc} % ----------------------------- gestion de l'encodage
+\usepackage[T1]{fontenc} % -------------------------------- gestion de la fonte
+\usepackage[dvips]{graphicx} % ---------------------------- https://www.ctan.org/pkg/graphicx ----------- insertion d'images
+\usepackage{amsmath} % ------------------------------------ gestion des maths
+\usepackage{amsfonts} % ----------------------------------- gestion des maths
+\usepackage{amssymb} % ------------------------------------ gestion des maths
+%\usepackage[numbers]{natbib} % ---------------------------- https://www.ctan.org/pkg/natbib ------------- harmonisation des citations
+\usepackage[globalcitecopy,sectionbib]{bibunits} % -------- https://www.ctan.org/pkg/bibunits sectionbib
+\usepackage{url} % ---------------------------------------- https://www.ctan.org/pkg/url ---------------- insertion de liens url
+\usepackage[pdftex,colorlinks=true,
+                   urlcolor=black,
+                   linkcolor=black,
+                   citecolor=black]{hyperref} %------------ https://www.ctan.org/pkg/hyperref ----------- gestion des hyperref
+\usepackage[justification=centering,margin=1cm]{caption}% - https://www.ctan.org/pkg/caption ------------ gestion des tables et des figures
+\usepackage{geometry} % ----------------------------------- https://www.ctan.org/pkg/geometry ----------- gestion du layout des pages
+\usepackage[svgnames]{xcolor}
+\usepackage[scriptsize]{subfig}
+\usepackage{fancyhdr} % ----------------------------------- https://www.ctan.org/pkg/fancyhdr ----------- gestion des headers et footers
+\usepackage{minitoc} % --------------------------- https://www.ctan.org/pkg/minitoc [english]
+\usepackage{pdfpages} % ----------------------------------- https://www.ctan.org/pkg/pdfpages ----------- inclusion de pdf dans le doc
+\usepackage[]{algorithm2e} % ------------------------------ https://www.ctan.org/pkg/algorithm2e -------- env pour écrire des algos
+
+%\usepackage{multibib}
+%\usepackage{layout}
+%\usepackage{animate}
+%\usepackage{multicol}
+%\usepackage{array}
+%\usepackage{lscape} % ------------------------------------- https://www.ctan.org/pkg/lscape
+
+%\definecolor{bleu}{rgb}{0,0,0.7}
+%\definecolor{vert}{rgb}{0,0.7,0}
+%\definecolor{rouge}{rgb}{0.7,0,0}
+%\definecolor{violet}{rgb}{0.5,0,0.5}
+%\definecolor{correction_color}{rgb}{0.5,0.5,0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% pour modifier la taille après les légendes
+%\setlength{\belowcaptionskip}{2ex}
+\setlength{\belowcaptionskip}{-6pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% pour mettre Figure et Table en gras dans les légendes
+\makeatletter
+\renewcommand{\fnum@figure}{\footnotesize\textbf{\figurename~\thefigure}}
+\makeatother
+
+\makeatletter
+\renewcommand{\fnum@table}{\footnotesize\textbf{\tablename~\thetable}}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Exemple de modifications du format de la page pour obtenir le format A4 propre
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\hoffset}{0mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\evensidemargin}{0mm}
+\setlength{\voffset}{-0.4cm}
+\setlength{\topmargin}{0mm}
+% \setlength{\headheight}{0mm}
+% \setlength{\headsep}{0mm}
+\setlength{\textheight}{228mm}
+\setlength{\textwidth}{159.2mm}
+\setlength{\marginparwidth}{2cm}
+\setlength{\footskip}{1.5cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Exemple de definition des en-tete et des pieds de page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pages quelconques
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} % définition du style fancy
+\fancyhf{} % nettoyage des entete et pied de page precedents
+\renewcommand{\chaptermark}[1]{\markboth{\bsc{\chaptername~\thechapter{} : }#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{#1}{}}
+\fancyhf[HRE]{\bfseries \slshape \nouppercase{\leftmark}} % entete des pages paires
+%\fancyhf[FL]{\bfseries \slshape \thepage} % pied de page des pages paires
+\fancyhf[FR]{\bfseries \slshape \thepage} % pied de page des pages impaires
+\fancyhf[HLO]{\bfseries \slshape \nouppercase{\rightmark}} % entete des pages impaires
+%\fancyhf[FRO]{\bfseries \slshape \thepage} % pied de page des pages impaires
+% redefinition de la taille des traits d'entete et de pied de page
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Première page de chapitre quasiment toujours dans le style plain
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fancypagestyle{plain}{ % définition du style plain
+\fancyhf{} % nettoyage des entete et pied de page precedents
+% pied de page des pages paires
+\fancyhf[FL]{\bfseries \slshape Titre thèse.}
+\fancyhf[FR]{\bfseries \slshape   Aur{\'e}lien CARLIER}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.5pt}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% définitions des répertoires figures
+\graphicspath{
+	{general-figs/}
+	{chap-introduction/figs/}
+	{chap-theProblem/figs/}
+	{chap-SDP/figs/}
+	{chap-sdpExp/figs/}
+	{chap-SLP/figs/}	
+	{chap-includingEnergy/figs/}
+	{chap-conclusion/figs/}
+}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% définitions de nouvelles commandes
+

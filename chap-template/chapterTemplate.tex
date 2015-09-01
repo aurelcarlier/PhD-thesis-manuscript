@@ -1,0 +1,36 @@
+\chapter{Chapter Template} \label{chap:}
+\begin{bibunit}[ieeetr]
+\minitoc
+\vspace{2cm}
+
+\begin{minipage}[c]{0.45\linewidth}
+\includegraphics[width=\textwidth]{picture}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.45\linewidth}
+\textbf{Abstract}
+\vspace{2mm}\hrule\vspace{2mm}
+
+blabla\\
+blabla\\
+blabla\\
+blabla\\
+blabla\\
+
+\vspace{2mm}\hrule
+\end{minipage}
+
+\newpage
+\section{sec1}
+
+\newpage
+\section{sec2}
+
+\newpage
+\section{sec3}
+
+\newpage
+\addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
+\renewcommand{\bibname}{Bibliography of chapter \thechapter}
+\putbib[bib/biblio]
+\end{bibunit}
