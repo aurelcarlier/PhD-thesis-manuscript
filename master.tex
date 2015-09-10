@@ -3,44 +3,44 @@
 %
 \begin{document}
 %
-\includepdf[pages={1,{}}]{front_page/front_page_fr} % page 1 + une page vide
-\includepdf[pages={1,{}}]{front_page/front_page_en} % page 1 + une page vide
-%
-\pagenumbering{roman}
-\include{remerciements-acknowledgments/remerciements-acknowledgments}
-\include{resume-abstract/resume-abstract}
-%
-\renewcommand*\contentsname{Table of contents}
+%\includepdf[pages={1,{}}]{front_page/front_page_fr} % page 1 + une page vide
+%\includepdf[pages={1,{}}]{front_page/front_page_en} % page 1 + une page vide
+%%
+%\pagenumbering{roman}
+%\include{remerciements-acknowledgments/remerciements-acknowledgments}
+%\include{resume-abstract/resume-abstract}
+%%
+%\renewcommand*\contentsname{Table of contents}
 \dominitoc
 \tableofcontents
-\cleardoublepage
-\pagenumbering{arabic}
-\setcounter{page}{1}
+%\cleardoublepage
+%\pagenumbering{arabic}
+%\setcounter{page}{1}
 %
 \include{chap-introduction/intro}
-\include{chap-theProblem/theProblem}
-%
-\part{The System Dimensioning Problem}
-\include{chap-SDP/sdp}
-\include{chap-sdpExp/sdpExp}
-\include{chap-conclusionPart1/conclusionPart1}
-%
-\part{The Station Location Problem and energy aspects}
-\include{chap-SLP/slp}
-\include{chap-includingEnergy/includingEnergy}
-\include{chap-conclusionPart2/conclusionPart2}
-%
-\include{chap-conclusion/conclusion}
-\include{publications/publications}
-%
-% biblio
-\addcontentsline{toc}{chapter}{General bibliography}
-\renewcommand{\bibname}{General bibliography}
-\bibliographystyle{ieeetr}
-\bibliography{bib/biblio}
-%
-\appendix
-\include{appendix/appendix}
+%\include{chap-theProblem/theProblem}
+%%
+%\part{The System Dimensioning Problem}
+%\include{chap-SDP/sdp}
+%\include{chap-sdpExp/sdpExp}
+%\include{chap-conclusionPart1/conclusionPart1}
+%%
+%\part{The Station Location Problem and energy aspects}
+%\include{chap-SLP/slp}
+%\include{chap-includingEnergy/includingEnergy}
+%\include{chap-conclusionPart2/conclusionPart2}
+%%
+%\include{chap-conclusion/conclusion}
+%\include{publications/publications}
+%%
+%% biblio
+%\addcontentsline{toc}{chapter}{General bibliography}
+%\renewcommand{\bibname}{General bibliography}
+%\bibliographystyle{ieeetr}
+%\bibliography{bib/biblio}
+%%
+%\appendix
+%\include{appendix/appendix}
 %
 \end{document}
 % EOF
