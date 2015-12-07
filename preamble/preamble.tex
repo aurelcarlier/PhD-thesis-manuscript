@@ -3,9 +3,17 @@
 \usepackage[utf8]{inputenc} % ----------------------------- gestion de l'encodage
 \usepackage[T1]{fontenc} % -------------------------------- gestion de la fonte
 \usepackage[dvips]{graphicx} % ---------------------------- https://www.ctan.org/pkg/graphicx ----------- insertion d'images
-\usepackage{amsmath} % ------------------------------------ gestion des maths
-\usepackage{amsfonts} % ----------------------------------- gestion des maths
-\usepackage{amssymb} % ------------------------------------ gestion des maths
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% gestion des maths & algo
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[fleqn]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[]{algorithm2e} % ------------------------------ https://www.ctan.org/pkg/algorithm2e
+\usepackage[fleqn]{cases}
+
+
 %\usepackage[numbers]{natbib} % ---------------------------- https://www.ctan.org/pkg/natbib ------------- harmonisation des citations
 \usepackage[globalcitecopy,sectionbib]{bibunits} % -------- https://www.ctan.org/pkg/bibunits sectionbib
 \usepackage{url} % ---------------------------------------- https://www.ctan.org/pkg/url ---------------- insertion de liens url
@@ -18,9 +26,15 @@
 \usepackage[svgnames]{xcolor}
 \usepackage[scriptsize]{subfig}
 \usepackage{fancyhdr} % ----------------------------------- https://www.ctan.org/pkg/fancyhdr ----------- gestion des headers et footers
-\usepackage{minitoc} % --------------------------- https://www.ctan.org/pkg/minitoc [english]
+\usepackage{minitoc} % ------------------------------------ https://www.ctan.org/pkg/minitoc [english]
 \usepackage{pdfpages} % ----------------------------------- https://www.ctan.org/pkg/pdfpages ----------- inclusion de pdf dans le doc
-\usepackage[]{algorithm2e} % ------------------------------ https://www.ctan.org/pkg/algorithm2e -------- env pour écrire des algos
+
+%%%%%%%%%%%%%%%%%%%%%%
+% gestion des tableaux
+%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{slashbox}
 
 %\usepackage{multibib}
 %\usepackage{layout}
@@ -112,4 +126,36 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % définitions de nouvelles commandes
+\newcommand{\cX}{\cal {X}}
+\newcommand{\cA}{\cal {A}}
+\newcommand{\cN}{\cal {N}}
+\newcommand{\cH}{\cal {H}}
+\newcommand{\cL}{\cal {L}}
+\newcommand{\cD}{\cal {D}}
+\newcommand{\cP}{\cal {P}}
+\newcommand{\Coupe}{\cal {C}}
+\newcommand{\cCap}{u}
+\newcommand{\fC}{\mathfrak{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\R}{\mathcal{R}}
+\newcommand{\resp}{{\em resp. }}
+\newcommand{\ie}{{\em i.e. }}
+\newcommand{\eg}{{\em e.g. }}
+\newcommand{\see}{{\em see. }}
 
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\newenvironment{pbDefinition}[1][Definition]{\ \\ \noindent\textbf{[#1]}:}{}
+%\newenvironment{comment}[1][Comment]{\noindent\textbf{#1 :} }{}
+
+\newtheorem{definition}{Definition}
+\newtheorem{case}{Case}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{prop}{Property}

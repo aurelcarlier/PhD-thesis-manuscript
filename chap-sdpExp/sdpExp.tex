@@ -3,32 +3,205 @@
 \minitoc
 \vspace{2cm}
 
-\begin{minipage}[c]{0.45\linewidth}
+\begin{minipage}[c]{0.3\linewidth}
 \includegraphics[width=\textwidth]{experiments}
 \end{minipage}
 \hfill
-\begin{minipage}[c]{0.45\linewidth}
+\begin{minipage}[c]{0.7\linewidth}
 \begin{abstract}
-blabla\\
-blabla\\
-blabla\\
-blabla\\
-blabla\\
+In order to test the linear mathematical model, we first need data.
+Unfortunately, we do not yet have enough relevant and actual data that could be used for study purposes.
+%More particularly, we need a description of an existing carsharing infrastructure, which include stations positioning and demands between stations over time.
+%To deals with that, the first subsection presents how we generate data using a random generator.
+To cope with that, we propose to generate data using a random generator described in the first subsection.
+Then, the second subsection gives some discussion about computation times and solutions analysis of small instances, based on generated data.
+Three-dimensional Pareto frontier is especially presented.
+Finally, third subsection is dedicated to scalability experimentations, particularly the solver's performance when the problem increases in size.
 \end{abstract}
 \end{minipage}
 
 \newpage
 \section{Experimental context}
+All experimental results addressed bellow were made using an Intel(R) Core(TM) i3-3227U CPU running at $1.9$GHz. The linear programs were expressed using the AMPL format \cite{ampl_webPage} and numerical results were obtained using GLPK v4.52 \cite{glpk_webPage}.
 
 \newpage
 \section{First experiments and scalability}
 \subsection{3-pareto fontier}
+First of all, we start our experimentations considering $N=10$ stations, $T=144$ time-steps and $M=500$ demands. The upper bound of relocation operations and the number of vehicles belong to the set $\{0, 10, \cdots, 80\}$. For those fixed values, $30$ instances were generated using the random generator previously described for studding the computation time of the optimal solutions and the impact of model's building time.
+
+\begin{table}[t]
+\renewcommand{\arraystretch}{2.3}
+\caption{computation times in seconds}
+\label{table_computationTimes}
+\centering
+\begin{tabularx}{\linewidth}{|c|*{5}{>{\centering \arraybackslash}X|}}
+\cline{2-5}
+\multicolumn{1}{c|}{} & $\mu$ & $\sigma$ & $\min$ & $\max$ \\
+\hline
+LP  & $0,56$ & $0,25$ &	$<0,01$ &  $1,17$ \\
+ILP & $1,93$ & $1,86$ &	$<0,01$ & $16,77$ \\
+\hline
+\end{tabularx}
+\end{table}
+
+Table \ref{table_computationTimes} presents the average computation time $\mu$ and the standard deviation $\sigma$ for both integer linear program ILP and its relaxation to linear program LP. The minimal and maximal values are also specified.
+The first observation is that computation times remains quite low, in the order of a half-second for LPs and two seconds for ILPs. The major part is taken by the building of the mathematical program which takes $34$s (mostly  by the conservation law) regardless of which model is built.
+Secondly, when the solver runs the LP model, almost $8$ problems (exactly $7,66$ on average) under $81$ admit a non-integer value of the objective function, over the $30$ generated instances. This result represents almost $10\%$ of all instances. However, every time we get a non-integer optimal value, the integer one has always the same integer part.
+Hence it comes that we conjecture the existence of an integer optimal solution for LP and that the difference between the two criteria values comes from rounding errors.
+
+\begin{figure}[b]
+\centering
+\includegraphics[width=\linewidth]{result_parteo_frontier}
+\caption{3-dimensional Pareto frontier}
+\label{fig_pareto}
+\end{figure}
+
+Figure \ref{fig_pareto} shows a 3-dimensional Pareto frontier for a particular instance. When all the demands are satisfied, the minimal number of vehicles equals $50$. In this case, at least $70$ relocation operations are necessary. If the number of vehicle increases to $70$, $50$ relocations are needed. This confirms that the two criteria are in opposition and that there exists a tradeoff area between them.
+
+
 \subsection{Scalability study}
+The aim of this second experimentation is to measure the overall computation times following the size of the problem. We observed previously that its most important part comes from the linear program generation.
+
+\begin{table}[t]
+\renewcommand{\arraystretch}{1.8}
+\caption{generation time depending on the size of the graph (in seconds)}
+\label{table_generationTimes}
+\begin{tabularx}{\linewidth}{|c|*{5}{>{\centering \arraybackslash}X|}}
+\hline
+\backslashbox{T~}{N~} & $10$ & $20$ & $30$ & $40$ & $50$\\
+
+\hline
+\multirow{2}{*}{$72$} & \multirow{2}{*}{$14$} & \multirow{2}{*}{$59$} & $138$ & $147$ & $310$\\
+& & & $\approx 2'30$ & $\approx 3'$ & $\approx 5'$\\
+
+\hline
+\multirow{2}{*}{$144$} & \multirow{2}{*}{$53$} & $234$ & $343$ & $632$ & $1437$\\
+& & $\approx 4'$ & $\approx 5'30$ & $\approx 10'30$ & $\approx 24'$\\
+
+\hline
+\multirow{2}{*}{$288$} & $211$ & $997$ & $1417$ & $2481$ & $4735$\\
+& $\approx 2'30$ & $\approx 16'30$ & $\approx 23'30$ & $\approx 41'30$ & $\approx 1$h$20'$\\
+
+\hline
+\end{tabularx}
+\end{table}
+
+Table \ref{table_generationTimes} presents the generation times depending on the number of stations and time-steps. Each measure was obtained from one instance since the time needed for generating the model only depends on the size of the time extended graph. Note that when $N=50$, $T=288$ and $R=C=80$, GLPK founds an optimal solution within $1'20$ minute and an integer optimal solution within $1'30$ minute. We observe that the generation time grows linearly following the number of arcs of the time extended graph, which is around $700~000$ for this instance. Moreover, this is confirmed by the correlation coefficient between generation time and the number of arcs in the graph standing at $95,9\%$. This result is coherent since the size of the linear model and the number of variables are both in $\Theta(|{\cA}|)$.
+
+For the biggest instance ($N=50$, $T=288$), the relocation arcs represent $98\%$ of the total number of arcs. Therefore, we suggest to increase the scalability of the method by considering for example only short distance relocation arcs or defining them at fixed time-steps.
 
 \newpage
 \section{Working on relocation operations}
+Previous results presented in \cite{carlier2014} aimed to evaluate the scalability of the optimization model described before.
+Computation times were obtained on small realistic instances with $10$ stations and $144$ time steps using an open source solver (GLPK).
+The authors observed that they were negligible compared to model building time and decided to study the building time behaviour when the problem grows.
+Results shown that they were unaffordable in an industrial or real case context, even for a realistic case, and can be improved by reducing the size of the linear programs.
+Authors suggested to use better relocation strategies in order to reduce the graph density and problem size.
+
+The aim of this section is to study the computation times for solving exactly or approximately the optimization problem for real case instances.
+More precisely, following previous experiments, we show that the density of relocation arcs drastically decreases computation times without impacting the quality of the solution.
+
+The experimental conditions are first presented, followed by the description of the strategies for reducing the graph density.
+The section ends with the impacts on solver computation time and optimal distances to the baseline situation. 
+
+\subsection{Experimental conditions}
+The generator described in \cite{carlier2014} was considered to produce randomly realistic urban data taking into account demand variability over time and travel time penalties during pick hours.
+The size of instances is fixed to $50$ stations, which corresponds to a reasonnable size for a real-life problem.
+$18$ stations are arbitrarily placed in a dense and small ``downtown'' area whereas $32$ are positioned in a peri-urban area. 
+A total of $500$ carsharing demands (requests) are randomly generated over a typical $24$ hours week day period segmented in $144$ time-steps of $10$ minutes. 
+To be realistic, $80$\% ({\em resp.} $60$\%) of the generated demand during rush hours is oriented from the suburbs ({\em resp.} the center) to the center ({\em resp.} the suburbs). 
+Morning rush is set between $7$ and $9$ while evening rush is between $17$ and $20$. 
+Travel times between stations are also  given using an average car speed of $70$km/h, applying a $160$\% penalty coefficient if the trip is done during the rush period.
+
+All the computational results presented in this paper, including the random data generation, were made using an Intel(R) Core(TM) i5-3337U CPU @1.80GHz. Mathematical programs were solved using the Java API of IBM ILOG CPLEX 12.5.1.
+
 \subsection{Impacts on graph density}
+Baseline situation (BS is short) corresponds to instances for which relocations are generated at each times steps, \ie every $10$ minutes.
+As pointed before, our idea is to reduce the number of relocation arcs, which corresponds in this case to more than $97$\% of the total number of arcs.
+The goal is to accelerate the resolution of our optimization problem.
+
+Table \ref{table:graphDensity} presents some numerical parameters of any generated TEG.
+We studied four strategies (S1 to S4) which generate relocation operations respectively every $30$ minutes, $1$, $2$ and $4$ hours. 
+The number of nodes is always equal to ${\cal X}= N \times T = 50 \times 144=7200$, while the total number of arcs $|{\cal A}|$ decreases following the frequency of relocation operations (RF)  during a day. 
+The respective ratios of remaining arcs compared to BS (\% BS) and the arcs removed (\% elim) are also presented, followed by the exact number of relocation arcs (RA) and their proportion in the graph.
+
+\begin{table}[h]
+\caption{Graph density depending on relocation strategies}
+\label{table:graphDensity}
+\centering
+\begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lrrrrrrr@{}}
+\hline
+Strategy  & $|{\cal N}|$ & $|{\cal A}|$  &    RF & \% BS &      \% elim &       RA &    RA$/|{\cal A}|$ \\
+\hline
+(BS) : Every 10 min  &         7200 &      $360500$ & $144$ &    $100,00$\% &   $-~~~~~~$ & $352800$ & $97,86$\% \\
+(S1) : Every 30 min  &         7200 &      $125300$ &  $48$ &     $34,76$\% & - $65,24$\% & $117600$ & $93,85$\% \\
+(S2) : Every 1h      &         7200 &       $66500$ &  $24$ &     $18,45$\% & - $81,55$\% &  $58800$ & $88,42$\% \\
+(S3) : Every 2h      &         7200 &       $37099$ &  $12$ &     $10,29$\% & - $89,71$\% &  $29400$ & $79,25$\% \\
+(S4) : Every 4h      &         7200 &       $22400$ &   $6$ &      $6,21$\% & - $93,79$\% &  $14700$ & $65,63$\% \\
+\hline
+\end{tabularx}
+\end{table}
+
+Reducing the number of relocation arcs decreases drastically the graph density: from - $65$\% for (S1) to almost - $94$\% for (S4).
+The resulting number of arcs for the strategy (S4) represents for instance $6,21$\% of the BS one.
+Also observe that relocation arcs remain predominant, even for strategy (S4) for which they represent above $65$\% of the total number of arcs.
+
 \subsection{Solver computation times}
+The following experiments aim to evaluate the impact of the relocation reduction on computation time and solution quality of our optimization problem.
+A total of $30$ instances were randomly generated.
+The five strategies were evaluated for each of them by solving $81$ linear programs corresponding to the combinational values of R and C, set in this study in the range $\{0,10,\cdots ,80\}$.
+
+Table \ref{table:calcTimesLP} summarizes our results solving approximately the integer linear program (LP in short) by considering real variables, while Table \ref{table:calcTimesILP} shows the results using exact method (ILP in short).
+In both case, columns ``$\mu_t$'', ``min'' and ``max'' reports respectively the average, the minimum and the maximum computation times in milliseconds while ``$\sigma_t$'' is the standard deviation.
+Columns ``$\mu_d$'' and  ``$\sigma_d$'' indicate the average distance to the solution obtained for (BS) and the corresponding standard deviation.
+
+\begin{table}[h] \label{table:calcTimesLP}
+\centering
+\renewcommand{\arraystretch}{1.5}
+\newcolumntype{Y}{>{\raggedleft \arraybackslash}X}
+\begin{tabularx}{.9\linewidth}{@{\extracolsep{\fill}}l*{7}{Y}@{}}
+ & \multicolumn{5}{c}{SCT} & \multicolumn{2}{c}{OGV} \\
+\hline
+Strategy            & $\mu_t$ &      gain & $\sigma_t$ &   min &     max &  $\mu_d$ & $\sigma_d$ \\
+\hline
+(BS): Every 10 min &  $7669$ &       $-$ &     $6278$ & $262$ & $24406$ &      $-$ &        $-$ \\
+(S1): Every 30 min &  $2431$ &  - $68$\% &     $1736$ & $120$ &  $7347$ & $0,40$\% &   $0,61$\% \\
+(S2): Every 1h     &  $1325$ &  - $82$\% &      $965$ &  $63$ &  $3555$ & $1,07$\% &   $1,53$\% \\
+(S3): Every 2h     &   $540$ &  - $92$\% &      $358$ &  $36$ &  $1742$ & $2,56$\% &   $3,65$\% \\
+(S4): Every 4h     &   $323$ &  - $95$\% &      $238$ &  $41$ &  $1608$ & $5,15$\% &   $6,42$\% \\
+\hline
+\end{tabularx}
+\caption{Solver computation times (SCT) in milliseconds and optimal gap values (OGV) compared to the baseline situation in the LP version.}
+\end{table}
+
+\begin{table}[h]
+\label{table:calcTimesILP}
+\centering
+\renewcommand{\arraystretch}{1.5}
+\newcolumntype{Y}{>{\raggedleft \arraybackslash}X}
+\begin{tabularx}{.9\linewidth}{@{\extracolsep{\fill}}l*{7}{Y}@{}}
+ & \multicolumn{5}{c}{SCT} & \multicolumn{2}{c}{OGV} \\
+\hline
+Strategy            & $\mu_t$ &     gain & $\sigma_t$ &   min &      max & $\mu_d$  & $\sigma_d$ \\
+\hline
+(BS) : Every 10 min & $57949$ &      $-$ &    $35509$ & $256$ & $138123$ &     $-$  &        $-$ \\
+(S1) : Every 30 min &  $9472$ & - $83$\% &     $6355$ & $126$ &  $29963$ & $0,38$\% &   $0,59$\% \\
+(S2) : Every 1h     &  $3059$ & - $94$\% &     $2131$ &  $69$ &  $10733$ & $1,01$\% &   $1,45$\% \\
+(S3) : Every 2h     &   $918$ & - $98$\% &      $641$ &  $48$ &   $3685$ & $2,60$\% &   $3,61$\% \\
+(S4) : Every 4h     &   $426$ & - $99$\% &      $251$ &  $30$ &   $1528$ & $4,92$\% &   $6,18$\% \\
+\hline
+\end{tabularx}
+\caption{Solver computation times (SCT) in milliseconds and optimal gap values (OGV) compared to the baseline situation in the ILP version.}
+\end{table}
+
+First note that computation times remain reasonable, even for the exact method with baseline strategy (always less than $139$ seconds).
+However, the density reduction allows to decrease dramatically computation times. 
+This reduction is particularly important for the exact method ILP.
+Also note that computation time values are almost equal for both exact or approximate solutions using (S4) strategy.
+
+The surprise is that the optimal number of fulfilled demands are almost not impacted by the reduction of relocation arcs.
+The optimal values following  the different strategies remain very close  to the baseline one for both LP or ILP resolutions,
+with a gap varying from $0,4$\% in (S1) to $5$\% in (S4).
 
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}

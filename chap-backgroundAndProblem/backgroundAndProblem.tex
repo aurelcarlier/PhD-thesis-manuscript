@@ -197,7 +197,28 @@ A citer :\\
 \subsection{Assumptions}
 \subsection{MIC integration}
 \subsection{Random data generator}
+A generator has been then implemented to emulate real demand data over time. We decided to focus our study on representing an average weekday demand. As a consequence, all the data depending on time are generated over a $24$ hours period, segmented into $T$ time-steps. The total number of time-steps is user-settable and can vary from $24$ to $1440$ (representing respectively a $60$ and $1$ min time-step).
 
+Basically, the generator is based on two phases: station and demand generation. The first phase positions $N$ carsharing stations within a given territory. Maximum size for each station is randomly generated using a discrete uniform distribution over an integer interval $[Z_{\min}, Z_{\max}]$ given by the user as a parameter.
+The station positioning is made over two distinct zones: a central area (in general representing the center of the city) included in a larger one (representing the suburbs area), both defined as a square. The generation algorithm takes two additional parameters: the percentage of total area the center must represent and the probability that a station is contained in the center. Once the geographic division is made, every station is then positioned randomly in the area where it belongs. 
+%Figure \ref{fig_randomStationPositioning} illustrates the positioning of $100$ stations in the Paris area where $p_{center}$ is set to $10\%$ and $p_{concentration}$ to $35\%$.
+
+%\begin{figure}[h]
+%\centering
+%\includegraphics[scale=0.25]{stationGenerationExample}
+%\caption{Random station positioning over the city of Paris and its region}
+%\label{fig_randomStationPositioning}
+%\end{figure}
+
+Then, the second phase generates randomly $M$ demands over time between stations. First of all, the generator has to schedule and position randomly each request over time, which means defining a probability distribution. In order to do so, the generator allows to specify the distribution profile the demand will follow. In other words, it consists on defining, for every couple of hours (thus $12$ values), the relative level of demand $Dem(t)$ at this time $t$. Then, the probability distribution $\cP$ is obtained normalizing all the values \ie ${\cP}(t) = Dem(t) \slash \sum_{t}{Dem(t)}$. Typically, most profile distributions are very similar to the one presented in Figure \ref{fig:demandProfile}.
+Now, the next step is to identify the two stations concerned by this demand at that time: where it starts and where it goes. Usually, in dense urban area, there are two rush hour slots, also called traffic peaks (generally the morning between 7 and 10 o'clock; the evening between 16 and 19 o'clock) for which the demand goes globally in the same direction: from the suburbs to the center during the morning and from the center to the suburbs the evening. The generator allows to define such rush time slots as well as the proportion of total demand during those rushes. Finally, it's also possible to specify an average car speed and a penalty coefficient during rush time for the calculation of travel-time between stations.
+
+\begin{figure}[t]
+\flushleft
+\includegraphics[width=\linewidth]{demandDistribution}
+\caption{Classical average demand profile in dense areas over the course of a weekday}
+\label{fig:demandProfile}
+\end{figure}
 
 \newpage
 \section{Problem description}
