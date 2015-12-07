@@ -29,6 +29,8 @@
 \usepackage{minitoc} % ------------------------------------ https://www.ctan.org/pkg/minitoc [english]
 \usepackage{pdfpages} % ----------------------------------- https://www.ctan.org/pkg/pdfpages ----------- inclusion de pdf dans le doc
 
+\usepackage{epigraph}
+
 %%%%%%%%%%%%%%%%%%%%%%
 % gestion des tableaux
 %%%%%%%%%%%%%%%%%%%%%%
@@ -126,28 +128,37 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % définitions de nouvelles commandes
-\newcommand{\cX}{\cal {X}}
-\newcommand{\cA}{\cal {A}}
-\newcommand{\cN}{\cal {N}}
-\newcommand{\cH}{\cal {H}}
-\newcommand{\cL}{\cal {L}}
-\newcommand{\cD}{\cal {D}}
-\newcommand{\cP}{\cal {P}}
-\newcommand{\Coupe}{\cal {C}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cZ}{\mathcal{Z}}
+
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\cA}{\mathcal{A}}
+
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cP}{\mathcal{P}}
+
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\R}{\mathcal{R}}
+
+\newcommand{\Coupe}{\mathcal{C}}
 \newcommand{\cCap}{u}
+
 \newcommand{\fC}{\mathfrak{C}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\N}{\mathbb{N}}
-\newcommand{\T}{\mathcal{T}}
-\newcommand{\M}{\mathcal{M}}
-\newcommand{\R}{\mathcal{R}}
+
+% abréviations
 \newcommand{\resp}{{\em resp. }}
 \newcommand{\ie}{{\em i.e. }}
 \newcommand{\eg}{{\em e.g. }}
 \newcommand{\see}{{\em see. }}
 
+% environnements
 \newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
 \newenvironment{pbDefinition}[1][Definition]{\ \\ \noindent\textbf{[#1]}:}{}
 %\newenvironment{comment}[1][Comment]{\noindent\textbf{#1 :} }{}

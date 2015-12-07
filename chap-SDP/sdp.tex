@@ -1,4 +1,6 @@
 \chapter{The System Dimensioning Problem} \label{chap:sdp}
+\epigraph{All human things are subject to decay, and when fate summons, Monarchs must obey}{\textit{Mac Flecknoe \\ John Dryden}}
+
 \begin{bibunit}[ieeetr]
 \minitoc
 \vspace{2cm}
@@ -19,30 +21,79 @@ Last subsection presents its formulation using integer linear programming.
 
 \newpage
 \section{Introduction : problem description}
-Considering potential one-way carsharing station locations and demands over time, what could be the optimal system configuration capturing the higher number of demands ?
+The first part of this thesis is dedicated to the optimal design of a carsharing system when stations are fixed.
+We assume that a time-dependant carsharing demand can be estimated from origins to destinations.
+This demand covers a geographical area where a carsharing operator is interested to established its service.
+Without any doubt, the demand estimation model as well as the time period considered in the study are critical inputs in the decision process.
+This bias will be discussed afterwards.
 
+In this work, the meaning of optimality will be considered as the will to capture the maximum number of demands.
+Somehow, this objective is aligned with the maximization of the operator's revenues.
+Indeed, the more demands the systems is able to fulfil, the more profits the operator can generate.
 
+As seen in \cite{les_relocs_sont_importantes_et_necessaires}, the optimization process should also integrate vehicle relocation operations.
+They are the only known "technique" to re-equilibrate the system and reach a higher satisfied demand.
+
+In the reminder of this work, this system design problem will be refer as the \emph{System Dimensioning Problem} (SDP).
+Its concise formulation could be :
+\begin{quote}
+``Considering potential one-way carsharing station locations and demands over time, what could be the optimal \emph{system configuration} capturing the higher number of demands ?''
+\end{quote}
+
+We define a system configuration as the quantification and/or the description of the following components:
+\begin{enumerate}
+\item the number of demands satisfied;
+\item the number of vehicles needed to run the system;
+\item the vehicle relocation operations.
+\end{enumerate}
+
+This chapter is organised as follow.
+A first section is devoted to a brief state of the art and related models found in the literature.
+Then, Section \ref{sec:mathModel} describes the mathematical materials and defines the problem mathematically.
+Section 
+
+% finir l'intro : organisation du chapitre
 
 \newpage
 \section{Related work}
 
 
 \newpage
-\section{Mathematical model}
+\section{Mathematical model} \label{sec:mathModel}
 \subsection{Inputs and outputs of the problem}
-In order to describe the mathematical problem, let us define first the required inputs.
-As discussed later, those data can be extracted from various sources such as simulation tools or real operating carsharing system data for example. 
+% In order to describe the mathematical problem, let us define first the required inputs.
+% As discussed later, those data can be extracted from various sources such as simulation tools or real operating carsharing system data for example. 
 
-First of all, let ${\cH} = \{1, \cdots, T\}$ be the set of time-steps considered in the study. For relevance issues, it has to cover a representative period of time, as an average  weekday or an average week for instance.
+% time
+As seen previously, the SDP is time-dependant.
+A carsharing system evolves over time.
+Vehicles are moving among stations, taking more or less time to join a destination according to their departure time.
+As a consequence, a formal description of the time component is first needed.
+In this work, we decided to consider a discrete set of time-steps, numbered from $1$ to $T \in \N$ and collected in a set called ${\cH}$.
+For relevance issues, and especially for experiments purposes, this period has to cover a representative period of time, as an average weekday or an average week for instance.
+Some discussions about it are given thereafter in the next chapter.
+~\\
 
-The set of carsharing stations is defined as ${\cN} = \{1, \cdots, N\}$ and comes with $Z(i)$ the maximum size (\ie maximum capacity, in terms of number of vehicles) of station $i\in{\cal N}$. Then, the demand $D(i,j,t)$ contains the number of passengers wishing to borrow a car from station $i \in \cN$ at time $t \in \cH$ to station $j \in \cN$. 
-Note here that there is no condition on the station themselves, thus allowing the travel to be a ``round trip" or a ``one-way" travel. In this case, $i$ is simply equal to $j$.
+% stations and capacities
+Carsharing stations are gathered in a set called ${\cN}$, and also numbered with natural integers from $1$ to $N > 1$.
+Each station comes with $Z(i)$, the maximum size (\ie maximum capacity, in terms of number of parking places) of station $i \in {\cN}$.
+The set of stations' capacities is denoted $\cZ$.
+~\\
 
+% demands
+Then, the demand $D(i,j,t)$ contains the number of passengers wishing to join station $j \in \cN$ from station $i \in \cN$, when the departure time at $i$ is $t \in \cH$.
+Note here that there is no condition on the station themselves, thus allowing the travel to be a ``round trip" or a ``one-way" travel.
+In this latter case, $i$ is simply equal to $j$.
+% All the demands are gathered in a set called $$.
+~\\
+
+% travel times
 Finally, $\delta(i,j,t)$ represents the travel time it takes for a car-user from station $i \in \cN$ to station $j \in \cN$, when departure time from $i$ is $t \in \cH$.
-We suppose that for any triple $(i,j,t)\in \cN \times \cN \times \cH$, $\delta(i,j,t)<T$. This assumption comes from the fact that the highest distance from different stations
-is quite low (usually less than $150$ or $200$ kilometres) and that the time-steps are covering at least a day.
+We suppose that for any triple $(i,j,t)\in \cN \times \cN \times \cH$, $\delta(i,j,t)<T$.
+This assumption comes from the fact that the highest distance from different stations is quite low (usually less than $150$ or $200$ kilometres) and that the time-steps are covering at least a day.
 
-A feasible solution of our problem consists on a set of vehicle tours, each of them modelling the situation of a car at each time step. The three criteria (the demand, the number of vehicles and the number of relocation operations) can be polynomially computed from any feasible solution.
+A feasible solution of our problem consists on a set of vehicle tours, each of them modelling the situation of a car at each time step.
+The three criteria (the demand, the number of vehicles and the number of relocation operations) can be polynomially computed from any feasible solution.
 
 \subsection{Time Extended Graph}
 
