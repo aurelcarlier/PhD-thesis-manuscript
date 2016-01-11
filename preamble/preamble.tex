@@ -12,7 +12,9 @@
 \usepackage{amssymb}
 \usepackage[]{algorithm2e} % ------------------------------ https://www.ctan.org/pkg/algorithm2e
 \usepackage[fleqn]{cases}
-
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\usepackage[autolanguage,np]{numprint}
 
 %\usepackage[numbers]{natbib} % ---------------------------- https://www.ctan.org/pkg/natbib ------------- harmonisation des citations
 \usepackage[globalcitecopy,sectionbib]{bibunits} % -------- https://www.ctan.org/pkg/bibunits sectionbib
@@ -37,6 +39,11 @@
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{slashbox}
+
+%%%%%%%%%%%%%%%%%%%
+% tikz
+%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
 
 %\usepackage{multibib}
 %\usepackage{layout}
@@ -128,29 +135,41 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % définitions de nouvelles commandes
-\newcommand{\cH}{\mathcal{H}}
-\newcommand{\cN}{\mathcal{N}}
-\newcommand{\cZ}{\mathcal{Z}}
-
-\newcommand{\cX}{\mathcal{X}}
-\newcommand{\cA}{\mathcal{A}}
-
-\newcommand{\cL}{\mathcal{L}}
-\newcommand{\cD}{\mathcal{D}}
-\newcommand{\cP}{\mathcal{P}}
-
-\newcommand{\T}{\mathcal{T}}
-\newcommand{\M}{\mathcal{M}}
-\newcommand{\R}{\mathcal{R}}
-
-\newcommand{\Coupe}{\mathcal{C}}
-\newcommand{\cCap}{u}
-
-\newcommand{\fC}{\mathfrak{C}}
+% classic math sets
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\N}{\mathbb{N}}
+
+\newcommand{\timeStepSet}{\mathcal{T}}
+\newcommand{\stationSet}{\mathcal{S}}
+\newcommand{\sCapaSet}{\mathcal{Z}}
+\newcommand{\demandSet}{\mathcal{D}}
+\newcommand{\travelTimeSet}{\mathcal{H}}
+\newcommand{\relocTimeStepSet}{\mathcal{R}}
+
+\newcommand{\nbTimeSteps}{\mathsf{T}}
+\newcommand{\nbStations}{\mathsf{S}}
+\newcommand{\nbDemands}{\mathsf{D}}
+\newcommand{\nbVROs}{R}
+\newcommand{\nbVehicles}{V}
+
+\newcommand{\teg}{\mathcal{G}}
+\newcommand{\tegNodeSet}{\mathcal{X}}
+\newcommand{\tegArcSet}{\mathcal{A}}
+\newcommand{\tegCapacitySet}{u}
+
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\cA}{\mathcal{A}}
+
+\newcommand{\Coupe}{\mathcal{C}}
+\newcommand{\cCap}{u}
+
+% are the following sets usefull ?
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\fC}{\mathfrak{C}}
 
 % abréviations
 \newcommand{\resp}{{\em resp. }}

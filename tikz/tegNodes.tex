@@ -1,0 +1,20 @@
+\begin{tikzpicture}[>=stealth, thick, scale=2]
+
+\def\timeAxisY{0.2}
+
+% TIME LINE
+\draw[timeline] (0.8,\timeAxisY) -- (5.2,\timeAxisY) node[below right]{time};
+\foreach \text / \pos in {{$1$/(1,\timeAxisY)}, {$2$/(2,\timeAxisY)}, {$t$/(3.5,\timeAxisY)}, {$\nbTimeSteps$/(5,\timeAxisY)}}
+\node[label=below:\text] at \pos {$|$};
+
+\node[label=below:$\cdots$, below=.2cm] at (2.75,\timeAxisY){};
+\node[label=below:$\cdots$, below=.2cm] at (4.25,\timeAxisY){};
+
+\foreach \x in {1,2,3.5,5}
+\path[timestepline] (\x,\timeAxisY) -- (\x,3.5);
+
+% STATIONS
+\foreach \name / \pos / \text in {{station1_1/(1,3)/$1(1)$}, {stationETC/(1,2)/$\vdots$}, {stationS_1/(1,1)/$\nbStations(1)$}, {station1_2/(2,3)/$1(2)$}, {stationETC1/(3.5,3)/$1(t)$}, {station1_T/(5,3)/$1(\nbTimeSteps)$}, {stationS_2/(2,1)/$\nbStations(2)$}, {stationETCS/(3.5,1)/$\nbStations(t)$}, {stationS_T/(5,1)/$\nbStations(\nbTimeSteps)$}}
+\node[station] (\name) at \pos {\text};
+
+\end{tikzpicture}

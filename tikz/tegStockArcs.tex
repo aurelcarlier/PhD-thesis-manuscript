@@ -1,0 +1,26 @@
+\begin{tikzpicture}[>=stealth, thick, scale=2]
+
+\def\timeAxisY{0.5}
+
+% TIME LINE
+\draw[timeline] (0.8,\timeAxisY) -- (5.2,\timeAxisY) node[below right]{time};
+\foreach \text / \pos in {{$1$/(1,\timeAxisY)}, {$2$/(2,\timeAxisY)}, {$t$/(3.5,\timeAxisY)}, {$\nbTimeSteps$/(5,\timeAxisY)}}
+\node[label=below:\text] at \pos {$|$};
+
+\node[label=below:$\cdots$, below=.2cm] at (2.75,\timeAxisY){};
+\node[label=below:$\cdots$, below=.2cm] at (4.25,\timeAxisY){};
+
+\foreach \x in {1,2,3.5,5}
+\path[timestepline] (\x,\timeAxisY) -- (\x,1.5);
+
+% STATIONS
+\foreach \name / \pos / \text in {{station1_1/(1,1)/$1(1)$}, {station1_2/(2,1)/$1(2)$}, {stationETC1/(3.5,1)/$1(t)$}, {station1_T/(5,1)/$1(\nbTimeSteps)$}}
+\node[station] (\name) at \pos {\text};
+
+% ARCS STOCK
+\path[arcStock] (station1_1) -> (station1_2);
+\path[arcStock] (station1_2) -> (stationETC1) node[midway, fill=white] {$\cdots$};
+\path[arcStock] (stationETC1) -> (station1_T) node[midway, fill=white] {$\cdots$};
+\path[arcStock] (station1_T) edge [in=30, out=150] (station1_1);
+
+\end{tikzpicture}

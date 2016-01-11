@@ -1,0 +1,103 @@
+\begin{tikzpicture}[>=stealth, thick] % shorten >=1pt
+
+% AXE TEMPOREL
+\node[dumbnode] (dumb1) at (0,-3.2) {};
+
+\node[graduation] (markt0) [right of = dumb1, node distance = .5cm] {$|$};
+\node[graduation] (markt1) [right of = markt0, node distance = 2cm] {$|$};
+\node[graduation] (markt2) [right of = markt1, node distance = 2cm] {$|$};
+\node[graduation] (markt3) [right of = markt2, node distance = 2cm] {$|$};
+\node[timestep] (t0) [below of = markt0] {$1$};
+\node[timestep] (t1) [below of = markt1] {$2$};
+\node[timestep] (cdots_2t) [right of = t1, node distance = 1cm] {$\cdots$};
+\node[timestep] (t2) [below of = markt2] {$t$};
+\node[timestep] (cdots_tT) [right of = t2, node distance = 1cm] {$\cdots$};
+\node[timestep] (t3) [below of = markt3] {$\nbTimeSteps$};
+
+\node[dumbnode] (dumb2) [right of = markt3, node distance = 1cm] {};
+
+\path[timeline] (dumb1) -- (dumb2);
+\node[dumbnode] (time) [below right of = dumb2, node distance = .4cm] {time};
+
+% LIGNES POINTILLEES VERTICALES POUR LES INSTANTS TEMPORELS
+\node[dumbnode] (dumb3) [above of = markt0, node distance = 7.2cm] {};
+\node[dumbnode] (dumb4) [right of = dumb3, node distance = 2cm] {};
+\node[dumbnode] (dumb5) [right of = dumb4, node distance = 2cm] {};
+\node[dumbnode] (dumb6) [right of = dumb5, node distance = 2cm] {};
+  
+\path[timestepline] (markt0) -- (dumb3);
+\path[timestepline] (markt1) -- (dumb4);
+\path[timestepline] (markt2) -- (dumb5);
+\path[timestepline] (markt3) -- (dumb6);
+  
+% STATIONS
+\node[station] (station1_1) [above of = markt0, node distance = 5.5cm] {1(1)};
+\node[station] (stationETC) [below of = station1_1, node distance = 2cm] {$\vdots$};
+\node[station] (stationN_1) [below of = stationETC, node distance = 2cm] {$\nbStations(1)$};
+
+\node[station] (station1_2) [right of = station1_1, node distance = 2cm] {1(2)};
+\node[station] (stationETC1) [right of = station1_2, node distance = 2cm] {$\mathbf{\cdots}$};
+\node[station] (station1_T) [right of = stationETC1, node distance = 2cm] {$1(\nbTimeSteps$)};
+\node[station] (stationN_2) [right of = stationN_1, node distance = 2cm] {$\nbStations(2)$};
+\node[station] (stationETCN) [right of = stationN_2, node distance = 2cm] {$\mathbf{\cdots}$};
+\node[station] (stationN_T) [right of = stationETCN, node distance = 2cm] {$\nbStations(\nbTimeSteps)$};
+
+% ARCS STOCK
+\path[arcStock] (station1_1) edge node[capacity]{(8)} (station1_2);
+\path[arcStock] (station1_2) edge node[capacity]{(8)} (stationETC1);
+\path[arcStock] (stationETC1) edge node[capacity]{(8)} (station1_T);
+\path[arcStock] (station1_T) edge [bend right, in=220, out=320] node[capacity]{(8)} (station1_1);
+
+\path[arcStock] (stationN_1) edge node[capacity]{(4)} (stationN_2);
+\path[arcStock] (stationN_2) edge node[capacity]{(4)} (stationETCN);
+\path[arcStock] (stationETCN) edge node[capacity]{(4)} (stationN_T);
+\path[arcStock] (stationN_T) edge [bend left] node[swap, capacity]{(4)} (stationN_1);
+
+% ARCS DEMAND
+\path[arcDemand] (station1_1) edge [bend left, out=5] node[capacity, left, near start]{(1)} (stationN_2);
+\path[arcDemand] (stationN_T) edge [bend right, out=15] node[swap, capacity, near start]{(2)} (station1_2);
+
+% ARCS RELOC
+\node[dumbnode] (dumb7) [below right of = station1_2, node distance = 1cm] {};
+\node[dumbnode] (dumb8) [below right of = dumb7, node distance = .7cm] {};
+\node[dumbnode] (dumb9) [below of = dumb8, node distance = .5cm] {};
+
+\path[arcReloc] (stationN_1) edge (station1_2.south);
+\path[arcReloc] (stationN_1) edge (dumb7.center);
+\path[arcReloc] (stationN_1) edge (dumb8.center);
+\path[arcReloc] (stationN_1) edge (dumb9.center);
+
+\node[dumbnode] (dumb10) [below right of = stationETC1, node distance = 1cm] {};
+\node[dumbnode] (dumb11) [below right of = dumb10, node distance = .7cm] {};
+\node[dumbnode] (dumb12) [below of = dumb11, node distance = .5cm] {};
+
+\path[arcReloc] (stationN_2) edge (stationETC1.south);
+\path[arcReloc] (stationN_2) edge (dumb10.center);
+\path[arcReloc] (stationN_2) edge (dumb11.center);
+\path[arcReloc] (stationN_2) edge (dumb12.center);
+
+% LEGENDE\\
+\node[station] (stationLeg) [right of = station1_T, node distance = 2cm, anchor = west] {i(t)};
+\node[dumbnode] (stationLegText) [right of = stationLeg, node distance = .76cm, anchor = west] {Station $i$ at time $t$};
+
+\node[dumbnode] (legArcStock1) [below left of = stationLeg, node distance = 1.2cm, anchor = west] {};
+\node[dumbnode] (legArcStock2) [right of = legArcStock1, node distance = 1.5cm, anchor = west] {Stock arcs: $({\cal A}_1)$};
+\path[arcStock] (legArcStock1) -- (legArcStock2);
+
+\node[dumbnode] (legArcDem1) [below of = legArcStock1, node distance = .5cm] {};
+\node[dumbnode] (legArcDem2) [right of = legArcDem1, node distance = 1.5cm, anchor = west] {Demand arcs: $({\cal A}_2)$};
+\path[arcDemand] (legArcDem1) -- (legArcDem2);
+
+\node[dumbnode] (legArcReloc1) [below of = legArcDem1, node distance = .5cm] {};
+\node[dumbnode] (legArcReloc2) [right of = legArcReloc1, node distance = 1.5cm, anchor = west] {Relocalisation arcs: $({\cal A}_3)$};
+\path[arcReloc] (legArcReloc1) -- (legArcReloc2);
+
+\node[dumbnode] (legcap) [below of = legArcReloc1, node distance = .5cm, anchor = west] {$(\cdot)$};
+\node[dumbnode] (legca2) [right of = legcap, node distance = 1.2cm, anchor = west] {Arc capacity};
+
+% SUITE / DENSITES
+\node (densiteTEG) [below of = legArcReloc1, node distance = 2.5cm, anchor = west, align=left]{
+Graph density :\\
+Nodes : $|\tegNodeSet| = \nbStations \times \nbTimeSteps$\\
+Arcs : $|\tegArcSet| = \nbStations^2 \cdot \nbTimeSteps + \nbDemands = \Theta(\nbStations^2 \cdot \nbTimeSteps)$};
+\end{tikzpicture}

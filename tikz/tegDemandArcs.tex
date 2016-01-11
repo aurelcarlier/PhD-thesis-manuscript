@@ -1,0 +1,24 @@
+\begin{tikzpicture}[>=stealth, thick, scale=2]
+
+\def\timeAxisY{0.5}
+
+% TIME LINE
+\draw[timeline] (0.8,\timeAxisY) -- (5.2,\timeAxisY) node[below right]{time};
+\foreach \text / \pos in {{$1$/(1,\timeAxisY)}, {$2$/(2,\timeAxisY)}, {$t$/(3.5,\timeAxisY)}, {$\nbTimeSteps$/(5,\timeAxisY)}}
+\node[label=below:\text] at \pos {$|$};
+
+\node[label=below:$\cdots$, below=.2cm] at (2.75,\timeAxisY){};
+\node[label=below:$\cdots$, below=.2cm] at (4.25,\timeAxisY){};
+
+\foreach \x in {1,2,3.5,5}
+\path[timestepline] (\x,\timeAxisY) -- (\x,2.5);
+
+% STATIONS
+\foreach \name / \pos / \text in {{station1_1/(1,2)/$1(1)$}, {station1_2/(2,2)/$1(2)$}, {stationETC1/(3.5,2)/$1(t)$}, {station1_T/(5,2)/$1(\nbTimeSteps)$}, {station2_1/(1,1)/$2(1)$}, {station2_2/(2,1)/$2(2)$}, {stationETC2/(3.5,1)/$2(t)$}, {station2_T/(5,1)/$2(\nbTimeSteps)$}}
+\node[station] (\name) at \pos {\text};
+
+% ARCS DEMAND
+\path[arcDemand] (station1_1) edge[in=120, out=-45] node[above]{$a_1$} (station2_2);
+\path[arcDemand] (station2_T) edge[in=-45, out=135] node[near start, above]{$a_2$} (station1_2);
+
+\end{tikzpicture}

@@ -9,32 +9,74 @@
 \hfill
 \begin{minipage}[c]{0.7\linewidth}
 \begin{abstract}
-In order to test the linear mathematical model, we first need data.
-Unfortunately, we do not yet have enough relevant and actual data that could be used for study purposes.
-%More particularly, we need a description of an existing carsharing infrastructure, which include stations positioning and demands between stations over time.
-%To deals with that, the first subsection presents how we generate data using a random generator.
-To cope with that, we propose to generate data using a random generator described in the first subsection.
-Then, the second subsection gives some discussion about computation times and solutions analysis of small instances, based on generated data.
-Three-dimensional Pareto frontier is especially presented.
-Finally, third subsection is dedicated to scalability experimentations, particularly the solver's performance when the problem increases in size.
+In the last chapter, we have proved that the System Dimensioning Problem (SDP) can be approached using an integer linear program.
+Although a polynomial sub case of the SDP has been highlighted, the global problem complexity is still unknown.
+It rises the question of an acceptable computing time and resources according to our industry context.
+Can the program deal with real instances, or at least realistic instances ?
+We propose in this chapter to evaluate the problem from a computational perspective.
 \end{abstract}
 \end{minipage}
 
 \newpage
-\section{Experimental context}
-All experimental results addressed bellow were made using an Intel(R) Core(TM) i3-3227U CPU running at $1.9$GHz. The linear programs were expressed using the AMPL format \cite{ampl_webPage} and numerical results were obtained using GLPK v4.52 \cite{glpk_webPage}.
+\section{Introduction}
 
-\newpage
+The lack of available real carsharing demand data prevents us from a meaningful confrontation between an actual operating carsharing system and an optimal system dimensioning configuration underlined by the linear program.
+
+We presented in Chapter \ref{??} a random data generator that has been developed especially to cope with that lack.
+It defines a specific time environment, generates a random set of stations with settable maximum capacities and a realistic set of carsharing demands from origins to destinations during the day.
+This chapter focuses on computational experiments based on the random data generator.
+It explores several computing aspects of the linear program, from the maximum problem size the program can solve to observed solver computation times.
+Generator parameter values will be specified at the beginning of each experiment.
+For more details on the random data generator, see Section \ref{?} page \pageref{?}.
+
+
+%In order to test the linear mathematical model, we first need data.
+%Unfortunately, we do not yet have enough relevant and actual data that could be used for study purposes.
+%More particularly, we need a description of an existing carsharing infrastructure, which include stations positioning and demands between stations over time.
+%To deals with that, the first subsection presents how we generate data using a random generator.
+%To cope with that, we propose to generate data using a random generator described in the first subsection.
+This chapter is organize as follow.
+Section \ref{?} gives some discussion about computation times and solutions analysis of small instances, based on generated data.
+Three-dimensional Pareto frontier is especially presented.
+Section \ref{?} is dedicated to scalability experimentations, particularly the solver's performance when the problem increases in size.
+
+
+
 \section{First experiments and scalability}
-\subsection{3-pareto fontier}
-First of all, we start our experimentations considering $N=10$ stations, $T=144$ time-steps and $M=500$ demands. The upper bound of relocation operations and the number of vehicles belong to the set $\{0, 10, \cdots, 80\}$. For those fixed values, $30$ instances were generated using the random generator previously described for studding the computation time of the optimal solutions and the impact of model's building time.
+\subsection{Experimental context}
 
-\begin{table}[t]
+In this first section, all experimental results were made using an Intel(R) Core(TM) i3-3227U CPU running at $1.9$GHz. The linear programs were expressed using the AMPL format \cite{ampl_webPage} and numerical results were obtained using the open-source solver GLPK v4.52 \cite{glpk_webPage}.
+
+The choice of GLPK instead of a commercial solver is mainly motivated by our industrial context.
+The will to transfer easily our methodology and tools in an industrial environment initially led us to use an open-source solver.
+Although the solutions we obtained with GLPK were quite good, some hard limitations related to the program build time lead us to use later a more flexible and powerfull solver (CPLEX).
+
+
+\subsection{3-pareto fontier}
+First experiment aims at assessing solver computation times of "small" SDP instances.
+Considering $\nbStations = 10$ stations, $\nbTimeSteps = 144$ time-steps and $\nbDemands = 500$ demands, we collected program building times and solver computation times of $30$ random instances.
+We assumed here that the system could be balanced using vehicle relocation operations at any time-step in $\timeStepSet$ (\ie $\relocTimeStepSet = \timeStepSet$).
+
+\bigskip
+For those fixed SDP values, the corresponding TEG has:
+\begin{itemize}
+\item $|\tegNodeSet| = \nbStations \cdot \nbTimeSteps = 10 \cdot 144 = \np{1440}$ nodes, and
+\item $|\tegArcSet| = \nbStations \cdot \nbTimeSteps + \nbDemands + |\relocTimeStepSet| \cdot \nbStations \cdot (\nbStations - 1) = (10 \cdot 144) + 500 + (144 \cdot 10 \cdot 9) = \np{14900}$ arcs.
+\end{itemize}
+
+For each random instance, the solver determine the maximum number of carsharing demand the system is able to satisfy according to different upper bound of relocation operations (R) and the number of vehicles (C).
+After having tested some empirical values of R and C, we observed that setting both of them to the set $\{0, 10, \cdots, 80\}$ produce the most representative results.
+For each random instance, a total of $9 \times 9 = 81$ linear programs are solved (9 values for R and 9 values for C).
+Table \ref{table_computationTimes} presents the average computation time $\mu$ and the standard deviation $\sigma$ for both integer linear program ILP and its relaxation to linear program LP.
+The minimal and maximal values are also specified.
+Note that the linear program in this experiment contains $|\tegArcSet| = \np{14900}$ variables, and  $xxx$ constraints.
+
+\begin{table}[h]
 \renewcommand{\arraystretch}{2.3}
-\caption{computation times in seconds}
+\caption{Computation times in seconds}
 \label{table_computationTimes}
 \centering
-\begin{tabularx}{\linewidth}{|c|*{5}{>{\centering \arraybackslash}X|}}
+\begin{tabularx}{.8\linewidth}{|c|*{5}{>{\centering \arraybackslash}X|}}
 \cline{2-5}
 \multicolumn{1}{c|}{} & $\mu$ & $\sigma$ & $\min$ & $\max$ \\
 \hline
@@ -44,29 +86,39 @@ ILP & $1,93$ & $1,86$ &	$<0,01$ & $16,77$ \\
 \end{tabularx}
 \end{table}
 
-Table \ref{table_computationTimes} presents the average computation time $\mu$ and the standard deviation $\sigma$ for both integer linear program ILP and its relaxation to linear program LP. The minimal and maximal values are also specified.
-The first observation is that computation times remains quite low, in the order of a half-second for LPs and two seconds for ILPs. The major part is taken by the building of the mathematical program which takes $34$s (mostly  by the conservation law) regardless of which model is built.
-Secondly, when the solver runs the LP model, almost $8$ problems (exactly $7,66$ on average) under $81$ admit a non-integer value of the objective function, over the $30$ generated instances. This result represents almost $10\%$ of all instances. However, every time we get a non-integer optimal value, the integer one has always the same integer part.
-Hence it comes that we conjecture the existence of an integer optimal solution for LP and that the difference between the two criteria values comes from rounding errors.
+The first observation is that computation times remain quite low, in the order of a half-second for LPs and two seconds for ILPs.
+The major part is taken by the building of the mathematical program which takes $34$ seconds (mostly  by the conservation law's constraints) regardless of which model is built.
 
-\begin{figure}[b]
+Secondly, when the solver runs the LP model, almost $8$ problems (exactly $7,66$ on average) under $81$ admit a non-integer value of the objective function, over the $30$ generated instances.
+This result represents almost $10\%$ of all instances.
+However, every time we get a non-integer optimal value, the integer one has always the same integer part.
+Hence it comes that we conjecture the existence of an integer optimal solution for LP and that the difference between the two criteria values comes from rounding errors > peut etre changer la conclusion.
+
+\begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{result_parteo_frontier}
+\includegraphics[width=.8\linewidth]{result_parteo_frontier}
 \caption{3-dimensional Pareto frontier}
 \label{fig_pareto}
 \end{figure}
 
-Figure \ref{fig_pareto} shows a 3-dimensional Pareto frontier for a particular instance. When all the demands are satisfied, the minimal number of vehicles equals $50$. In this case, at least $70$ relocation operations are necessary. If the number of vehicle increases to $70$, $50$ relocations are needed. This confirms that the two criteria are in opposition and that there exists a tradeoff area between them.
+% Numerical values are presented in Figure \ref{fig_pareto}.
 
+Figure \ref{fig_pareto} shows a 3-dimensional Pareto frontier for a particular problem instance where the coloured layers correspond to different demand satisfaction levels.
+For instance, the yellow level denotes a level satisfaction between $60$\% and $80$\%, whereas the green level stands for the maximal satisfaction level ($100$\%).
+In the latter, the minimal number of vehicles equals $50$.
+In this case, at least $70$ relocation operations are necessary.
+If the number of vehicle increases to $70$, $50$ relocations are needed.
+This confirms that the two criteria are in opposition and that there exists a tradeoff area between them.
 
 \subsection{Scalability study}
 The aim of this second experimentation is to measure the overall computation times following the size of the problem. We observed previously that its most important part comes from the linear program generation.
 
 \begin{table}[t]
 \renewcommand{\arraystretch}{1.8}
-\caption{generation time depending on the size of the graph (in seconds)}
+\caption{Generation time depending on the size of the graph (in seconds)}
 \label{table_generationTimes}
-\begin{tabularx}{\linewidth}{|c|*{5}{>{\centering \arraybackslash}X|}}
+\centering
+\begin{tabularx}{.9\linewidth}{|c|*{5}{>{\centering \arraybackslash}X|}}
 \hline
 \backslashbox{T~}{N~} & $10$ & $20$ & $30$ & $40$ & $50$\\
 
@@ -86,13 +138,13 @@ The aim of this second experimentation is to measure the overall computation tim
 \end{tabularx}
 \end{table}
 
-Table \ref{table_generationTimes} presents the generation times depending on the number of stations and time-steps. Each measure was obtained from one instance since the time needed for generating the model only depends on the size of the time extended graph. Note that when $N=50$, $T=288$ and $R=C=80$, GLPK founds an optimal solution within $1'20$ minute and an integer optimal solution within $1'30$ minute. We observe that the generation time grows linearly following the number of arcs of the time extended graph, which is around $700~000$ for this instance. Moreover, this is confirmed by the correlation coefficient between generation time and the number of arcs in the graph standing at $95,9\%$. This result is coherent since the size of the linear model and the number of variables are both in $\Theta(|{\cA}|)$.
+Table \ref{table_generationTimes} presents the generation times depending on the number of stations and time-steps. Each measure was obtained from one instance since the time needed for generating the model only depends on the size of the time extended graph. Note that when $\nbStations = 50$, $\nbTimeSteps = 288$ and $\nbVROs = \nbVehicles = 80$, GLPK founds an optimal solution within $1'20$ minute and an integer optimal solution within $1'30$ minute. We observe that the generation time grows linearly following the number of arcs of the time extended graph, which is around $700~000$ for this instance. Moreover, this is confirmed by the correlation coefficient (Pearson product-moment correlation coefficient) between generation time and the number of arcs in the graph standing at $95,9\%$. This result is coherent since the size of the linear model and the number of variables are both in $\Theta(|{\cA}|)$.
 
-For the biggest instance ($N=50$, $T=288$), the relocation arcs represent $98\%$ of the total number of arcs. Therefore, we suggest to increase the scalability of the method by considering for example only short distance relocation arcs or defining them at fixed time-steps.
+For the biggest instance ($\nbStations = 50$, $\nbTimeSteps = 288$), the relocation arcs represent $98\%$ of the total number of arcs. Therefore, we suggest to increase the scalability of the method by considering for example only short distance relocation arcs or defining them at fixed time-steps.
 
 \newpage
 \section{Working on relocation operations}
-Previous results presented in \cite{carlier2014} aimed to evaluate the scalability of the optimization model described before.
+Previous results aimed to evaluate the scalability of the optimization model described before.
 Computation times were obtained on small realistic instances with $10$ stations and $144$ time steps using an open source solver (GLPK).
 The authors observed that they were negligible compared to model building time and decided to study the building time behaviour when the problem grows.
 Results shown that they were unaffordable in an industrial or real case context, even for a realistic case, and can be improved by reducing the size of the linear programs.
@@ -122,7 +174,7 @@ The goal is to accelerate the resolution of our optimization problem.
 
 Table \ref{table:graphDensity} presents some numerical parameters of any generated TEG.
 We studied four strategies (S1 to S4) which generate relocation operations respectively every $30$ minutes, $1$, $2$ and $4$ hours. 
-The number of nodes is always equal to ${\cal X}= N \times T = 50 \times 144=7200$, while the total number of arcs $|{\cal A}|$ decreases following the frequency of relocation operations (RF)  during a day. 
+The number of nodes is always equal to $|\tegNodeSet| = \nbStations \times \nbTimeSteps = 50 \times 144 = 7200$, while the total number of arcs $|\tegArcSet|$ decreases following the frequency of relocation operations (RF) during a day.
 The respective ratios of remaining arcs compared to BS (\% BS) and the arcs removed (\% elim) are also presented, followed by the exact number of relocation arcs (RA) and their proportion in the graph.
 
 \begin{table}[h]
@@ -131,7 +183,7 @@ The respective ratios of remaining arcs compared to BS (\% BS) and the arcs remo
 \centering
 \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lrrrrrrr@{}}
 \hline
-Strategy  & $|{\cal N}|$ & $|{\cal A}|$  &    RF & \% BS &      \% elim &       RA &    RA$/|{\cal A}|$ \\
+Strategy  & $|\tegNodeSet|$ & $|\tegArcSet|$  &    RF & \% BS &      \% elim &       RA &    RA$/|{\cal A}|$ \\
 \hline
 (BS) : Every 10 min  &         7200 &      $360500$ & $144$ &    $100,00$\% &   $-~~~~~~$ & $352800$ & $97,86$\% \\
 (S1) : Every 30 min  &         7200 &      $125300$ &  $48$ &     $34,76$\% & - $65,24$\% & $117600$ & $93,85$\% \\
