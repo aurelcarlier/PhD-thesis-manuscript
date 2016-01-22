@@ -1,0 +1,40 @@
+\begin{tikzpicture}
+\begin{axis}[
+width=.45\linewidth,
+xlabel=Number of stations,
+ylabel=Number of arcs in the TEG,
+legend pos=north west,
+legend cell align=left,
+axis x line=bottom,
+axis y line=left,
+]
+
+\addplot[smooth,mark=*,color=green] plot coordinates {
+(10,29300)
+(20,115700)
+(30,259700)
+(40,461300)
+(50,720500)
+};
+\addlegendentry{$\nbTimeSteps = 288$}
+
+\addplot[smooth,mark=*,color=red] plot coordinates {
+(10,14900)
+(20,58100)
+(30,130100)
+(40,230900)
+(50,360500)
+};
+\addlegendentry{$\nbTimeSteps = 144$}
+
+\addplot[smooth,mark=*,color=blue] plot coordinates {
+(10,7700)
+(20,29300)
+(30,65300)
+(40,115700)
+(50,180500)
+};
+\addlegendentry{$\nbTimeSteps = 72$}
+
+\end{axis}
+\end{tikzpicture}

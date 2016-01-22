@@ -4,4 +4,8 @@ master.pdf
 *.db
 *.aux
 *.mtc*
+*.log
+*.out
+*.toc
+*.synctex.gz
 front_page/*.pdf
