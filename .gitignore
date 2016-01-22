@@ -2,4 +2,6 @@ master.pdf
 *.jpg
 *.png
 *.db
+*.aux
+*.mtc*
 front_page/*.pdf
