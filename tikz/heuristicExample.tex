@@ -1,0 +1,216 @@
+\tikzstyle{stationb}=[circle, fill = white, opacity = 1, draw, minimum size = 0.7cm]
+\tikzstyle{arcred}=[draw, ->, color = red, line width = 1pt]
+\tikzstyle{arcblue}=[draw, ->, color = blue, line width = 1pt]
+\tikzstyle{arrowmod}=[draw, line width = 2pt]
+
+\begin{tikzpicture}
+
+%Division des taches
+\node[dumbnode] (dumb) at (0,0) {};
+
+%graph example
+
+\node[stationb] (S10) [left of = dumb, node distance = 1cm] {1(0)};
+\node[stationb] (S11) [right of =  S10, node distance = 1.8cm] {1(1)};
+\node[stationb] (S12) [right of = S11, node distance = 1.8cm] {1(2)};
+\node[stationb] (S13) [right of = S12, node distance = 1.8cm] {1(3)};
+\node[stationb] (S21) [below of = S11, node distance = 2.3cm] {2(1)};
+\node[stationb] (S22) [right of = S21, node distance = 1.8cm] {2(2)};
+\node[stationb] (S23) [right of = S22, node distance = 1.8cm] {2(3)};	
+
+
+%Value above node heuristic
+\node[dumbnode] (valueS10) [above of = S10,color = green, node distance = 0.8cm] {\emph{(0,0)}};
+\node[dumbnode] (valueS11) [above of = S11, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS12) [above of = S12, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS13) [above of = S13, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS21) [above of = S21, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS22) [above of = S22, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS23) [above of = S23, node distance = 0.8cm] {($\infty$,0)};
+
+\path[arcStock] (S10) -- (S11);
+\path[arcStock] (S11) -- (S12);
+\path[arcred] (S11) -- (S22);
+\path[arcStock] (S12) -- (S13);
+\path[arcblue] (S22) -- (S13);
+\path[arcblue] (S12) -- (S23);
+\path[arcred] (S10) -- (S21);
+\path[arcStock] (S22) -- (S23);
+\path[arcStock] (S21) -- (S22);
+
+
+\node[dumbnode] (dumb1) [below left of = S21, node distance = 1.5cm] {};
+\node[dumbnode] (dumb3) [left of = dumb1, node distance = 1.5cm] {};
+
+\node[graduation] (markt0) [left of = dumb1, node distance = 0.7cm] {$|$};
+\node[graduation] (markt1) [right of = markt0, node distance = 1.8cm] {$|$};
+\node[graduation] (markt2) [right of = markt1, node distance = 1.8cm] {$|$};
+\node[graduation] (markt3) [right of = markt2, node distance = 1.8cm] {$|$};
+\node[timestep] (t0) [below of = markt0] {$0$};
+\node[timestep] (t1) [below of = markt1] {$1$};
+\node[timestep] (t2) [below of = markt2] {$2$};
+\node[timestep] (t3) [below of = markt3] {$3$};
+
+\node[dumbnode] (g1) [below left of = t2] {\emph{Step 1} : Init and select the lower couple (in green)};
+\node[dumbnode] (dumb2) [right of = markt3, node distance = 1cm] {};
+
+\path[timeline] (dumb3) -- (dumb2);
+
+%graph example second
+
+\node[stationb] (S10a) [right of = S13, node distance = 3.5cm] {1(0)};
+\node[stationb] (S11a) [right of =  S10a, node distance = 1.8cm] {1(1)};
+\node[stationb] (S12a) [right of = S11a, node distance = 1.8cm] {1(2)};
+\node[stationb] (S13a) [right of = S12a, node distance = 1.8cm] {1(3)};
+\node[stationb] (S21a) [below of = S11a, node distance = 2.3cm] {2(1)};
+\node[stationb] (S22a) [right of = S21a, node distance = 1.8cm] {2(2)};
+\node[stationb] (S23a) [right of = S22a, node distance = 1.8cm] {2(3)};	
+
+
+%Value above node heuristic
+\node[dumbnode] (valueS10a) [above of = S10a,color = green, node distance = 0.8cm] {(0,0)};
+\node[dumbnode] (valueS11a) [above of = S11a, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS12a) [above of = S12a, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS13a) [above of = S13a, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS21a) [above of = S21a, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS22a) [above of = S22a, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS23a) [above of = S23a, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS11aa) [above of = valueS11a, node distance = 0.5cm] {(1,25)};
+\node[dumbnode] (valueS21aa) [above of = valueS21a, node distance = 0.5cm] {(0,-10)};
+
+\path[arcStock] (S10a) -- (S11a);
+\path[arcStock] (S11a) -- (S12a);
+\path[arcred] (S11a) -- (S22a);
+\path[arcStock] (S12a) -- (S13a);
+\path[arcblue] (S22a) -- (S13a);
+\path[arcblue] (S12a) -- (S23a);
+\path[arcred] (S10a) -- (S21a);
+\path[arcStock] (S22a) -- (S23a);
+\path[arcStock] (S21a) -- (S22a);
+
+
+\node[dumbnode] (dumb1a) [below left of = S21a, node distance = 1.5cm] {};
+\node[dumbnode] (dumb3a) [left of = dumb1a, node distance = 1.5cm] {};
+
+\node[graduation] (markt0a) [left of = dumb1a, node distance = 0.7cm] {$|$};
+\node[graduation] (markt1a) [right of = markt0a, node distance = 1.8cm] {$|$};
+\node[graduation] (markt2a) [right of = markt1a, node distance = 1.8cm] {$|$};
+\node[graduation] (markt3a) [right of = markt2a, node distance = 1.8cm] {$|$};
+\node[timestep] (t0a) [below of = markt0a] {$0$};
+\node[timestep] (t1a) [below of = markt1a] {$1$};
+\node[timestep] (t2a) [below of = markt2a] {$2$};
+\node[timestep] (t3a) [below of = markt3a] {$3$};
+
+\node[dumbnode] (g1a) [below left of = t2a] {\emph{Step 2} : Add the new couple for each adjacent arc};
+\node[dumbnode] (dumb2a) [right of = markt3a, node distance = 1cm] {};
+
+\path[timeline] (dumb3a) -- (dumb2a);
+\node[dumbnode] (nodearrow) [below right of = S13] {};
+\node[dumbnode] (nodearrowa) [below left of = S10a] {};
+\path[arrowmod] (nodearrow) edge (nodearrowa);
+
+%Third graph
+\node[stationb] (S10b) [below of = t0, node distance = 4cm] {1(0)};
+\node[stationb] (S11b) [right of =  S10b, node distance = 1.8cm] {1(1)};
+\node[stationb] (S12b) [right of = S11b, node distance = 1.8cm] {1(2)};
+\node[stationb] (S13b) [right of = S12b, node distance = 1.8cm] {1(3)};
+\node[stationb] (S21b) [below of = S11b, node distance = 2.3cm] {2(1)};
+\node[stationb] (S22b) [right of = S21b, node distance = 1.8cm] {2(2)};
+\node[stationb] (S23b) [right of = S22b, node distance = 1.8cm] {2(3)};	
+
+
+%Value above node heuristic
+\node[dumbnode] (valueS10b) [above of = S10b,color = green, node distance = 0.8cm] {\emph{(0,0)}};
+\node[dumbnode] (valueS11b) [above of = S11b, node distance = 0.8cm] {(1,25)};
+\node[dumbnode] (valueS12b) [above of = S12b, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS13b) [above of = S13b, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS21b) [above of = S21b, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS22b) [above of = S22b, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS23b) [above of = S23b, node distance = 0.8cm] {($\infty$,0)};
+
+\path[arcStock] (S10b) -- (S11b);
+\path[arcStock] (S11b) -- (S12b);
+\path[arcred] (S11b) -- (S22b);
+\path[arcStock] (S12b) -- (S13b);
+\path[arcblue] (S22b) -- (S13b);
+\path[arcblue] (S12b) -- (S23b);
+\path[arcred] (S10b) -- (S21b);
+\path[arcStock] (S22b) -- (S23b);
+\path[arcStock] (S21b) -- (S22b);
+
+
+\node[dumbnode] (dumb1b) [below left of = S21b, node distance = 1.5cm] {};
+\node[dumbnode] (dumb3b) [left of = dumb1b, node distance = 1.5cm] {};
+
+\node[graduation] (markt0b) [left of = dumb1b, node distance = 0.7cm] {$|$};
+\node[graduation] (markt1b) [right of = markt0b, node distance = 1.8cm] {$|$};
+\node[graduation] (markt2b) [right of = markt1b, node distance = 1.8cm] {$|$};
+\node[graduation] (markt3b) [right of = markt2b, node distance = 1.8cm] {$|$};
+\node[timestep] (t0b) [below of = markt0b] {$0$};
+\node[timestep] (t1b) [below of = markt1b] {$1$};
+\node[timestep] (t2b) [below of = markt2b] {$2$};
+\node[timestep] (t3b) [below of = markt3b] {$3$};
+
+\node[dumbnode] (g1b) [below left of = t2b,align=center,text width=8cm] {\emph{Step 3} : Suppress the useless couple and the energy non valide one};
+\node[dumbnode] (dumb2b) [right of = markt3b, node distance = 1cm] {};
+
+\path[timeline] (dumb3b) -- (dumb2b);
+
+%graph example second
+
+\node[stationb] (S10c) [right of = S13b, node distance = 3.5cm] {1(0)};
+\node[stationb] (S11c) [right of =  S10c, node distance = 1.8cm] {1(1)};
+\node[stationb] (S12c) [right of = S11c, node distance = 1.8cm] {1(2)};
+\node[stationb] (S13c) [right of = S12c, node distance = 1.8cm] {1(3)};
+\node[stationb] (S21c) [below of = S11c, node distance = 2.3cm] {2(1)};
+\node[stationb] (S22c) [right of = S21c, node distance = 1.8cm] {2(2)};
+\node[stationb] (S23c) [right of = S22c, node distance = 1.8cm] {2(3)};	
+
+
+%Value above node heuristic
+\node[dumbnode] (valueS11c) [above of = S11c,color = green, node distance = 0.8cm] {\emph{(1,25)}};
+\node[dumbnode] (valueS12c) [above of = S12c, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS13c) [above of = S13c, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS21c) [above of = S21c, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS22c) [above of = S22c, node distance = 0.8cm] {($\infty$,0)};
+\node[dumbnode] (valueS23c) [above of = S23c, node distance = 0.8cm] {($\infty$,0)};
+%done
+\path[arcStock] (S10c) -- (S11c);
+\path[arcStock] (S11c) -- (S12c);
+\path[arcred] (S11c) -- (S22c);
+\path[arcStock] (S12c) -- (S13c);
+\path[arcblue] (S22c) -- (S13c);
+\path[arcblue] (S12c) -- (S23c);
+\path[arcred] (S10c) -- (S21c);
+\path[arcStock] (S22c) -- (S23c);
+\path[arcStock] (S21c) -- (S22c);
+
+
+\node[dumbnode] (dumb1c) [below left of = S21c, node distance = 1.5cm] {};
+\node[dumbnode] (dumb3c) [left of = dumb1c, node distance = 1.5cm] {};
+
+\node[graduation] (markt0c) [left of = dumb1c, node distance = 0.7cm] {$|$};
+\node[graduation] (markt1c) [right of = markt0c, node distance = 1.8cm] {$|$};
+\node[graduation] (markt2c) [right of = markt1c, node distance = 1.8cm] {$|$};
+\node[graduation] (markt3c) [right of = markt2c, node distance = 1.8cm] {$|$};
+\node[timestep] (t0c) [below of = markt0c] {$0$};
+\node[timestep] (t1c) [below of = markt1c] {$1$};
+\node[timestep] (t2c) [below of = markt2c] {$2$};
+\node[timestep] (t3c) [below of = markt3c] {$3$};
+
+\node[dumbnode] (g1c) [below left of = t2c,align=center,text width=8cm] {\emph{Step 4} : Supress the choosen couple,\\ select the next one and repeat from step 2};
+\node[dumbnode] (dumb2c) [right of = markt3c, node distance = 1cm] {};
+
+\path[timeline] (dumb3c) -- (dumb2c);
+\node[dumbnode] (nodearrowb) [below right of = S13b] {};
+\node[dumbnode] (nodearrowc) [below left of = S10c] {};
+\path[arrowmod] (nodearrowb) edge (nodearrowc);
+
+
+\node[dumbnode] (arrowa) [below left of = t0a] {};
+\node[dumbnode] (arrowb) [above right of = valueS13b] {};
+\path[arrowmod] (arrowa) edge (arrowb);
+
+\node[dumbnode] (arrowd) [below of = t2a] {};
+\node[dumbnode] (arrowc) [above of = valueS12c, node distance = 0.5cm] {};
+\end{tikzpicture}

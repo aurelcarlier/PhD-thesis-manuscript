@@ -1,0 +1,14 @@
+\tikzstyle{stationc}=[circle, fill = white, opacity = 1, draw, minimum size = 0.5cm]
+
+\begin{tikzpicture}
+\node[dumbnode] (dumb) at (0,0) {};
+\node[stationc] (S11) [right of = dumb, node distance = 2cm] {x};
+\node[dumbnode] (S12) [right of = S11, node distance = 2cm] {};
+\path[arcStock] (dumb) edge [ bend left = 20] node[capacity]{$i$} (S11);
+\path[arcStock] (dumb) edge [ bend right = 20] node[capacity,below]{$i\prime$} (S11);
+\path[arcStock] (S11) edge [ bend left = 20] node[capacity]{$j$} (S12);
+\path[arcStock] (S11) edge [ bend right = 20] node[capacity,below]{$j\prime$} (S12);
+\node[dumbnode] (dumb1) [right of = S12, node distance = 1cm] {Variables : };
+\node[dumbnode] (dumb2) [right of = dumb1, node distance = 3.5cm] {before : {\{$A_{ij},A_{i\prime j},A_{ij\prime},A_{i\prime j\prime}$\}}};
+\node[dumbnode] (dumb3) [below left of = dumb2, node distance = 1.1cm] {after : {\{$A_{ij},A_{i\prime j\prime}$\}}};
+\end{tikzpicture}

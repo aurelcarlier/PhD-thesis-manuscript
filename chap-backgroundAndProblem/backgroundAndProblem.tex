@@ -157,6 +157,23 @@ The principle is very simple: when users wanted to travel from a station with sh
 But despite the fact this strategy effectively balances the system in theory, it relies on assumptions that may be unrealistic in practice.
 For instance, it's not relevant if a majority of travellers value privacy and convenience over minor cost saving, or if trip-joining policies make carsharing similar to carpooling (which has severe sociological barriers associated with riding with strangers, mainly for safety and security reasons as said in \cite{chan_ridesharing_2012, correia_carpooling_2011}), or finally, with respect to trip splitting, if users simply do not want to be divided.
 
+%%%%%%%%%%%%%% intro Sean sur les relocations
+However, the main issue with carsharing optimisation is the vehicle relocation.
+Indeed, in the case of one-way carsharing, the user doesn't have to leave the car where it was picked up.
+This can create uneven distribution of cars depending on the trip which can lead to stations without cars or stations without free parking spaces.
+
+This issue is more and more studied and research tends to lead to two possibilities.
+The first one is to let the operator even out by relocating cars from stations with higher numbers of vehicles to stations with fewer number of vehicles.
+This possibility is studied most of the time using stochastic method \cite{fan_optimizing_2014} or heuristics \cite{duron_analysis_2000}.
+The second one is to reward the user by applying various incentive mechanisms.
+For example, the operator decreases the rental cost if the client accepts to deliver his car not to the original station but to an almost empty station nearby.
+This also means asking a group to use different cars if the station has not enough available parking spaces or asking strangers to regroup in order to use only one car if the station has less cars with a lower rental cost as reward.
+This method has good results with preselected people but depends on the behaviour of the users.
+Thus, in general, the client will choose his safety and privacy over a reward.
+%%%%%%%%%%%%%% fin intro Sean sur les relocations
+
+
+
 \subsection{Outlooks}
 
 For an interesting and complete literature review of the carsharing systems and their attached problems, please refer to \cite{jorge_carsharing_2013}.
@@ -184,6 +201,29 @@ They all use mathematical integer programming (MIP) models and thus are limited 
 The large number of variables needed to integrate several decisions into the same problem in a real case study context is indeed a real challenge in this field.
 Actually, this last problem represents the core of this thesis and the scope of our research.
 Therefore, the next chapter will introduce more precisely the reasons why we were especially interested by those aspects and give a mathematical formulation of the problem we are working on.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% intro Sean
+\subsection{Definition, advantages and drawbacks}
+Today, it continues to grow in major cities and tries to conquer middle sized cities.
+In 2014, carsharing had 4.94 million members and 92 200 cars \cite{frost_strategic_2014}.
+We can explain this will to make carsharing succeed by three facts.
+Firstly, carsharing vehicle spend more time on the road in order to fulfil other requests so require fewer parking spaces \cite{mitchell_reinventing_2010} than personal car which spends 90\% of its time parked \cite{hu_summary_2004}.
+Secondly, research \cite{sioui_carsharing_2013} proves that carsharing tends to reduce the average time spent driving.
+And finally, carsharing has also positive impacts on the environment.
+
+\subsection{Demand modelling}
+Carsharing users have been studied and more precisely their motivations to use it.
+Studies show that the average user is a 35 to 45 male, highly educated and environmentally aware.
+Main factors to join a carsharing program are: the accessibility to the stations, the nearest station, the age of the station and the percentage of people using their personal car \cite{jorge_carsharing_2013}.
+All these factors have to be taken into account for the development of carsharing.
+One other main factor is the flexibility.
+Due to its nature, round-way carsharing is unsuitable for capturing all possible trips.
+So cars from round-way carsharing are mainly used for leisure or shopping \cite{barth_shared_use_2002, costain_synopsis_2012}.
+One-way carsharing provide more freedom to the user which is a main selling point.
+Today, the number of people giving up using their personal car and opting for carsharing is still unknown.
+This number will be the key to finding out if carsharing really brings down the number of personal cars or if it attracts more people from the public transportation.
+%%%%%%%%%%%%%%%%%%%%%%%%%% fin intro Sean
 
 
 \newpage
@@ -215,7 +255,7 @@ Now, the next step is to identify the two stations concerned by this demand at t
 
 \begin{figure}[t]
 \flushleft
-\includegraphics[width=\linewidth]{demandDistribution}
+\includegraphics[width=.7\linewidth]{demandDistribution}
 \caption{Classical average demand profile in dense areas over the course of a weekday}
 \label{fig:demandProfile}
 \end{figure}

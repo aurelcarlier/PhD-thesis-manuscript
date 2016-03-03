@@ -1,0 +1,25 @@
+\tikzstyle{stationc}=[circle, fill = white, opacity = 1, draw, minimum size = 0.5cm]
+\tikzstyle{arcdash}=[draw, dashed]
+
+\begin{tikzpicture}
+\node[dumbnode] (dumb) at (0,0) {};
+\node[stationc] (S11) [above of = dumb, node distance = 1cm] {A};
+\node[stationc] (S12) [right of = S11, node distance = 2cm] {B};
+\node[dumbnode] (dumb1) [left of = S11, node distance = 1cm] {i};
+\node[dumbnode] (dumb2) [below left of = S11, node distance = 1cm] {};
+\node[dumbnode] (dumb3) [right of = S12, node distance = 1cm] {k};
+\node[dumbnode] (dumb4) [below right of = S12, node distance = 1cm] {};
+\node[dumbnode] (dumb5) [above right of = S12, node distance = 1cm] {};
+\node[dumbnode] (dumb6) [below of = S11, node distance = 1cm] {$\sum_{i}^{}{A_{ij}}$};
+\node[dumbnode] (dumb7) [above of = dumb6, node distance = 2 cm] {};
+\node[dumbnode] (dumb8) [below of = S12, node distance = 1cm] {$\sum_{k}^{}{A_{jk}}$};
+\node[dumbnode] (dumb9) [above of = dumb8, node distance = 2 cm] {};
+\path[arcdash] (dumb6) edge [bend left =50] (dumb7);
+\path[arcdash] (dumb8) edge [bend right =50] (dumb9);
+\path[arcStock] (dumb1) -- (S11);
+\path[arcStock] (dumb2) -- (S11);
+\path[arcStock]  (S12) -- (dumb3);
+\path[arcStock] (S12) -- (dumb4);
+\path[arcStock] (S12) -- (dumb5);
+\path[arcStock] (S11) edge node[capacity] {$\varphi (j)$} (S12);
+\end{tikzpicture}

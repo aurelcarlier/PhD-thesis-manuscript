@@ -52,7 +52,7 @@ Considering $\nbStations = 10$ stations, $\nbTimeSteps = 144$ time-steps and $\n
 We assumed here that the system could be balanced using vehicle relocation operations at any time-step in $\timeStepSet$ (\ie $\relocTimeStepSet = \timeStepSet$).
 
 \bigskip
-For those fixed SDP values, the corresponding TEG has:
+For those fixed SDP inputs, the corresponding TEG has:
 \begin{itemize}
 \item $|\tegNodeSet| = \nbStations \cdot \nbTimeSteps = 10 \cdot 144 = \np{1440}$ nodes, and
 \item $|\tegArcSet| = \nbStations \cdot \nbTimeSteps + \nbDemands + |\relocTimeStepSet| \cdot \nbStations \cdot (\nbStations - 1) = (10 \cdot 144) + 500 + (144 \cdot 10 \cdot 9) = \np{14900}$ arcs. This value is actually an upper-bound of the number of arc since $\nbDemands$ is interpreted by the generator as $\sum_{a \in \tegArcSet_2} u(a)$, which potentially lead to the situation where $|\tegArcSet_2| < \nbDemands$.
@@ -345,6 +345,8 @@ Also note that computation time values are almost equal for both exact or approx
 The surprise is that the optimal number of fulfilled demands are almost not impacted by the reduction of relocation arcs.
 The optimal values following  the different strategies remain very close to the baseline one for both LP or ILP resolutions,
 with a gap varying from $0,4$\% in (S1) to $5$\% in (S4).
+
+\section{Conclusions}
 
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}

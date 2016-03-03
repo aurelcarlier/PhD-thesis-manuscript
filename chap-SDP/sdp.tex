@@ -36,7 +36,7 @@ As seen in \cite{les_relocs_sont_importantes_et_necessaires}, the optimization p
 They are the only known "technique" to re-equilibrate the system and reach a higher satisfied demand.
 
 In the reminder of this work, this system design problem will be refer as the \emph{System Dimensioning Problem} (SDP).
-Its concise formulation could be:
+Its concise formulation follows:
 \begin{quote}
 ``Considering potential one-way carsharing station locations and demands over time, what is the optimal \emph{system configuration} capturing the higher number of demands ?''
 \end{quote}
@@ -61,7 +61,8 @@ Section
 
 \newpage
 \section{Mathematical model} \label{sec:mathModel}
-\subsection{Problem inputs}
+\subsection{Formal problem statements}
+\paragraph{Inputs:}
 % In order to describe the mathematical problem, let us define first the required inputs.
 % As discussed later, those data can be extracted from various sources such as simulation tools or real operating carsharing system data for example. 
 
@@ -75,20 +76,20 @@ The time period between consecutive steps, noted $\Delta t$, is set constant and
 For relevance issues, and especially for experiment purposes, $\timeStepSet$ has to cover a representative period of time, as an average weekday or an average week for instance.
 For the record, note that a $24$h period segmented into $10$ minutes time-steps represents a total of $144$ steps (\ie $\nbTimeSteps = 144$).
 Some discussions about the assessment of the time component are given in the next chapter.
-~\\
+\medskip
 
 % stations and capacities
 Carsharing stations are gathered in a set called $\stationSet$, and also numbered with natural integers from $1$ to $\nbStations > 1$.
 Each station comes with a natural integer value $Z(i) > 0$, the maximum capacity (in terms of number of parking places) of station $i \in \stationSet$.
 The set of stations' capacities is denoted by $\sCapaSet$.
-~\\
+\medskip
 
 % demands
 Then, $\demandSet$ denotes a set of $\nbDemands$ carsharing demands.
 A demand $D(i,j,t)$ contains the number of passengers wishing to join station $j \in \stationSet$ from station $i \in \stationSet$, when the departure time at $i$ is $t \in \timeStepSet$.
 Note here that there is no condition on the station themselves, thus allowing the potential travel to be a ``round trip'' or a ``one-way'' travel.
 In this latter case, $i$ is simply equal to $j$.
-~\\
+\medskip
 
 % travel times
 Similarly, $\delta(i,j,t)$ represents the travel time it takes for a car-user picking up a vehicle at station $i \in \stationSet$ to reach station $j \in \stationSet$, when departure time from $i$ is $t \in \timeStepSet$.
@@ -101,19 +102,19 @@ More generally, any travel time $tt_{min}$ expressed in minutes can be converted
 For instance, if $\Delta t = 10$, then a $43$ minutes travel will corresponds to a $5$ time-steps travel.
 We suppose that for any triple $(i,j,t) \in \stationSet^2 \times \timeStepSet$, $\delta(i,j,t) < \nbTimeSteps$.
 This assumption comes from the fact that the highest distance from different stations is quite low (usually less than $150$ or $200$ kilometres) and that the time-steps are covering at least a day.
-~\\
+\medskip
 
-Finally, the following list summarize the inputs needed for the mathematical model:
+Finally, the following list summarizes the problem's inputs:
 \begin{itemize}
 \item $\timeStepSet$: the set of $\nbTimeSteps$ time-steps;
 \item $\stationSet$: the set of $\nbStations$ carsharing stations;
 \item $\sCapaSet$: the stations' maximum capacities;
 \item $\demandSet$: the set of carsharing demands among stations and over time;
+\item $\relocTimeStepSet$: the set of time-steps when the system can operates vehicle relocation operations;
 \item $\travelTimeSet$: the set of travel times expressed in time-steps.
 \end{itemize}
 
-\subsection{Problem outputs}
-
+\paragraph{Outputs:}
 A carsharing system dimensioning consists in quantifying the system components in order to get a realistic and runnable system.
 To be more specific, dimensioning a carsharing system expect the following output values:
 \begin{itemize}
@@ -124,6 +125,17 @@ To be more specific, dimensioning a carsharing system expect the following outpu
 \end{itemize}
 % définir ici ce qu'est une 'optimal system configuration' > nb voitures, nb min de place dans chaque stations...
 
+\paragraph{Statement:}
+A formal definition of our main optimization problem, referred as the System Dimensioning Problem with vehicle relocation operations, noted {\SDP} is stated in the following.
+
+\noindent{\SDP}:
+\begin{description}
+\item[Inputs:] A set of $\nbStations$ stations with their capacity $Z(i) \in \sCapaSet$, $i \in \stationSet$, time periods set ${\timeStepSet = \{1, \cdots, \nbTimeSteps\}}$, travel times $\delta(i,j,t) \in \travelTimeSet$ for each triplet $(i,j,t)\in \stationSet^2 \times \timeStepSet$, a set $\demandSet$ of $\nbDemands$ time-dependant demands, fixed number of vehicles $\nbVehicles$ and relocation operations $\nbVROs$.
+\item[Question:]
+What is the maximum number of demands $d \leq \nbDemands$ that can be captured by a vehicle routing of at most $\nbVehicles$ vehicles and $\nbVROs$ vehicle relocation operations during the considered period $\timeStepSet$?
+\end{description}
+We refer later on at SDP($\timeStepSet, \stationSet, \sCapaSet, \demandSet, \relocTimeStepSet, \travelTimeSet, \nbVROs, \nbVehicles$) to indicate a particular SDP instance.
+We will show that {\SDP} belongs to ${\cal NP}$ by modelling feasible solutions as a non classical flow problem.
 
 \subsection{Time Expanded Graph}
 In the Station Dimensioning Problem, time is an essential ingredient.
@@ -133,30 +145,16 @@ The strength of such models arises from the fact that we benefit from results of
 The basic idea is to consider a separate copy of every node at every discrete time-step. % allows to describe the system over time
 Arcs that link these static ``snapshots'' of the network describe temporal linkage in the system.
 
+\medskip
 The resulted TEG is a valued directed graph describing the original system over time.
-According to conventional notations, a TEG will be denoted by $\teg = (\tegNodeSet, \tegArcSet, \tegCapacitySet)$ where $\tegNodeSet$, $\tegArcSet$ and $\tegCapacitySet$ are respectively the set of nodes, the set of arcs and the arcs' capacities.
+According to conventional notations, a TEG will be denoted by $\teg = (\tegNodeSet, \tegArcSet, \tegCapacity)$ where $\tegNodeSet$, $\tegArcSet$ and $\tegCapacity$ are respectively the set of nodes, the set of arcs and the arcs' capacities.
 Next sections aim to describe the graph components, the methodology to build them and their interpretation in the carsharing context.
 
 % However, this time expansion of the original network could become an issue for big instances, especially for the graph density.
 
 \subsubsection{Set of nodes}
-Nodes in the TEG stand for carsharing stations' states over time.
-They are couples $(i,t)$ where $i \in \stationSet$ and $t \in \timeStepSet$ depict the state of each station $i$ at time $t$.
 
-As shown in Figure \ref{fig:tegNodes}, the $\nbStations$ stations are represented vertically and duplicated over time following the horizontal time axis.
-We denoted by $\tegNodeSet$ the set of nodes in the TEG formally defined as:
-\begin{equation}
-\tegNodeSet = \stationSet \times \timeStepSet = \{x=(i,t) \mid i \in \stationSet \text{ and } t \in \timeStepSet\}
-\end{equation}
-The total number of node in $\teg$ is $|\tegNodeSet| = \nbStations \cdot \nbTimeSteps$.
-
-Let $\eta$ and $\theta$ the functions which reciprocally return the station number and the time-step associated with every element of $\tegNodeSet$:
-\begin{align}
-\eta \colon \tegNodeSet  \to \stationSet \text{ ~~~~with~~~~ }  x = (i,t) \mapsto \eta(x) = i \\
-\theta \colon \tegNodeSet \to \timeStepSet \text{ ~~~~with~~~~ } x = (i,t) \mapsto \theta(x) = t
-\end{align} 
-
-\begin{figure}[t] \label{fig:tegNodes}
+\begin{figure}[t]
 \begin{minipage}{.65\textwidth}
 \begin{center}
 \input{tikz/tegNodes}
@@ -166,11 +164,29 @@ Let $\eta$ and $\theta$ the functions which reciprocally return the station numb
 In this figure, $\nbTimeSteps$ time-steps are dispatched horizontally whereas the $\nbStations$ stations are distributed vertically.
 
 \bigskip
-The graph account for a total of $\nbStations \cdot \nbTimeSteps$ nodes and each one of them represents a station's state at a given time-step.
+The graph accounts for a total of $\nbStations \cdot \nbTimeSteps$ nodes and each one of them represents a station's state at a given time-step.
 \end{minipage}
 \caption{The TEG's node configuration}
+\label{fig:tegNodes}
 \end{figure}
 
+Nodes in the TEG stand for carsharing stations' states over time.
+They are couples $(i,t)$ where $i \in \stationSet$ and $t \in \timeStepSet$ depict the state of each station $i$ at time $t$.
+\medskip
+
+As shown in Figure \ref{fig:tegNodes}, the $\nbStations$ stations are represented vertically and duplicated over time following the horizontal time axis.
+We denoted by $\tegNodeSet$ the set of nodes in the TEG formally defined as:
+\begin{equation}
+\tegNodeSet = \stationSet \times \timeStepSet = \{x=(i,t) \mid i \in \stationSet \text{ and } t \in \timeStepSet\}
+\end{equation}
+The total number of node in $\teg$ is $|\tegNodeSet| = \nbStations \cdot \nbTimeSteps$.
+\medskip
+
+Let $\eta$ and $\theta$ the functions which reciprocally return the station number and the time-step associated with every element of $\tegNodeSet$:
+\begin{align}
+\eta \colon \tegNodeSet  \to \stationSet \text{ ~~~~with~~~~ }  x = (i,t) \mapsto \eta(x) = i \\
+\theta \colon \tegNodeSet \to \timeStepSet \text{ ~~~~with~~~~ } x = (i,t) \mapsto \theta(x) = t
+\end{align}
 
 \subsubsection{Set of arcs}
 The set of arcs is denoted by $\tegArcSet$.
@@ -181,35 +197,34 @@ It is formally defined as the following equation.
 \tegArcSet \subseteq \{a=(x,y) \mid x \in \tegNodeSet \text{ and } y \in \tegNodeSet\}
 \end{equation}
 
-In this study, we consider tree temporal operations between/in stations: park a vehicle in a station, satisfy a carsharing demand and relocate a vehicle.
-Those operations are modelled with arcs in $\teg$ and partitioned into tree distinct sets $\tegArcSet_1$, $\tegArcSet_2$ and $\tegArcSet_3$.
+In this study, we consider tree temporal operations among stations: park a vehicle in a station, satisfy a carsharing demand and relocate a vehicle.
+Those operations are modelled with arcs in $\teg$ and partitioned into tree distinct sets denoted by $\tegArcSet_1$, $\tegArcSet_2$ and $\tegArcSet_3$.
 
-\bigskip
-{\noindent\textbf{Stay Parked:}}
+\paragraph{Stay Parked:}
 $\tegArcSet_1$ is the set of arcs representing the possibility for the vehicles to stay parked at a station between two consecutive time-steps.
 Formally, every arc $a = (x,y) \in \tegArcSet_1$ checks the property $P_1$ defined as:
 \begin{numcases}{P_1(a) : }
-\eta(x)		= \eta(y)							& ~ \label{eqn:sameStation}\\
-\theta(y)	= \theta(x) + 1 \mbox{ mod }\nbTimeSteps		& ~ \label{eqn:consecTT}
+\eta(x) = \eta(y) & ~ \label{eqn:sameStation}\\
+\theta(y) = \theta(x) + 1 \mbox{ mod } \nbTimeSteps & ~ \label{eqn:consecTT}
 \end{numcases}
 
 Equation (\ref{eqn:sameStation}) ensures that nodes $x$ and $y$ model the same carsharing station whereas equation (\ref{eqn:consecTT}) expresses the consecutive time-step relation between those station states.
 
-\begin{figure}[t] \label{fig:tegStockArcs}
+\begin{figure}[t]
 \begin{center}
 \input{tikz/tegStockArcs}
 \end{center}
 \caption{Stock arcs in the TEG}
+\label{fig:tegStockArcs}
 \end{figure}
 
-Figure \ref{fig:tegStockArcs} (1.2) illustrates a single station over time where parking a vehicle is model with stock arcs.
+\medskip
+Figure \ref{fig:tegStockArcs} illustrates a single station over time where parking a vehicle is model with stock arcs.
 Note here that an arc exists between node $1(\nbTimeSteps)$ and $1(1)$.
 In our model, time-steps number $\nbTimeSteps$ and $1$ are considered as consecutive.
+The total number of arc in $\tegArcSet_1$ is exactly the number of nodes in the graph, \ie ${|\tegArcSet_1| = |\tegNodeSet| = \nbStations \times \nbTimeSteps}$, since every node in $\teg$ have a unique adjacent stock arc in $\tegArcSet_1$.
 
-The total number of arc in $\tegArcSet_1$ is exactly the number of nodes in the graph, \ie ${|\tegArcSet_1| = \nbStations \times \nbTimeSteps}$, since every node in $\teg$ have an adjacent arc in $\tegArcSet_1$.
-
-\bigskip
-{\noindent\textbf{Fulfil a demand:}}
+\paragraph{Fulfil a demand:}
 Arcs in $\tegArcSet_2$ are associated with a vehicle demand.
 Each demand $D(i,j,t) > 0$ given as input is modelled with an arc linking the station $i$ at time-step $t$, \ie node $x = (i,t) \in \teg$, to station $j$.
 The arrival time-step at station $j$ is calculated using the known travel time $\delta(i,j,t)$ given as input and its value is $t + \delta(i,j,t) \mbox{ mod } \nbTimeSteps$.
@@ -220,7 +235,7 @@ D(\eta(x), \eta(y), \theta(x)) > 0 & ~\\
 \theta(x) + \delta(\eta(x), \eta(y), \theta(x)) = \theta(y) \mbox{ mod } \nbTimeSteps & ~
 \end{numcases}
 
-Figure \ref{fig:tegDemandArcs} (1.3) illustrates the construction of the demand arcs.
+Figure \ref{fig:tegDemandArcs} illustrates the construction of the demand arcs.
 In this basic example, two demands, ${D_1 = D(1,2,1)}$ and ${D_2 = D(2,1,\nbTimeSteps)}$ are represented respectively by arc ${a_1 = (x_1, y_1)}$ and arc ${a_2 = (x_2, y_2)}$.
 Using travel times ${\delta_1 = \delta(1,2,1) = 1}$ and ${\delta_2 = \delta(2,1,\nbTimeSteps) = 2}$ as inputs, the couple of arcs is build as follows:
 
@@ -238,20 +253,20 @@ y_2 = (1, \nbTimeSteps + \delta_2 \mbox{ mod } \nbTimeSteps = 2) = (1, 2) & ~ \n
 \end{numcases}
 \end{minipage}
 
-\begin{figure}[t] \label{fig:tegDemandArcs}
+\begin{figure}[t]
 \begin{center}
 \input{tikz/tegDemandArcs}
 \end{center}
 \caption{Graph representation of two arc demands}
+\label{fig:tegDemandArcs}
 \end{figure}
 
-
-\bigskip
-{\noindent\textbf{Relocate a vehicle between stations:}}
+\paragraph{Relocate a vehicle between stations:}
 $\tegArcSet_3$ represents all the possible vehicle relocation operations over time.
-Let define $\relocTimeStepSet \subseteq \timeStepSet$, the subset of time-steps when the system could be balanced through vehicle relocation operations.
+Let define $\relocTimeStepSet \subseteq \timeStepSet$ \label{def:relocTimeStepSet}, the subset of time-steps when the system could be balanced through vehicle relocation operations.
 Then it comes that any relocation arc can be model as arcs starting from every station at every time-steps in $\relocTimeStepSet$.
 
+\medskip
 Similarly to demand arcs, the arrival nodes are calculated taking into account travel times between stations given as input.
 Formally, any triple $(i,j,t) \in \stationSet^2 \times \relocTimeStepSet$ with $i \neq j$ is modelled as a vehicle relocation arc connecting node $x = (i,t)$ to node $y = (j, t + \delta(i,j,t) \mbox{ mod } \nbTimeSteps)$.
 Property $P_3$ ensures that any arc $a = (x, y)$ belongs to $\tegArcSet_3$.
@@ -261,14 +276,15 @@ Property $P_3$ ensures that any arc $a = (x, y)$ belongs to $\tegArcSet_3$.
 \theta(x) + \delta(\eta(x), \eta(y), \theta(x)) = \theta(y)  \mbox{ mod } \nbTimeSteps		& ~
 \end{numcases}
 
-\begin{figure}[t] \label{fig:tegRelocArcs}
+\begin{figure}[t]
 \begin{center}
 \input{tikz/tegRelocArcs}
 \end{center}
 \caption{Demand arcs in the TEG}
+\label{fig:tegRelocArcs}
 \end{figure}
 
-Figure \ref{fig:tegRelocArcs} (1.4) depicts the set of relocation arcs in a complete TEG where $\relocTimeStepSet = \timeStepSet$.
+Figure \ref{fig:tegRelocArcs} depicts the set of relocation arcs in a complete TEG where $\relocTimeStepSet = \timeStepSet$.
 At every time-step, every station is connected to the other.
 In this model, a vehicle relocation operation can be performed at any time between every pair of stations.
 The total number of vehicle relocation arcs can be calculated using equation (\ref{eqn:nbVehicleRelocationOperation}).
@@ -279,16 +295,15 @@ The total number of vehicle relocation arcs can be calculated using equation (\r
 
 
 \bigskip
-
 Finally, sets $\tegArcSet_1$, $\tegArcSet_2$, $\tegArcSet_3$ are then formally defined as:
 \begin{equation}
-\tegArcSet_k = \{x \in \tegNodeSet \mid P_k(x)\}, \forall k \in \{1, 2, 3\}.
+\tegArcSet_k = \{x \in \tegNodeSet \mid P_k(x)\},\quad\forall k \in \{1, 2, 3\}.
 \end{equation}
 Together, they form a mathematical partition of the set of arcs.
-Assuming that $\demandSet \not= \emptyset$, the tree subsets hold the following relations:
+Assuming that $\demandSet \not= \emptyset$, the three subsets hold the following relations:
 \begin{enumerate}
 \item $\tegArcSet = \bigcup\limits_{k=1}^3 \tegArcSet_k$;
-\item $\tegArcSet_i \cap \tegArcSet_j = \emptyset, \forall i,j \in \{1,2,3\}, i\not= j$.
+\item $\tegArcSet_i \cap \tegArcSet_j = \emptyset, \quad\forall i,j \in \{1,2,3\}, \quad i\not= j$.
 \end{enumerate}
 The total number of arcs is given by:
 \begin{equation} \label{eqn:tegNbArcs}
@@ -298,18 +313,20 @@ where $\nbDemands$ is the number of requested demands.
 When $\relocTimeStepSet = \timeStepSet$, and since $\nbDemands \ll \nbStations^2$, then it comes that ${|\tegArcSet| = \Theta(\nbStations^2 \cdot \nbTimeSteps)}$.
 In this case, we observe that $|\tegArcSet_3|\gg |\tegArcSet_1 \cup \tegArcSet_2|$ and that the number of arcs is then proportional to $\tegArcSet_3$.
 
+\medskip
 Figure \ref{fig:teg} illustrates a complete TEG configuration with $\nbStations$ stations, $\nbTimeSteps$ time-steps and $\relocTimeStepSet = \timeStepSet$.
-\begin{figure}[t] \label{fig:teg}
+\begin{figure}[t]
 \begin{center}
 \input{tikz/tegBis}
 \end{center}
 \caption{Complete TEG with $\nbStations$ stations and $\nbTimeSteps$ time-steps. Maximum capacities for stations $1$ and $\nbStations$ are respectively $8$ and $4$. The two demands are the same as those in figure (\ref{fig:tegDemandArcs})(1.3).}
+\label{fig:teg}
 \end{figure}
 
 \subsubsection{Arcs Capacities}
 Associated with each arc $a = (x,y) \in \tegArcSet$, is given a capacity function $u: \tegArcSet \rightarrow \N$ corresponding to a maximum number of vehicles allowed on $a$.
 It is defined as follows for any arc $a \in \tegArcSet$:
-\begin{numcases}{u(a) =}
+\begin{numcases}{\tegCapacity(a) =}
 Z(\eta(x))                    & if $a \in \tegArcSet_1$, \nonumber \\
 D(\eta(x), \eta(y),\theta(x)) & if $a \in \tegArcSet_2$, \nonumber \\
 + \infty                      & if $a \in \tegArcSet_3$. \nonumber
@@ -329,13 +346,13 @@ It corresponds to the demand for any arc $a \in \tegArcSet_2$, and it is not bou
 %The figure \ref{TEGExample} aims to help represent each topology of each sets of arcs. Capacities over arcs of $\tegArcSet_1$ and $\tegArcSet_2$ are represented in brackets, whereas %those infinite of $\tegArcSet_3$ do not appear in the figure. Let's notice that this example don't represent all the arcs of the graph since it is very dense.\\
 
 \subsubsection{Additional notations}
-We denote by $\Gamma^-(x)$ and $\Gamma^+(x)$ respectively the set of immediate predecessors and successors of a node $x\in\tegNodeSet$.
+We denote by $\Gamma^-(x)$ and $\Gamma^+(x)$ respectively the set of immediate predecessors and successors of a node $x \in \tegNodeSet$.
 \begin{align}
-\Gamma^-(x)=\{y\in{\cX}\mid(y,x)\in\tegArcSet\} \\
-\Gamma^+(x)=\{y\in{\cX}\mid(x,y)\in\tegArcSet\}
+\Gamma^-(x) = \{y \in \tegNodeSet \mid (y,x) \in \tegArcSet\} \\
+\Gamma^+(x) = \{y \in \tegNodeSet \mid (x,y) \in \tegArcSet\}
 \end{align}
 
-For any couple of time instants $\forall (t, t') \in {\timeStepSet}^2$, 
+For any couple of time instants $\forall (t, t') \in \timeStepSet^2$, 
 the number of time-steps between those two instants is defined through the following function:
 
 \begin{minipage}{.25\textwidth}
@@ -352,7 +369,7 @@ T + t' - t & otherwise. \nonumber
 \end{minipage}
 
 \bigbreak
-For each arc $a=(x,y)\in \tegArcSet$, let us define the boolean value $\epsilon_a$ as:
+For each arc $a = (x,y) \in \tegArcSet$, let us define the boolean value $\epsilon_a$ as:
 \begin{numcases} {\epsilon_a =}
 0 & if $\theta(x) \leq \theta(y)$, \nonumber \\
 1 & otherwise. \nonumber 
@@ -364,27 +381,55 @@ The time required for a movement from $x$ to $y$ is then given by the function
 a = (x, y) & {\quad \mapsto \quad} \ell(a) = \theta(y) - \theta(x) + \epsilon_a \cdot \nbTimeSteps
 \end{align}
 
-By extension, if $\mu = (a_1, \cdots, a_p) \in \tegArcSet^p$ is a path in the TEG from $x$ to $y$, the value
-$\ell(\mu)=\sum_{i=1}^p \ell(a_i)$ is the total time required for a vehicle going from $x$ to
-$y$ following $\mu$.
+By extension, if $\mu = (a_1, \cdots, a_p) \in \tegArcSet^p$ is a path in the TEG from $x$ to $y$, the value $\ell(\mu)=\sum_{i=1}^p \ell(a_i)$ is the total time required for a vehicle going from $x$ to $y$ following $\mu$.
 
-For any time value $t\in \timeStepSet$, let us define the set ${\Coupe}_t(\mu)$ as
-the arcs $a=(x,y)$ from $\mu$ starting at time $t$ or earlier but ending after
-$t$.
+For any time value $t \in \timeStepSet$, let us define the set ${\Coupe}_t(\mu)$ as the arcs $a=(x,y)$ from $\mu$ starting at time $t$ or earlier but ending after $t$.
 Formally,
 \begin{equation}
-{\Coupe}_t(\mu)=\{a=(x,y)\in \mu \mid \vartheta(\theta(x),t)<\ell(a)\}.
+{\Coupe}_t(\mu) = \{a=(x,y) \in \mu \mid \vartheta(\theta(x),t) < \ell(a)\}.
 \end{equation}
 
 \subsection{Flows and decision variables}
 
+Consider vehicles directly in the model does not seem to be a good option.
+Although it would be possible to create boolean variables for each node of the TEG to track and follow the movement of vehicles over the day, their number may be too large.
+Thus, we first introduce flow variables over arcs in the Time Extended graph.
+It is shown then that feasible vehicle tours can be extracted easily from any feasible flow.
+
+\medskip
+The aim of our study is to compute the planning of each vehicles during the period. 
+At any time, each vehicle is either parked in a station or in transit between two stations.
+Its position over the period can be modelled as a vehicle tour \ie a circuit denoted by $c=(a_1,\cdots, a_p)$ in the TEG.
+The size of any feasible solution may be highly reduced if we only consider the number of vehicles passing through each arc.  
+Each vehicle in the system is thus associated to a vehicle tour (even if the vehicle is not used, staying in a station).
+
+\medskip
+The duration of any path or circuit in a TEG may be easily evaluated.
+Indeed, for any couple of time instants $(t, t') \in {\cal H}^2$, let the function $\vartheta:{\cal H}^2 \mapsto \mathbb{N}^\star$ that computes the number of time-steps between those two instants, formally defined as follow:
+\begin{numcases}{\vartheta(t, t') =}
+t' - t & if $t \leq t'$, \nonumber \\
+\nbTimeSteps + t' - t & otherwise. \nonumber
+\end{numcases}
+
+For each arc $a=(x,y)\in \tegArcSet$, let us define and set the boolean value $\epsilon_a$ to true if  $\theta(x)>\theta(y)$.
+The effective time required for a move from  $x$ to $y$ is then equal to $\ell(a) = \theta(y) - \theta(x) + \epsilon_a \cdot \nbTimeSteps$.
+By extension, if $\mu= (a_1, \cdots, a_p) \in \tegArcSet^p$ is a path of the TEG from $x$ to $y$, the value $\ell(\mu)=\sum_{i=1}^p \ell(a_i)$ is the total time required for a vehicle going from $x$ to $y$ following $\mu$.
+Next lemma evaluates the total time of any circuit $c$.
+\begin{lemma} \label{timecircuit}
+The total time of any circuit $c = (a_1, \cdots, a_p) \in \tegArcSet^p$ is $\ell(c) = \nbTimeSteps \times \sum\limits_{i=1}^p \epsilon_{a_i}$.
+\end{lemma}
+\begin{proof}
+Let $x_i$, $i \in \{1, \cdots, p+1\}$ be the sequence of elements from $\tegNodeSet$ such that, $x_{p+1} = x_1$ and
+$\forall i \in \{1, \cdots, p\}$, $a_i = (x_i, x_{i+1})$.
+The total time of $c$ is then
+\[\ell(c)=\sum_{i=1}^p \ell(a_i) = \sum_{i=1}^p ( \theta(x_{i+1})- \theta(x_{i}) +\epsilon_{a_i} \cdot\nbTimeSteps) =\nbTimeSteps\times \sum_{i=1}^p \epsilon_{a_i},\]
+the result.
+\end{proof}
 
 %\subsection{Decision variables (MOSIM)}
 %The aim of our modelling is to not consider if possible the vehicles directly to solve our optimization problem. The main reason is that this number may be quite important, and a vehicle tour may be associated to each of them.
 
-%Consider vehicles directly in the model does not seem to be a good option. Although it would be possible to create boolean variables for each node of the TEG to track and follow the movement of vehicles over the day, their number may be too large.
-%Thus, we first introduce flow variables over arcs in the Time Extended graph.
-%It is shown then that feasible vehicle tours can be extracted easily from any feasible flow.
+
 
 %The aim of our study is to compute the planning of each vehicles during the period. 
 %At any time, each vehicle is either parked in a station or in transit between two stations. Its position over the period can be modelled as a vehicle tour \ie a circuit $c=(a_1,\cdots, a_p)$ in the TEG.
@@ -408,66 +453,59 @@ Formally,
 %We prove in the following that vehicle tours may be easily computed from a feasible flow.
 
 %\subsection{Decision variables (EWGT)}
-The aim of our study is to compute the planning of each vehicles during the period. 
+The aim of our study is therefore to compute the planning of each vehicles during the period $\timeStepSet$. 
 At any time, each of them is either parked in a station or in transit between two stations.
 Its position over the period can be modelled as a vehicle tour \ie a circuit $c=(a_1,\cdots, a_p)$ in the TEG.
 We show in the following that a feasible solution can be described by only considering the number of vehicles modelled as a flow passing through each arc.
 
+\medskip
 For each arc $a =(x,y) \in \tegArcSet$, we call $\varphi(a)$ the flow of vehicles transiting through the arc $a$. 
-It can be interpreted as the number of vehicle staying in station $\eta(x)$ between two consecutive time-steps $\theta(x)$ and $\theta(y)$ if $a \in \tegArcSet_1$, or 
-the number of vehicle moving from station $\eta(x)$ at time $\theta(x)$ to station $\eta(y)$ otherwise.
-
-Since the total number of vehicles transiting to any node $x \in \tegNodeSet$ is constant, 
+It can be interpreted as the number of vehicle staying in station $\eta(x)$ between two consecutive time-steps if $a \in \tegArcSet_1$, or the number of vehicle moving from station $\eta(x)$ at time $\theta(x)$ to station $\eta(y)$ otherwise.
+Since the total number of vehicles transiting by any node $x \in \tegNodeSet$ is constant, the flow verify the following flow conservation equation:
 \begin{equation}\label{eqn:flowconservation}
-\sum_{{y\in \Gamma^-(x)}} \varphi((y,x))= \sum_{{y\in \Gamma^+(x)}} \varphi((x,y)).
+\sum_{{y\in \Gamma^-(x)}} \varphi((y,x))= \sum_{{y\in \Gamma^+(x)}} \varphi((x,y)),
 \end{equation}
-A flow $\varphi:\tegArcSet\mapsto\mathbb{N}$  is said to be feasible if $\forall a\in \tegArcSet$, $\varphi(a)\leq u(a)$ and 
-$\forall x \in \tegNodeSet$, the flow conservation equation (\ref{eqn:flowconservation}) is true.
+A flow $\varphi:\tegArcSet \mapsto \N$ is then said to be feasible if $\forall a \in \tegArcSet$, its value do not exceeds its capacity, \ie $\varphi(a) \leq u(a)$ and $\forall x \in \tegNodeSet$, the flow conservation equation (\ref{eqn:flowconservation}) is true.
 A feasible flow may be easily obtained from any feasible set of vehicle tours.
 
+\medskip
 We prove in the following that the reverse is also true, with the consequence that any feasible solution of our problem can be described using a flow.
 Next lemma computes the exact number of vehicles associated to a constant unitary flow over a circuit $c$.
-\begin{lemma}
+
+\begin{lemma} \label{NbVoitCircuit}
 Let $c$ be a circuit and $\varphi_c$ a feasible flow such that:
 \begin{numcases} {\varphi_c(a) =}
-1 &if $a$ belongs to $c$ \nonumber \\
-0 &  otherwise. \nonumber 
+1 & if $a$ belongs to $c$, \nonumber \\
+0 & otherwise. \nonumber 
 \end{numcases}
-The minimum number of vehicles to insure $\varphi_c$ is
-$\frac{\ell(c)}{T}$.
-\label{NbVoitCircuit}
+The minimum number of vehicles to insure $\varphi_c$ is $\frac{\ell(c)}{\nbTimeSteps}$.
 \end{lemma}
 \begin{proof}
-For any time value $t\in \timeStepSet$, let us define the set ${\cal {C}}_t(c)$ as
-the arcs $a=(x,y)$ from $c$ starting at time $t$ or earlier but ending after
-$t$.
-Since $\vartheta(\theta(x),t)$ equals the number of time steps 
-from $\theta(x)$ to  $t$, we get 
-${\cal {C}}_t(c)=\{a=(x,y)\in c\mid\vartheta(\theta(x),t)<\ell(a)\}$.
+For any time value $t \in \timeStepSet$, let us define the set ${\cal C}_t(c)$ as
+the arcs $a=(x,y)$ from $c$ starting at time $t$ or earlier but ending after $t$.
+Since $\vartheta(\theta(x), t)$ equals the number of time steps from $\theta(x)$ to $t$, we get ${\cal C}_t(c) = \{a=(x,y) \in c \mid \vartheta(\theta(x), t) < \ell(a)\}$.
 
-Now, since $c$ is a circuit, the value $\vert {\cal C}_t (c) \vert$ is a constant $\forall t \in \timeStepSet$
-and corresponds to the total number of vehicles needed to insure a unitary flow over $c$. Let us prove
-that $\vert {\cal C}_T (c) \vert=\sum\limits_{a\in c} \epsilon_a$. 
-For that purpose, setting $B(c)=\{ a=(x,y)\in c \mid\epsilon_a=1\}$, we show that $B(c)= {\cal C}_T (c)$.
+\medskip
+Now, since $c$ is a circuit, the value $\vert {\cal C}_t(c) \vert$ is a constant $\forall t \in \timeStepSet$ and corresponds to the total number of vehicles needed to insure a unitary flow over $c$.
+Let us prove that $\vert {\cal C}_\nbTimeSteps(c) \vert = \sum\limits_{a \in c} \epsilon_a$. 
+For that purpose, setting $B(c) = \{a=(x,y) \in c \mid \epsilon_a = 1\}$, we show that $B(c)= {\cal C}_\nbTimeSteps(c)$.
 \begin{itemize}
-\item $B(c) \subseteq {\cal C}_T (c)$:
-if $a=(x,y)\in B(c)$, then as $\theta(x)\leq\nbTimeSteps$, $\vartheta(\theta(x),T)=\nbTimeSteps-\theta(x)$.
-Now, since $\epsilon_a=1$ and $\theta(y)\geq 1$, 
-$\ell(a)=\theta(y)-\theta(x)+T \geq 1-\theta(x)+T >\vartheta(\theta(x),T)$ and $a\in {\cal C}_T (c)$.
+\item $B(c) \subseteq {\cal C}_\nbTimeSteps(c)$:
+if $a=(x,y) \in B(c)$, then as $\theta(x) \leq \nbTimeSteps$, $\vartheta(\theta(x), \nbTimeSteps) = \nbTimeSteps - \theta(x)$.
+Now, since $\epsilon_a=1$ and $\theta(y)\geq 1$, $\ell(a) = \theta(y) - \theta(x) + \nbTimeSteps \geq 1 - \theta(x) + \nbTimeSteps > \vartheta(\theta(x),\nbTimeSteps)$ and $a\in {\cal C}_\nbTimeSteps(c)$.
 
-\item ${\cal C}_T (c) \subseteq B(c)$:
-let consider now an arc $a=(x,y)\in {\cal C}_T (c)$.
-Since $\vartheta(\theta(x),T)=\nbTimeSteps-\theta(x) < \ell(a)$ we get that 
-$\theta(y)-\theta(x)+\epsilon_a \cdot\nbTimeSteps >\nbTimeSteps-\theta(x)$ and thus 
-$\theta(y)+\epsilon_a \cdot\nbTimeSteps >\nbTimeSteps$.  
-As $\theta(y) \leq\nbTimeSteps$, we necessarily have $\epsilon_a=1$ and thus $a\in B(c)$.
+\item ${\cal C}_\nbTimeSteps(c) \subseteq B(c)$:
+let consider now an arc $a=(x,y) \in {\cal C}_\nbTimeSteps(c)$.
+Since $\vartheta(\theta(x), \nbTimeSteps) = \nbTimeSteps - \theta(x) < \ell(a)$ we get that 
+$\theta(y) - \theta(x) + \epsilon_a \cdot \nbTimeSteps > \nbTimeSteps - \theta(x)$ and thus 
+$\theta(y) + \epsilon_a \cdot \nbTimeSteps > \nbTimeSteps$.  
+As $\theta(y) \leq \nbTimeSteps$, we necessarily have $\epsilon_a = 1$ and thus $a \in B(c)$.
 \end{itemize}
-Now, by Lemma \ref{timecircuit}, $\vert {\cal C}_T (c) \vert=\sum\limits_{a\in c} \epsilon_a=\frac{\ell(c)}{T}$, the lemma.
+Now, by Lemma \ref{timecircuit}, $\vert {\cal C}_\nbTimeSteps(c) \vert = \sum\limits_{a\in c} \epsilon_a = \frac{\ell(c)}{\nbTimeSteps}$, the lemma.
 \end{proof}
 
-\begin{theorem}\label{theo:decomp}
+\begin{theorem} \label{th:decomp} % l'ensemble des circuits ${\cal S}$ porte le même nom que l'ensemble des stations... à modifier peut être pour éviter la confusion
 Any feasible solution $\varphi$ can be decomposed into a set of circuits ${\cal S}$ such that, for any arc $a \in \tegArcSet$, $\varphi(a) = \sum\limits_{c \in {\cal S}} \varphi_c(a)$.
-\label{decomposition}
 \end{theorem}
 \begin{proof}
 The proof is by recurrence on $n(\varphi) = \sum\limits_{a \in \tegArcSet} \varphi(a)$.
@@ -483,7 +521,7 @@ Otherwise, let $\tilde{a}=(\tilde{x},\tilde{y})$ the last arc of $\mu_i$.
 Since $\varphi(\tilde{a}) > 0$, the flow conservation equation (\ref{eqn:flowconservation}) insures that there exists an arc $a$ starting at $\tilde{y}$ with $\varphi(a)>0$.
 We then set $\mu_{i+1}=\mu_i\cdot a$.
 \end{enumerate}
-As ${\cal G}$ has a finite number of nodes, the algorithm stops and a non empty circuit $c$ is  returned.
+As $\teg$ has a finite number of nodes, the algorithm stops and a non empty circuit $c$ is  returned.
 The flow $\hat{\varphi}$ defined as
 \begin{numcases}
 {\hat{\varphi}(a) =}
@@ -497,202 +535,61 @@ Note that the  number of flow variables is a polynomial function on the size of 
 This is not true anymore for vehicle tours, which number can be exponential.
 The consequence is that the determination of a flow is in ${\cal NP}$, which is not the case for the determination of vehicle tours.
 
-\subsection{Solution and Objectives}
-
-A feasible solution of our problem consists on a set of vehicle tours, each of them modelling the situation of a car at each time step.
-The three criteria (the demand, the number of vehicles and the number of relocation operations) can be polynomially computed from any feasible solution.
-
-A feasible solution of our optimization problem is given by a set of vehicles, each of them associated with its position in the system
-at any time-step during the period.
-The first objective is to maximize the total number of satisfied demands, \ie for which a vehicle is allocated. However, two other objectives
-must be taken into account: each vehicle in the system is associated to a fixed cost, so that the total number of vehicles must be minimized. 
-In the same way, vehicle relocations are fundamental for increasing the number of satisfied demands with a fixed  number of vehicles. However,
-they cost an extra charge for the operator, and thus their number should also be limited.
-In the following, the total number of vehicles and relocations are referred respectively by $C$ and $R$.
-
-\subsection{Effective duration of a path or a circuit} \label{subsec:duree}
-The duration of any path of a TEG may be easily evaluated. Indeed, 
-for any couple of time instants $(t, t') \in {\cal H}^2$, 
-let the function $\vartheta:{\cal H}^2 \mapsto \mathbb{N}^\star$
-that computes the number of time-steps between those two instants. It is defined
-formally as 
-\begin{numcases}{\vartheta(t, t') =}
-t' - t &, if $t \leq t'$ \nonumber \\
-T + t' - t &, otherwise. \nonumber
-\end{numcases}
-
-For each arc $a=(x,y)\in \tegArcSet$, let us define and set the boolean value $\epsilon_a$ to true if  $\theta(x)>\theta(y)$.
-For any arc $a=(x,y)\in \tegArcSet$, the effective time required for a move from  $x$ to $y$ is then equal to 
-$\ell(a)=\theta(y)-\theta(x)+\epsilon_a \cdot\nbTimeSteps$.
-By extension, if $\mu= (a_1, \cdots, a_p) \in \tegArcSet^p$ is a path of the TEG from $x$ to $y$, the value
-$\ell(\mu)=\sum_{i=1}^p \ell(a_i)$ is the total time required for a vehicle going from $x$ to
-$y$ following $\mu$.
-Next lemma evaluates the total time of any circuit $c$.
-\begin{lemma} \label{timecircuit}
-The total time of any circuit $c=(a_1,\cdots, a_p)$ is $\ell(c)=T\times \sum\limits_{i=1}^p \epsilon_{a_i}$.
-\end{lemma}
-\begin{proof}
-Let $x_i$, $i\in \{1,\cdots, p+1\}$ be the sequence of elements from $\tegNodeSet$ such that, $x_{p+1}=x_1$ and
-$\forall i\in\{1,\cdots, p\}$, $a_i=(x_i, x_{i+1})$.
-The total time of $c$ is then
-\[\ell(c)=\sum_{i=1}^p \ell(a_i) = \sum_{i=1}^p ( \theta(x_{i+1})- \theta(x_{i}) +\epsilon_{a_i} \cdot\nbTimeSteps) =\nbTimeSteps\times \sum_{i=1}^p \epsilon_{a_i},\]
-the result.
-\end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%% NEED ?
-%\subsection{Formal definition of the problem}
-%With the inputs and outputs listed above, we present in this section a formal definition of the System Dimensioning Problem.
-%It can be expressed as follows:
-%~\\
-%
-%{\noindent\textbf{System Dimensioning Problem [\textsc{SDP}]:}}
-%\begin{description}
-%\item[Inputs:]
-%$\timeStepSet$, $\stationSet$, $\sCapaSet$, $\demandSet$ and $\travelTimeSet$.
-%\item[Question:]
-%What is the optimal system configuration allowing to capture the $\nbDemands$ demands ?
-%\end{description}
-
-\subsection{Formal problem statements}
-A formal definition of our main optimization problem, referred as  the basic carsharing problem with relocations [\textsc{bcpr}] can be stated as follows:
-
-{\vspace{5pt}\noindent\textbf{Basic carsharing problem with relocations [\textsc{bcpr}]:}}
-\begin{description}
-\item[Inputs:] A set of stations ${\cal N}$ with their capacity $Z(i)$, $i\in {\cal N}$, time periods set ${\cal H}=\{1,\cdots,T\}$, 
-travel times $\delta(i,j,t)$ for each triplet $(i,j,t)\in {\cal N}^2\times  {\cal H}$, a set of $M$ demands, fixed number of vehicles $C$ and relocation operations $R$.
-\item[Question:]
-What is the maximum number of demands $m\leq M$ that can be captured by a vehicle routing  of  at most $C$ vehicles and $R$ vehicle relocation 
-operations during the considered period ${\cal H}$?
-\end{description}
-We will show that [\textsc{bcpr}] belongs to ${\cal NP}$ by modelling feasible solutions as a non classical flow problem. 
-
-
-\subsection{How to recover the number of vehicles?}
-Next lemmas characterize the total time of any circuit $c$ and the exact number of vehicles required for a unitary flow on $c$.
-
-\begin{lemma} \label{timecircuit}
-The total time of any circuit $c=(a_1,\cdots, a_p)$ is $\ell(c)=T\times \sum_{i=1}^p \epsilon_{a_i}$.
-\end{lemma}
-\begin{proof}
-Let $x_i$, $i\in \{1,\cdots, p+1\}$ be the sequence of elements from $\cX$ such that, $x_{p+1}=x_1$ and
-$\forall i\in\{1,\cdots, p\}$, $a_i=(x_i, x_{i+1})$.
-The total time of $c$ is then
-\begin{align*}
-\ell(c) & =   \sum_{i=1}^p \ell(a_i) \\
-        & =   \sum_{i=1}^p (\theta(x_{i+1})- \theta(x_i) + \epsilon_{a_i} \cdot \nbTimeSteps) \\
-        & =  \nbTimeSteps\times \sum_{i=1}^p \epsilon_{a_i}.
-\end{align*}
-the result.
-\end{proof}
-\begin{lemma} \label{NbVoitCircuit}
-Let $c$ be a circuit and $\varphi_c$ a feasible flow such that 
-\begin{numcases} {\varphi_c(a) =}
-1 &  if $a$ belongs to $c$, \nonumber \\
-0 & otherwise. \nonumber 
-\end{numcases}
-The minimum number of vehicles to insure $\varphi_c$ is
-$\frac{\ell(c)}{T}$.
-\end{lemma}
-%
-\begin{proof}
-The total number of vehicles needed at time $t\in {\timeStepSet}$ for $c$ is clearly $\vert {\Coupe}_t (c) \vert$.
-
-We first show that $\vert \Coupe_T (c) \vert=\sum_{a \in c} \epsilon_a$. 
-For that purpose, setting ${B(c)=\{ a=(x,y)\in c \mid\epsilon_a=1\}}$, we prove that $B(c)= {\Coupe}_T (c)$.
-\begin{itemize}
-\item $B(c) \subseteq {\Coupe}_T (c)$:
-If $a=(x,y)\in B(c)$, then as $\theta(x)\leq\nbTimeSteps$, $\vartheta(\theta(x),T)=\nbTimeSteps-\theta(x)$.
-Now, since $\epsilon_a=1$, $\ell(a)=\theta(y)-\theta(x)+T \geq \vartheta(\theta(x),T)$ and
-$a\in {\Coupe}_T (c)$.
-
-\item ${\Coupe}_T (c) \subseteq B(c)$:
-Let consider now an arc $a=(x,y)\in {\Coupe}_T (c)$. 
-Since $\vartheta(\theta(x),T)=\nbTimeSteps-\theta(x)< \ell(a)$, we get
-$\theta(y)+\epsilon_a \cdot\nbTimeSteps > \nbTimeSteps$.  As $\theta(y) \leq \nbTimeSteps$, we necessarily have $\epsilon_a=1$ and thus $a\in B(c)$.
-\end{itemize}
-
-Now, by Lemma \ref{timecircuit}, $\vert {\Coupe}_T (c) \vert=\sum_{a\in c} \epsilon_a=\frac{\ell(c)}{\nbTimeSteps}$. Lastly, the minimum number of vehicles to insure $\varphi_c$ is constant over $\timeStepSet$ and thus $\forall t\in \timeStepSet$,
-the lemma.
-\end{proof}
-
-\begin{theorem} \label{decomposition}
-Any feasible solution $\varphi$ can be decomposed into a set of circuits ${\cal S}$ such that, for any
-arc $a\in G$, $\varphi(a)=\sum_{c \in {\cal S}} \varphi_c(a)$.
-\end{theorem}
-\begin{proof}
-The proof is by recurrence on $n(\varphi)=\sum_{a \in \tegArcSet} \varphi(a)$.
-The theorem is trivially true if $n(\varphi)=0$.
-
-Let suppose now that $n(\varphi)>0$, thus there exists at least one arc $a=(x, y)$ with $\varphi(a)>0$. Set $\mu_0=(x, y)$ and let consider the sequence of paths $\mu_i$ built as follows:
-\begin{enumerate}
-\item
-Stop the sequence as soon as  $\mu_i$ contains a circuit $c$;
-\item
-Otherwise, let $\tilde{a}=(\tilde{x},\tilde{y})$ the last arc of $\mu_i$. Since $\varphi(\tilde{a})>0$, following the
-conservation low of $\varphi$ over nodes of $G$, there exists an arc $a$ starting at $\tilde{y}$ with
-$\varphi(a)>0$. We then set $\mu_{i+1}=\mu_i\cdot a$.
-\end{enumerate}
-As $G$ has a finite number of nodes, the algorithm stops and a non empty circuit is then returned.
-Let now define the flow $\hat{\varphi}$ as follows
-\begin{numcases}
-{\hat{\varphi}(a) =}
-\varphi(a)-1&  if $a \in c$,  \nonumber \\
-\varphi(a) &  otherwise. \nonumber 
-\end{numcases}
-$\hat{\varphi}$ is feasible with $n(\hat{\varphi})<n(\varphi)$, thus the theorem.
-\end{proof}
-
-Note that the  number of flow variables is a polynomial function on the size of the problem.
-It is not the case for the vehicle tours, which number can be of exponential size.
-The consequence is that the determination of a flow is in ${\cal NP}$, which is not the case for the determination of vehicle tours.
-
-\subsection{Modelling of the optimization problem}
-Three objectives are to be considered for our optimization problem: the main objective is to maximize the number of demands. The two other ones are to minimize both the number of relocations and the total number of vehicles.
-
-As we shall see later, the number of demands and relocations are easily linearly expressed using the flows. Next theorem shows that it is also the case for the total number of vehicles:
-
 \begin{theorem} \label{NbVoiture}
-The minimum total number of cars required for a feasible flow $\varphi$ equals
-$\sum_{a\in \cA} \varphi(a) \cdot \epsilon_a$.
+The minimum number of vehicles required for a feasible flow $\varphi$ equals $\sum\limits_{a\in \tegArcSet} \varphi(a) \cdot \epsilon_a$.
 \end{theorem}
 \begin{proof}
-Let ${\cal S}$ be a set of circuits obtained from the decomposition of $\varphi$
-following Theorem \ref{decomposition} and let $V$ be the minimum number
-of cars associated with $\varphi$.
-By Lemmas  \ref{timecircuit} and \ref{NbVoitCircuit}, the total number of car of any circuit $c\in {\cal S}$ is
+Let ${\cal S}$ be a set of circuits obtained from the decomposition of $\varphi$ following Theorem \ref{th:decomp} and let $V$ be the minimum number of cars associated with $\varphi$.
+By Lemmas \ref{timecircuit} and \ref{NbVoitCircuit}, the total number of car of any circuit $c \in {\cal S}$ is
 \[\sum_{a\in c} \epsilon_a = \sum_{a\in \tegArcSet} \epsilon_a \cdot \varphi_c(a)\]
 and thus
 \[V \leq \sum_{c\in {\cal S}} \sum_{a\in \tegArcSet} \epsilon_a \cdot \varphi_c(a).\]
-Now, from  Theorem \ref{decomposition}, $\varphi (a)= \sum_{c\in {\cal S}}\varphi_c(a)$.
+Now, from  Theorem \ref{th:decomp}, $\varphi (a)= \sum_{c\in {\cal S}}\varphi_c(a)$.
 Thus, 
 \[\sum_{c\in {\cal S}} \sum_{a\in \tegArcSet} \epsilon_a \cdot \varphi_c(a)=\sum_{a\in \tegArcSet} \epsilon_a \cdot \sum_{c\in {\cal S}}  \varphi_c(a)=\sum_{a\in \tegArcSet} \varphi(a) \cdot \epsilon_a.\]
 Lastly, the total number of vehicles required at time $\nbTimeSteps$ to reach $\varphi$ is exactly $\sum_{a\in \tegArcSet} \varphi(a) \cdot \epsilon_a$, the theorem.
 \end{proof}
 
-The modelling of our optimization problem follows. $R$ and $C$ are fixed integer bounds for respectively  the total number of relocation operations and vehicles.
-Equation $?$ is the maximization of the total demand.
-Equation $?$ expresses the bound on the total number of relocation.
-Equation $?$ expresses these on the total number of vehicles.
-Equations $?$, $?$ and $?$ are lastly flow constraints.
+\subsection{Solution and objectives}
+A feasible solution of our problem consists on a set of vehicle tours, each of them modelling the situation of a car at each time step.
 
-{\noindent
-\begin{minipage}{\linewidth}
-\setlength{\mathindent}{0pt}
-\begin{flalign} \label{objective_function_users}
+\medskip
+A feasible solution of our optimization problem is given by a set of vehicles, each of them associated with its position in the system at any time-step during the period.
+The first objective is to maximize the total number of satisfied demands, \ie for which a vehicle is allocated.
+Besides, two other objectives must be taken into account: each vehicle in the system is associated to a fixed cost, so that the total number of vehicles must be minimized. 
+In the same way, vehicle relocations are fundamental for increasing the number of satisfied demands with a fixed  number of vehicles.
+However, they cost an extra charge for the operator, and thus their number should also be limited.
+In the following, the total number of vehicles and relocations are referred respectively by $\nbVehicles$ and $\nbVROs$.
+The three criteria (the demand, the number of vehicles and the number of relocation operations) can be polynomially computed from any feasible solution.
+
+%\subsection{How to recover the number of vehicles?}
+%Next lemmas characterize the total time of any circuit $c$ and the exact number of vehicles required for a unitary flow on $c$.
+
+\subsection{Mathematical program}
+
+
+
+\medskip
+The modelling of our optimization problem follows.
+$\nbVROs$ and $\nbVehicles$ are fixed integer bounds for respectively the total number of relocation operations and vehicles.
+Equation (\ref{obj:maxDemands}) is the maximization of the total demand.
+Equation (\ref{const:nbVROs}) expresses the bound on the total number of relocation.
+Equation (\ref{const:nbVehicles}) expresses these on the total number of vehicles.
+Equations (\ref{const:capacities}), (\ref{const:flowConservation}) and (\ref{const:flowDef}) are lastly flow constraints.
+The total number of equations is around $2|\tegArcSet| + \nbStations \times \nbTimeSteps = \Theta(\nbStations^2 \cdot \nbTimeSteps)$.
+
+\begin{flalign} \label{obj:maxDemands}
 \max ~~\sum_{\substack{a\in \tegArcSet_2}} \varphi(a)
 \end{flalign}
 \begin{numcases}{s.t.}
-\sum_{a \in \tegArcSet_3} \varphi(a) \leq R              &\\
-\sum_{a\in \cA} \varphi(a) \cdot \epsilon_a \leq C  &\\
-\varphi(a) \leq u(a)                                & $\forall a \in \tegArcSet$\\
-\sum_{\substack{y\in \Gamma^-(x)}} \varphi((y,x)) = \sum_{\substack{y\in \Gamma^+(x)}} \varphi((x,y)) &$\forall x \in \tegNodeSet$\\
-\varphi(a) \in \N                                   &$\forall a\in\tegArcSet$
+\sum_{a \in \tegArcSet_3} \varphi(a) \leq \nbVROs & \label{const:nbVROs}\\
+\sum_{a \in \tegArcSet} \varphi(a) \cdot \epsilon_a \leq \nbVehicles & \label{const:nbVehicles}\\
+\varphi(a) \leq u(a) & $\forall a \in \tegArcSet$ \label{const:capacities}\\
+\sum_{\substack{y\in \Gamma^-(x)}} \varphi((y,x)) = \sum_{\substack{y\in \Gamma^+(x)}} \varphi((x,y)) &$\forall x \in \tegNodeSet$ \label{const:flowConservation}\\
+\varphi(a) \in \N & $\forall a\in\tegArcSet$ \label{const:flowDef}
 \end{numcases}
-\end{minipage}}
-~\\
-The total number of equations is around $2|\tegArcSet| + \nbStations \times \nbTimeSteps = \Theta(\nbStations^2 \cdot \nbTimeSteps)$.
 
-\newpage
+
 \section{Theoretical result}
 \subsection{Problem complexity}
 intro.
@@ -700,71 +597,70 @@ intro.
 \subsection{Polynomial sub-case}
 This section aims to prove that the determination of a flow that satisfies all the demands 
 without a constraint on the total number of relocations or vehicles is a polynomial problem.
-The formal definition of this problem,  designated by \textsc{all-demands}, follows. 
+The formal definition of this problem, designated by {\SDPALLDEMANDS}, follows.
 
-\begin{pbDefinition} [\textsc{all-demands}]
+\bigskip
+\noindent{\SDPALLDEMANDS}:
 \begin{description}
-\item[Inputs :] A Time Expanded Graph ${\cal G}=(\tegNodeSet, \tegArcSet, u)$.
+\item[Inputs :] A Time Expanded Graph $\teg = (\tegNodeSet, \tegArcSet, u)$.
 \item[Question :]
-Is there a feasible flow $\varphi$ such that all the demands are fufilled, {\em i.e} $\forall a \in \tegArcSet_2, \varphi(a)=u(a)$ ?
+Is there a feasible flow $\varphi$ such that all the demands are fulfilled,\\
+~~~~~~~~~\ie $\forall a \in \tegArcSet_2$, $\varphi(a)=u(a)$?
 \end{description}
-\end{pbDefinition}
 
-Let $I$ be an instance of \textsc{all-demands}. We associate an instance of a max-flow problem $f(I)$ 
-which network $\widehat{\cal G}=(\widehat\tegNodeSet,\widehat\tegArcSet, \widehat{w})$ is defined
-as follows:
+Let $I$ be an instance of \textsc{all-demands}.
+We associate an instance of a max-flow problem $f(I)$ which network $\widehat{\teg}=(\widehat{\tegNodeSet}, \widehat{\tegArcSet}, \widehat{w})$ is defined as follows:
 \begin{enumerate}
 \item
-Vertices are $\widehat{\tegNodeSet} = \tegNodeSet \cup \{s^\star, t^\star\}\cup \{s_a, t_a, a\in \tegArcSet_2\}$. $s^\star$ and $t^\star$ are respectively
-the source and the sink of $\widehat{\cal G}$, while $s_a$ and $t_a$ are two additional vertices associated to any demand arc $a\in \tegArcSet_2$.
+Vertices are $\widehat{\tegNodeSet} = \tegNodeSet \cup \{s^\star, t^\star\} \cup \{s_a, t_a, a \in \tegArcSet_2\}$.
+$s^\star$ and $t^\star$ are respectively the source and the sink of $\widehat{\teg}$, while $s_a$ and $t_a$ are two additional vertices associated to any demand arc $a \in \tegArcSet_2$.
 \item
-Arcs set is $\widehat\tegArcSet=\tegArcSet_1 \cup \tegArcSet_3 \cup \{ (x,t_a), (t_a,t^\star), (s^\star, s_a), (s_a,y), \forall a=(x,y)\in \tegArcSet_2\}$.
+Arc set is $\widehat{\tegArcSet} = \tegArcSet_1 \cup \tegArcSet_3 \cup \{ (x,t_a), (t_a,t^\star), (s^\star, s_a), (s_a,y), \forall a=(x,y)\in \tegArcSet_2\}$.
 \item
-Maximum capacity of arcs are $\widehat{w}(a)=u(a)$ for $a\in \tegArcSet_1 \cup \tegArcSet_3$.
-Otherwise, for any arc $a=(x,y)\in \tegArcSet_2$, 
-$\widehat{w}((x,t_a))=\widehat{w}((t_a,t^\star))=\widehat{w}((s^\star, s_a))=\widehat{w}( (s_a,y))=u(a)$.
+Maximum capacity of arcs are $\widehat{w}(a) = u(a)$ for $a \in \tegArcSet_1 \cup \tegArcSet_3$.
+Otherwise, for any arc $a=(x,y) \in \tegArcSet_2$, $\widehat{w}((x,t_a))=\widehat{w}((t_a,t^\star))=\widehat{w}((s^\star, s_a))=\widehat{w}( (s_a,y))=u(a)$.
 \end{enumerate}
-Note that this transformation is a polynomial function and does not depend on  the structure
-of ${\cal G}$.
+Note that this transformation is a polynomial function and does not depend on the structure of $\teg$.
 
 \begin{theorem}\label{theo:pol}
-Let an instance of \textsc{all-demands} expressed by a TEG ${\cal G}$.
-There exists a feasible flow fulfilling all the demands of ${\cal G}$ if and only if there exists a maximum flow in $\widehat{\cal G}$ of value $\sum_{a\in \tegArcSet_2} u(a)$. 
+Let an instance of \emph{\SDPALLDEMANDS} expressed by a TEG $\teg$.
+There exists a feasible flow fulfilling all the demands of $\teg$ if and only if there exists a maximum flow in $\widehat{\teg}$ of value $\sum_{a\in \tegArcSet_2} u(a)$. 
 \end{theorem}
 \begin{proof}
-Let suppose that $\varphi$ is a feasible flow of ${\cal G}$ that fulfils all the demands, \ie for any arc $a\in \tegArcSet_2$, $\varphi(a)=u(a)$.
-A flow $\widehat{\varphi}$ of $\widehat{\cal G}$ may be built as follows:
+Let suppose that $\varphi$ is a feasible flow of $\teg$ that fulfils all the demands, \ie for any arc $a \in \tegArcSet_2$, $\varphi(a) = u(a)$.
+A flow $\widehat{\varphi}$ of $\widehat{\teg}$ may be built as follows:
 \begin{enumerate}
 \item
-$\forall a\in \tegArcSet_1 \cup \tegArcSet_3$, 
-$\widehat{\varphi}(a)=\varphi(a)$;
+$\forall a \in \tegArcSet_1 \cup \tegArcSet_3$, 
+$\widehat{\varphi}(a) = \varphi(a)$;
 \item
-For any arc $a=(x,y)\in \tegArcSet_2$, 
-$\widehat{\varphi}((x,t_a))=\widehat{\varphi}((t_a,t^\star))=\widehat{\varphi}((s^\star, s_a))=\widehat{\varphi}( (s_a,y))=u(a)$.
+For any arc $a=(x,y) \in \tegArcSet_2$, 
+$\widehat{\varphi}((x,t_a))=\widehat{\varphi}((t_a,t^\star))=\widehat{\varphi}((s^\star, s_a))=\widehat{\varphi}((s_a,y))=u(a)$.
 \end{enumerate}
-We prove that $\widehat \varphi$ is a feasible flow of $\widehat{\cal G}$ of value $\sum_{a \in \tegArcSet_2} u(a)$. 
+We prove that $\widehat{\varphi}$ is a feasible flow of $\widehat{\teg}$ of value $\sum_{a \in \tegArcSet_2} u(a)$. 
 Indeed, let consider a node $x \in \widehat{\tegNodeSet}$.
 \begin{enumerate}
-\item Let suppose first that $x \in \tegNodeSet$. Then any demand arc ${a = (y,x) \in \tegArcSet_2}$ (\resp ${a = (x,y) \in \tegArcSet_2}$) of flow $\varphi(a)$ is associated in $\widehat{A}$ to an
+\item Let suppose first that $x \in \tegNodeSet$.
+Then any demand arc ${a = (y,x) \in \tegArcSet_2}$ (\resp ${a = (x,y) \in \tegArcSet_2}$) of flow $\varphi(a)$ is associated in $\widehat{A}$ to an
 arc $e = (s_a, x)$ (\resp $e = (x, t_a)$) with ${\widehat{\varphi}(e) = \varphi(a)}$.
 Thus, 
-\[\sum_{a \in \Gamma^-({\widehat{\cal G}},x)} \widehat{\varphi}(a)=
-\sum_{a \in \Gamma^-({\cal G},x)} \varphi(a)=\sum_{a \in \Gamma^+({\cal G},x)} \varphi(a)=
-\sum_{a \in \Gamma^+({\widehat{\cal G}},x)} \widehat{\varphi}(a)\text{.}\]
+\[\sum_{a \in \Gamma^-(\widehat{\teg}, x)} \widehat{\varphi}(a)=
+\sum_{a \in \Gamma^-(\teg, x)} \varphi(a)=\sum_{a \in \Gamma^+(\teg, x)} \varphi(a)=
+\sum_{a \in \Gamma^+(\widehat{\teg}, x)} \widehat{\varphi}(a)\text{.}\]
 \item
 For any arc $a=(z,y)\in \tegArcSet_2$, the two vertices $t_a$ and $s_a$ are such that
-\[\sum_{e \in \Gamma^-({\widehat{\cal G}},t_a)} \widehat{\varphi}(e)=\widehat{\varphi}((x,t_a))=\widehat{\varphi}((t_a, t^\star))=\sum_{e \in \Gamma^+({\widehat{\cal G}}, t_a)} \widehat{\varphi}(e)\]
+\[\sum_{e \in \Gamma^-(\widehat{\teg}, t_a)} \widehat{\varphi}(e)=\widehat{\varphi}((x, t_a))=\widehat{\varphi}((t_a, t^\star))=\sum_{e \in \Gamma^+(\widehat{\teg}, t_a)} \widehat{\varphi}(e)\]
 and
-\[\sum_{e \in \Gamma^-({\widehat{\cal G}},s_a)} \widehat{\varphi}(e)=\widehat{\varphi}((s^\star,s_a))=\widehat{\varphi}((s_a, y))=\sum_{e \in \Gamma^+({\widehat{\cal G}},s_a)} \widehat{\varphi}(e)\text{.}\]
+\[\sum_{e \in \Gamma^-(\widehat{\teg}, s_a)} \widehat{\varphi}(e)=\widehat{\varphi}((s^\star,s_a))=\widehat{\varphi}((s_a, y))=\sum_{e \in \Gamma^+(\widehat{\teg}, s_a)} \widehat{\varphi}(e)\text{.}\]
 \item
-Lastly, \[\sum_{e \in \Gamma^-({\widehat{\cal G}},t^\star)} \widehat{\varphi}(e)=\sum_{a\in \tegArcSet_2} u(a) \text{ ~~ and } \sum_{e \in \Gamma^+({\widehat{\cal G}},s^\star)} \widehat{\varphi}(e)=\sum_{a\in \tegArcSet_2} u(a)\text{.}\]
+Lastly, \[\sum_{e \in \Gamma^-(\widehat{\teg}, t^\star)} \widehat{\varphi}(e)=\sum_{a\in \tegArcSet_2} u(a) \text{ ~~ and } \sum_{e \in \Gamma^+(\widehat{\teg}, s^\star)} \widehat{\varphi}(e)=\sum_{a\in \tegArcSet_2} u(a)\text{.}\]
 \end{enumerate}
-The consequence is that $\widehat\varphi$ is a feasible flow of $\widehat{\cal G}$ of value $\sum_{a\in \tegArcSet_2} u(a)$. 
+The consequence is that $\widehat\varphi$ is a feasible flow of $\widehat{\teg}$ of value $\sum_{a\in \tegArcSet_2} u(a)$. 
 
-Conversely, any feasible flow of $\widehat{\cal G}$ of value $\sum_{a\in \tegArcSet_2} u(a)$ verifies
+Conversely, any feasible flow of $\widehat{\teg}$ of value $\sum_{a\in \tegArcSet_2} u(a)$ verifies
 that, for any arc $a=(x,y)\in \tegArcSet_2$, 
 $\widehat{\varphi}((x,t_a))=\widehat{\varphi}((t_a,t^\star))=\widehat{\varphi}((s^\star, s_a))=\widehat{\varphi}( (s_a,y))=u(a)$.
-A feasible flow for ${\cal G}$ can be easily obtained by setting:
+A feasible flow for ${\teg}$ can be easily obtained by setting:
 \begin{enumerate}
 \item
 $\forall a\in \tegArcSet_1 \cup \tegArcSet_3$, 
@@ -780,6 +676,8 @@ of Theorem \ref{theo:pol}:
 \begin{corollary}
 \textsc{all-demands} is polynomial.
 \end{corollary}
+
+\section{Conclusion}
 
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}

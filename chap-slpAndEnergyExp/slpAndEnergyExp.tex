@@ -1,0 +1,116 @@
+\chapter{SLP and energy experimentations} \label{chap:slpEnergyExp}
+\begin{bibunit}[ieeetr]
+\minitoc
+\vspace{2cm}
+
+\begin{minipage}[c]{.3\linewidth}
+\includegraphics[width=\textwidth]{electricity}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{.7\linewidth}
+\begin{abstract}
+blabla\\
+blabla\\
+blabla\\
+blabla\\
+blabla\\
+\end{abstract}
+\end{minipage}
+
+
+\section{Introduction}
+Intro
+
+\section{test graphs}
+
+\begin{figure}[t]
+\centering
+\input{tikz/plotDemand}
+\caption{A caption}
+\label{plot:graphdensities}
+\end{figure}
+
+
+\section{Results}
+The optimisation models and heuristic were run in an Intel® Xeon® processor 3.10 GHz, 16Gb RAM computer under Ubuntu using Cplex as a solver.
+The code was written in java with the java API of Cplex. 
+
+\subsection{Resolution time}
+The first result we try to have is to know which instance we can resolve in a reasonable time.
+The \textbf{Figure 6.3} gives us the resolution time for instances between 10 and 30 stations.
+We can see that for 30 stations, some instances need 32 hours to be resolved.
+Also, we can see that the heuristic have an impact for small instance but with 30 stations, it can have a impact null or even a bad impact. 
+
+~\\~\\~\\Figure\\~\\~\\
+
+We can also notice that the y axis is on a logarithmic scale which tell us that the time to solve an instance is exponential on the number of station.
+
+\subsection{Energy versus no energy}
+Our second experiment was to see the impact of the electric car opposed to fuel car in an optimal solution.
+The \textbf{Figure 6.4} show us the difference in the number of request accepted, car used and vehicle relocation in each solution.
+The number of request accepted stay the same with or without energy.
+However, a solution with energy requires in average more cars  than a solution without.
+If we restrain the number of car, then the energy solution cannot achieves the same number of request accepted than the solution without energy.
+So, even if the solution seems to be equal in term of accepted request, the solution with  the energy constraint is different from a solution without such constraint.
+
+\begin{figure}
+\begin{tabularx}{\textwidth}{|X|c|c|c|c|}
+\hline
+Instances & Nb stations & Nb requests & Nb cars & Nb veh-reloc \\
+\hline
+Without energy & 10 & 74 & 12 & 20 \\
+With energy & 10 & 74 & 14 & 19\\
+\hline
+With energy restraint \newline to 12 cars and 20 \newline vehicle relocations & 10 & 72 & 12 & 14\\
+\hline  
+Without energy & 20 & 361 & 60 & 50 \\
+With energy & 20 & 361 & 60 & 50 \\
+\hline
+Without energy & 30 & 461 & 83 & 50\\
+With energy & 30 & 461 & 84 & 50\\
+\hline
+Without energy & 50 & 790 & 149 & 50\\
+With energy & 50 & 790 & 149 & 50\\
+\hline
+\end{tabularx}
+\caption{Impacts of the energy on solutions}
+\end{figure}
+
+\subsection{Energy result}
+The last experiment was to see how each car and station were used in a optimal solution with energy constraint.
+We choose to create instances with the same ratio between station number, car and request as in the autolib system in Paris.
+This mean for a system with $N$ stations, we have 3 x $N$ cars and 20 x $N$ requests.
+The \textbf{Figure 6.5} shows the results for different instances.
+We evaluate the average number of request, number of vehicle relocation, battery level and time spent in station of a car in an optimal solution.
+The last column gives us the average energy a station delivers in a solution in comparison to maximum energy possible to delivers by a station.\\
+
+\begin{figure}[h]
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{|C|C|C|C|C|C|}
+\hline
+Nb Stations & Nb requests done by a car & Nb veh-reloc by a car & Battery level ($\%$) & Time in station ($\%$) & Energy delivers by a station ($\%$)\\
+\hline
+10 & 6.06 & 0.96 & 35.21 & 73.65 & 37.48 \\
+\hline
+20 & 6.01 & 0.83 & 28.63 & 75.57 & 28.38 \\
+\hline
+30 & 5.48 & 0.76 & 33.39 & 71.43 & 27.42 \\
+\hline
+50 & 5.28 & 0.33 & 22.66 & 75.00 & 23.89 \\
+\hline
+\end{tabularx}
+\caption{Results on average for a solution with energy}
+\end{figure}
+
+This result shows us that even if the energy has an impact in the solution as seen in \textbf{Figure 6.4}, the impact is small.
+Indeed, a car stay in station almost $75\%$ of the day but has very low battery level.
+And thanks to the last column, we can see that a car spends time in station without charging.
+This show that in a system with the same proportion as autolib, the electric component isn't such a constraint as we might except. 
+\newpage
+
+
+\newpage
+\addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
+\renewcommand{\bibname}{Bibliography of chapter \thechapter}
+\putbib[bib/biblio]
+\end{bibunit}

@@ -1,0 +1,785 @@
+\chapter{The Station Location Problem and energy aspects} \label{chap:slp}
+\begin{bibunit}[ieeetr]
+\minitoc
+\vspace{2cm}
+
+\begin{minipage}[c]{0.45\linewidth}
+\includegraphics[width=\textwidth]{stationLocations}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.45\linewidth}
+\begin{abstract}
+~
+\end{abstract}
+\end{minipage}
+
+\newpage
+\section{Introduction}
+We have presented in Chapter \ref{chap:sdp} a mathematical linear program resolving the system dimensioning problem.
+The optimization dealt with the optimal sizing of a carsharing system when stations were fixed.
+The optimal flow circulating in the Time Expanded Graph (TEG) can be interpreted as vehicle routes and some global dimensioning parameters can be deduce from it.
+Until then, the problem was to assess the number of vehicles as well as the number of vehicle relocations to run the carsharing system at its better efficiency, considered in this work as the capacity to fulfil the higher number of demands.
+In this chapter, we intend to enhance the initial problem with two new challenged aspects.
+
+\bigskip
+The first one deal with stations' locations.
+We propose to look at the problem from a different perspective by expanding its scope to the selection of a subset of stations contributing to the better system configuration.
+It involves changing the concept of \emph{station} to \emph{possible station location} which can be also understood as \emph{possible carsharing station site}.
+Then, the problem can be expressed as follow: among all possible $\nbStations$ station's locations, what are the $P \leq \nbStations$ sites constituting the most effective carsharing system?
+From this perspective, we intend to study the decisional factor that lead to select, or not select, a site.
+Our expectations are to deduce from exact solutions a global scheme that could inquire the site selection without having to run a exact optimization.
+
+\bigskip
+The second challenge aims at introduce energy components.
+In the previous model, vehicles were able to transport customers from station to another without limiting the total distance they travel during the day or even during a specific trip.
+Nowadays, combustion cars can travelled hundred of kilometres a day without the need to refill in gasoline.
+Moreover, no specific infrastructure is required to accommodate such vehicles.
+In that sense, we assumed that vehicles were considered as combustion vehicles in our previous work.
+
+During the last few decades, numerous environmental issues have motivated the development of alternative means of transportation.
+In the world of private vehicles, electric cars has regained a high interest.
+Carsharing operators has begun to introduce electric vehicles (EVs) in their fleet and equip station parking slots with charging points.
+Some of them (\eg Autolib) even propose a vehicle fleet exclusively composed of electric cars.
+In this chapter, our objective is to measure the \emph{operational} impact of running a carsharing system with electric cars.
+For the most part, we wish to address the following questions:
+\begin{enumerate}
+\item Is the lower range of an EVs really limits the global system efficiency?
+\item Is the size of the electric battery well suited for carsharing usage?
+\item What is the impact of the charging points' power supply?
+\end{enumerate}
+Including battery range constraints means control their charge level at all times so that a trip can only be performed if the vehicle have sufficient energy to do it.
+Until then, the flow model based on TEGs describes macroscopic flows of vehicles.
+Even if individual vehicle routes can be extracted, the numerous possible interpretations lead us to adapt and propose an alternative mathematical model able to consider electric cars and their appropriate functional equipment.
+
+\bigskip
+This chapter is organized as follow.
+
+% We study their impact in the global system optimization and discuss .
+%of considering electric vehicles on
+%Is this type of vehicle intended to be use as strict mobility purposes or can we consider another use in an intelligent territory?
+
+\section{The Station Location Problem}
+A major difficulty for an operator wishing to set up a carsharing systems is without any doubt the stations' locations over the area he wishes to cover.
+Assuming that potential stations' sites could be identified, the remaining problem of select the ones leading to a system that operates efficiently and captures the higher number of requests still remain a tricky question.
+From a formal point of view, the problem is purely combinatorial and admits $\binom{\nbStations}{\nbMaxStations}$ possible solutions, where $\nbMaxStations$ denotes the number of stations to chose among the $\nbStations$ number of potential stations' sites.\medbreak
+
+We have seen previously that the System Dimensioning Problem (SDP) assumed fixed stations in its statement.
+In a way, the SLP will consist in relaxing this assumption and appending some decisions over the stations' locations.
+Its formulation will thus sounds very close to the SDP and can be stated as follow.
+
+\paragraph{Station Location Problem [SLP]:}
+Given a set of $\nbStations$ carsharing stations' sites, it consists in select the subset of $\nbMaxStations \leq \nbStations$ possible stations' sites allowing the system to run at its maximum potential, \ie satisfying the higher number of demands. 
+
+\bigbreak
+Inputs are very similar to the SDP.
+The major difference concerns the carsharing stations which are not longer fixed but are now considered as potential stations' sites.
+We assumed that a maximum capacity (\ie maximum number of parking lots) could still be known for each site.
+Input sets are summarized in the following:
+\begin{itemize}
+\item $\timeStepSet$: the set of $\nbTimeSteps$ time-steps;
+\item $\stationSet$: the set of $\nbStations$ potential stations' sites;
+\item $\sCapaSet$: the sites' maximum capacities;
+\item $\demandSet$: the set of carsharing demands among stations' sites over time;
+\item $\travelTimeSet$: the set of travel times expressed in time-steps.
+\end{itemize}
+Similarly to the SDP, sets $\demandSet$ and $\travelTimeSet$ are defined as triplets $(i,j,t) \in \stationSet^2 \times \timeStepSet$ where $i$ and $j$ denotes respectively the site of departure and destination and $t$ the time-step of departure.
+The problem also considers some system limitations bounds.
+The maximum number of selected stations' sites will be denoted by $\nbMaxStations$.
+The number of vehicle relocations operations and the number of vehicles are bounded respectively as before to the non-zeros integer values $\nbVROs$ and $\nbVehicles$.
+Finally, we also included another feature dealing with the maximum number of jockeys (employees of the carsharing operator).
+We refer to $\nbMaxJockeys \in \N$ as the number of jockeys allowing to relocate vehicles at the same time.
+
+
+\subsection{Related work}
+% 1. stations locations
+
+
+% 2. jockeys
+
+One-way carsharing allows to study various problems.
+The first one is the number, the position and the size of the stations.
+The sizing and station location problems were studied using MILP model \cite{rickenberg_decision_2013}.
+
+
+\subsection{Problem modelling}
+
+The SLP appears as a master problem of the SDP.
+It enhances decisions on the selection of potential carsharing sites under the scope of the system dimensioning problem.
+As a consequence, the model used previously for the SDP seems well suited and will need some adaptations to deal with the SLP.
+The following sections describe the added variables and constraints as well as the graph modifications.
+
+\subsubsection{Decision variables}
+
+In this problem, selecting stations constitutes the main decisions.
+Using the previous model, it can be achieved by adding a new group of binary variables for each potential carsharing site standing for its selection in the solution.
+Let thus $b = (b_i)_{i \in \{1,\dots, \nbStations\}} \in \{0, 1\}^\nbStations$ be the decisional vector of this problem, define for all $i \in \stationSet$ as:
+\medskip
+\begin{numcases}{b_i=}
+1 & if the station's site $i$ is selected, \nonumber \\
+0 & otherwise. \nonumber
+\end{numcases}
+
+\medskip
+Every vector value represents a unique system configuration.
+It is easy to observed here that the SDP is actually a SLP sub-problem when $b$ is fixed to a value in $\{0, 1\}^\nbStations$.
+The total number of active stations, $\nbMaxStations$, is the number of ones in $b$.
+It can be obtained using $\nbMaxStations = \sum_{i=1}^\nbStations b_i$.
+Every instance of the SDP with $\nbMaxStations$ stations correspond to an instance of the SLP where $b$ contains $\nbMaxStations$ ones.
+
+\subsubsection{Constraints}
+First note that limit the number of selected sites can be easily be expressed by limiting the number of ones in $b$ to $\nbMaxStations$.
+Formally, the constraint can be written as follow:
+\begin{equation} \label{const:nbMaxStations}
+\sum_{i=1}^\nbStations b_i \leq \nbMaxStations
+\end{equation}
+
+\medskip
+Secondly, limit the number of opened sites imply to close some of them.
+When a carsharing site is closed, no vehicle can stop or either pass through it.
+In our model, vehicles are represented as flows and until then, no restriction on the possibility to enter the nodes have been considered.
+Using the new decisional vector $b$, it is now easy to limit the inner (\resp outer) flow entering (\resp leaving) each nodes (carsharing sites).
+These constraints are defined as follows:
+\begin{align}
+\varphi(a) \leq b_{\eta(x)} \cdot \tegCapacity(a) \quad & , \forall a = (x, y) \in \tegArcSet \label{const:stationInnerFlow} \\
+\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) \quad & , \forall a = (x, y) \in \tegArcSet_2 \cap \tegArcSet_3 \label{const:stationOuterFlow}
+\end{align}
+Constraints (\ref{const:stationInnerFlow}) limit the outer flow in every arcs of the TEG to the arc's capacity if the site is selected and zero otherwise.
+Similarly, if the site is active, constraints (\ref{const:stationOuterFlow}) bound the inner flow to the arc's capacity but only for demand and vehicle relocation arcs.
+In order not to be redundant with the previous group of constraints, only arcs where the departure station is different from the arrival station have to be considered.
+The TEG stock arcs are thus not involved.
+In addition, note that this restriction could also be appropriate to some specific demand patterns like round-trip demands for instance.
+
+\medskip
+As introduced before, \emph{jockeys} are essential to operate vehicle relocation operations although they constitute an additional financial charge for the operator.
+They represent the operator-based approach to balance vehicle stocks through the system and correspond to periodic relocation of vehicles among stations by staff members, also known as \emph{jockeys}.
+
+In this work, we intend to limit the total number of jockeys working for the carsharing operator.
+To do so, we simply bound the number of vehicle relocations made at the same time.
+Recall first that $\relocTimeStepSet$ denotes the subset of time-steps when vehicles start to be relocated (previously defined in chapter \ref{chap:sdp}, page \pageref{def:relocTimeStepSet}).
+For clarity reasons, let $\tegArcSet_3^t$ be the set of relocation arcs starting their operation at time $t \in \relocTimeStepSet$.
+Formally:
+\begin{equation}
+\tegArcSet_3^t = \{a = (x, y) \in \tegArcSet_3 \mid \theta(x) = t\}
+\end{equation}
+Then, the constraint under the maximum number of simultaneous vehicle relocation operations, denoted by $\nbMaxJockeys$, follows:
+\begin{equation} \label{const:nbJockeys}
+\sum_{a \in \tegArcSet_3^t} \varphi(a) \leq \nbMaxJockeys \quad, \forall t \in \relocTimeStepSet
+\end{equation}
+
+
+\subsubsection{Outputs and Solution}
+A solution to the SLP consist of assigning a stations' configuration to the carsharing system, \ie settle the value of $b \in \{0, 1\}^\nbStations$ satisfying constraint (\ref{const:nbMaxStations}).
+For any value of $b$, which means that the stations' locations are now fixed, we can solve the system dimensioning problem upgraded with the limitation under the number of jockeys (constraint group \ref{const:nbJockeys}).
+Its resolution gives the maximum number of demands this station configuration is able to fulfil.
+Then, the optimal solution of the SLP is the vector value $b \in \{0, 1\}^\nbStations$ which maximize the system efficiency for fixed values of the maximal number of vehicles, vehicle relocation operations and jockeys.
+%The number of vehicles as well as the vehicles' routes the and the vehicle relocation plan can also be part of the solution.
+The expected outputs of the problem resolution are listed below:
+\begin{itemize}
+\item a system configuration, \ie a value of $b \in \{0, 1\}^\nbStations$,
+\item the vehicles' routes through the system.
+\end{itemize}
+
+\bigskip
+As for the system dimensioning problem, we can extract a lot of information from vehicles' routes.
+Those extended outputs can be deduced from any solution and are summarized in the following:
+\begin{itemize}
+\item the total number of stations, vehicles and jockeys;
+\item the set of satisfied demands;
+\item the set of vehicle relocation to be operate during the period;
+\item the number of parking places in each station.
+\end{itemize}
+
+\subsection{Mathematical program}
+
+To cope with the station location problem, we opted for the linear programming approach.
+The mathematical model presented thereafter is based on a enhanced model of the system dimensioning problem described in Chapter \ref{chap:sdp}.
+The later is actually a solid basis since the two problems are linked to each other.
+They both rely on the time expanded graph model presented before.
+This time, nodes represent possible location sites for carsharing stations and a fixed number of jockeys is involved as a constraint in vehicle relocation operations.
+As such, they are a limit factor affecting the global optimization.
+Basically, the mathematical program reused the transportation network expanded over time (TEG) and its associated constraints.
+
+\medskip
+We present in this section two sights of seeing the model.
+The first one aims at highlight the sub-problem dependence between the SDP and the SLP.
+Then, the full version is detailed.
+
+\subsubsection{The master-slave scheme}
+As seen in chapter \ref{chap:sdp}, an instance of the {\SDP} could be written as $\text{SDP}(\timeStepSet, \stationSet, \sCapaSet, \demandSet, \travelTimeSet, \nbVROs, \nbVehicles)$.
+This definition can be generalized to consider different station configurations.
+The idea is to use the vector $b$ as a component selector of the station set $\stationSet$.
+%So, let first defined $\stationSet(b)$, the set of stations' sites conditioned by vector $b$.
+\begin{equation} \label{eq:subStationSet}
+\stationSet(b) = \{ s_i \in \stationSet, i\in \{1, \dots, \nbStations\} \mid b_i=1\}
+\end{equation}
+
+Now, we clearly have $\stationSet(b) \subseteq \stationSet$, for any value of $b$.
+According to Equation \eqref{eq:subStationSet}, each value of $b$ generates a fixed subset of stations picked in $\stationSet$.
+The initial set corresponds to the situation where $b=1$.
+%In the following we refer to $\text{SDP}^\star(\timeStepSet, \stationSet(b), \sCapaSet, \demandSet, \travelTimeSet, \nbVROs, \nbVehicles)$ as the maximum number of demands the optimal system configuration of the SDP instance resolution have given.
+As a master problem, the SLP can now be formally expressed.
+\begin{equation}\label{obj:master-slave}
+\text{[SLP]:} \max\limits_{b \in \{0, 1\}^\nbStations} \text{SDP}^\star(\timeStepSet, \stationSet(b), \sCapaSet, \demandSet, \relocTimeStepSet, \travelTimeSet, \nbVROs, \nbVehicles)
+\end{equation}
+\begin{numcases}{s.t.}
+\sum_{i=1}^\nbStations b_i \leq \nbMaxStations \label{constr:MS:nbStations}\\
+\varphi(a) \leq b_{\eta(x)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet$ \label{constr:MS:stationInnerFlow} \\
+\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet_2 \cap \tegArcSet_3$ \label{constr:MS:stationOuterFlow}\\
+\sum_{a \in \tegArcSet_3^t} \varphi(a) \leq \nbMaxJockeys &$\forall t \in \relocTimeStepSet$ \label{constr:MS:nbJockeys}\\
+\varphi(a) \in \N & $\forall a\in\tegArcSet$ \label{constr:MS:varFlows}\\
+b_i \in \{0, 1\} & $\forall i \in \{1, \dots, \nbStations\}$ \label{constr:MS:varStations}
+\end{numcases}
+
+\medskip
+Equation \eqref{obj:master-slave} stands for the maximization of the demand.
+The value $\text{SDP}^\star$ returns the maximal number of demands the resolution of the SDP linear program for the specific configuration given as parameter.
+Equation \eqref{constr:MS:nbStations} limits the total number of carsharing sites to $\nbMaxStations$.
+Equation \eqref{constr:MS:stationInnerFlow} (\resp Equation \eqref{constr:MS:stationOuterFlow}) prevents an inner flow (\resp outer flow) to pass through a node if not active.
+Equation \eqref{constr:MS:nbJockeys} limits the number of simultaneous vehicle relocation operations to $\nbMaxJockeys$.
+Finally, Equations \eqref{constr:MS:varFlows} and \eqref{constr:MS:varStations} define the variables' domains.
+
+\subsubsection{The mathematical program}
+The detailed linear program of the {\SLP} is given bellow.
+\begin{equation}\label{obj:SLP:maxDemands}
+\text{[SLP]:} \max ~~\sum_{\substack{a\in \tegArcSet_2}} \varphi(a)
+\end{equation}
+\begin{numcases}{s.t.}
+\sum_{i=1}^\nbStations b_i \leq \nbMaxStations \label{constr:SLP:nbStations}\\
+\varphi(a) \leq b_{\eta(x)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet$ \label{constr:SLP:stationInnerFlow} \\
+\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet_2 \cap \tegArcSet_3$ \label{constr:SLP:stationOuterFlow}\\
+\sum_{a \in \tegArcSet_3} \varphi(a) \leq R \label{constr:SLP:nbVROs}\\
+\sum_{a\in \tegArcSet} \varphi(a) \cdot \epsilon_a \leq C \label{constr:SLP:nbVehicles}\\
+\sum_{a \in \tegArcSet_3^t} \varphi(a) \leq \nbMaxJockeys \quad, \forall t \in \relocTimeStepSet \label{constr:SLP:nbJockeys}\\
+\varphi(a) \leq u(a) & $\forall a \in \tegArcSet$ \label{constr:SLP:arcCapacities}\\
+\sum_{\substack{y\in \Gamma^-(x)}} \varphi((y,x)) = \sum_{\substack{y\in \Gamma^+(x)}} \varphi((x,y)) & $\forall x \in \tegNodeSet$ \label{constr:SLP:flowConservation}\\
+\varphi(a) \in \N & $\forall a\in\tegArcSet$ \label{constr:SLP:varFlows}\\
+b_i \in \{0, 1\} & $\forall i \in \{1, \dots, \nbStations\}$ \label{constr:SLP:varStations}
+\end{numcases}
+
+
+\eqref{obj:SLP:maxDemands}
+\eqref{constr:SLP:nbStations}
+\eqref{constr:SLP:stationInnerFlow}
+\eqref{constr:SLP:stationOuterFlow}
+\eqref{constr:SLP:nbVROs}
+\eqref{constr:SLP:nbVehicles}
+\eqref{constr:SLP:nbJockeys}
+\eqref{constr:SLP:arcCapacities}
+\eqref{constr:SLP:flowConservation}
+\eqref{constr:SLP:varFlows}
+\eqref{constr:SLP:varStations}
+
+
+\newpage
+\section{Adding energy components}
+Throughout most of our discussion to this point, we have not talk about the vehicles themselves.
+For the last decades, the rise of the number of vehicles on roads has grown to the point where traffic jams and pollution have become an issue.
+In order to reduce dependence on oil, electric cars have retrieved a high interest since 2008 \cite{sperling_two_2009}.
+This interest did not occurred just because of increasing oil prices but thanks as well to advances in batteries and energy management.
+Climate policies and ecology have shifted consumer preferences.
+The need to reduce greenhouse gas emissions seemed to be now a important concern for the car industry who  gave more and more attention to it in their products.
+Today, more and more electric vehicles are used on the roads.
+As of 2016, the market share in France represent almost 1\% \cite{VE_MarketShare2016}.
+
+\medskip
+The electric cars have several benefits over conventional internal combustion engine automobiles \cite{VE_avantages}.
+First of all, they are cleaner vehicles.
+Especially in cities, they help reducing significantly the air pollution.
+They do not emit harmful tailpipe pollutants such as particulates (soot), volatile organic compounds, hydrocarbons, carbon monoxide, ozone, lead, and various oxides of nitrogen.
+Depending on the nature and origin of the electricity, electric vehicles spend around 20g of CO2/km against almost 130g of CO2/km for combustion vehicles.
+The gap in term of environmental cost between the electric and the fuel car will become even larger with the development and the availability of renewable energies.
+Secondly, electric motors are more energy efficient.
+No consumption is made during the off-idle phase and some energy can even be recover during deceleration or braking phases \cite{artmeier_optimal_2010}.
+Finally, driving an electric vehicles appeared more reliable and pleasant.
+People spend less time and money for repairs and vehicles are much more quieter than gasoline-powered cars.
+
+\medskip
+The major drawback of an electric vehicle comes from its battery.
+More precisely, the distance it can travel without the necessity to recharge (also call the \emph{range} of the vehicle) do not exceed 160km for a standard car in urban traffic conditions, like a Renault Zoe for instance.
+Thus, electric vehicles are not presently suited for long distances but are more appropriate for short travels in urban areas.
+Additionally, charging a vehicle can take considerable time depending on the charging technique.
+The time needed to recharge a battery entirely depends on the available power supply.
+Basically, the more the power, the quicker the battery charged.
+Four power tiers, expressed in kWatt (SI unit symbol: kW), are currently used in the market \cite{livre_vert_2014}: home charging (3kW), quick charging (22kW) and fast charging (44kW).
+More recently, superchargers delivering up to 120kW are today available.
+Those levels allow to charge a standard battery of 22kWh within respectively 6-8h, 1-2h and 20-30 minutes.
+Home charging answers to the most common situations where the vehicle is parked during a long period, during the night or working time for instance.
+Conversely, quick and fast charging require specific electric devices to be used and are not recommended for a day to day charge.
+They are more suited when parking time is very limited.
+They grant a higher flexibility covering situations with additional non-planned kilometres.
+
+\subsection{Related work}
+Considering carsharing with electric cars brings up three problems: the energy shortest path problem, the management of the car battery and the impact on electric facilities.
+It also modifies three other problems: the dimensioning, the station location and the vehicle relocation for one-way carsharing.
+Some characteristics of electric cars were simplified in order to reduce the number of problems.
+For instance, the charging model is assumed to be linear.
+
+The energy shortest path problem consists in finding the least energy consuming path between two stations.
+This problem arises with the energy recuperation during the deceleration phase.
+It has been studied using MILP \cite{touati_combinatorial_2012} and algorithms based on the shortest path principle on modified graph \cite{artmeier_optimal_2010}.\\
+Few studies take into account the car battery and the charge time.
+They either block the cars that need to be charged at a station for a fixed period of time \cite{boyaci_optimization_2015} or add variables to represent the battery \cite{bruglieri_vehicle_2014}.
+Thus, research tends to maximize the remaining quantity of energy in the battery at the end of the day and only charge during the night.\\
+The impact on electric facilities is nearly null in the U.S. due to the policy on electricity which create oversize network \cite{liu_survey_2011}.
+However, this study shows the importance of taking the hour of demand into account in order to reduce the price of electricity. 
+The problem of redistribution for electric cars was studied with meta-heuristics or with MILP.
+Two approaches have been developed for this problem.
+The first one uses trucks to move the cars from one station to another.
+The second uses folding bicycles to travel between two stations and stock the bicycle in the car during the relocation trip \cite{bruglieri_vehicle_2014}.
+
+The sizing and localisation problems for electric carsharing systems were studied but most of the time, were not in relation with the relocation problem.
+In these articles, vehicle relocations are made by night.
+It increases the size of stations in order to accept the demands \cite{correia_optimization_2012}.
+However, this problem is also studied for bicycles \cite{george_fleet_2011} and hydrogen cars \cite{melaina_initiating_2003} and the methods used in these researches may be applied for the sizing and localisation problem.
+
+Despite these researches, there is no model which takes all these problems into account at the moment.
+Trying to resolve them one by one will probably lead to an non optimal solution.
+As far as we know, there is only one paper which tries to make the connexions between these problems \cite{boyaci_optimization_2015}.
+The model considers that the client has to reserve his car in advance so it doesn't simulate the demand.
+Moreover, the model is too complex to be able to run in a reasonable time lapse.
+The authors then choose to relax the problem in order to be able to find a solution.
+They obtained a result with an error of 8\% in less than 3 hours in most of the instances.
+
+\subsection{Selected energy components and modelling issues}
+Opt for electric vehicles bring some important constraints, on vehicles themselves of course but also on the system (stations especially) and its dynamics.
+In this section we discuss some energetic components we thought essential or interesting to introduce in the optimization process.
+Although not all of them were selected in the detailed model presented in the next section, we still wanted to give here some insights to be familiar with each of them.
+Afterwards, some modelling issues are highlighted.
+
+\subsubsection{The battery capacity}
+Despite there exists a large diversity of electric batteries, the most common are based on the lithium ion technology.
+Their light weight make them suitable for numerous applications such as portable devices, power tools or electric vehicles.
+Today, the typical battery range for carsharing electric vehicles varies on average from 160 to 250 kilometres, depending on the driving context and the weather conditions.
+
+\subsubsection{The power supply}
+For now, charging an electric car takes from 30 minutes to 6 hours depending on the charging technology.
+Moreover, the charge is not linear.
+It is very fast during approximately the 80 first percents of the battery capacity and became more and more slower until reaching the full capacity.
+But for reasons of simplicity, we will assume in this work that the battery charge follows a linear profile.
+
+%This is due to the fact that the charger need to check the level of charge of each cell of the battery during the electric transfer.
+
+\subsubsection{The discharge}
+Modelling the discharge of an electric vehicle can be difficult because electric cars can restore some energy during decelerating and braking phases.
+Additionally, note that the discharge when the vehicle is neither used or plug into a charging point is negligible, about 1 to 2\% per month.
+In this work, we assume the battery discharge to be linear over time.
+
+\subsubsection{The number of charging points per station}
+Carsharing systems with electric vehicles have to equip their stations with charging points.
+During the design phase of the system, it could be interesting not to consider systematically that all the parking spot are equipped with charging points. 
+A better solution would be providing power supply where the system need to, according to the estimated stations' attractiveness.
+Thereby, the operator save money while maintaining a good level of service.
+
+%This allows us to see how the system reacts if all the parking spots don't have a charging borne;
+
+\subsubsection{Price of electricity}
+In France, the price of electricity constantly varies during the day.
+It is fixed at the European Power Exchange SE (EPEX SPOT SE), the exchange operating the power spot market for short-term trading power in some European country, including France.
+Integrate this price in a system design context could certainly be a interesting feature.
+Fostering the recharge by night for instance, when the price of electricity is the lowest, could be a significant  economic argument.
+
+
+\bigskip
+Conclusion. What are the selected components?
+
+
+\subsubsection{Modelling issues: the flow interpretation}
+In a carsharing system with electric vehicles, accept or reject a request will not only depend on the vehicle availability.
+The battery level become a important parameter impacting the decision to provide or not the resource, in this case the electric car.
+It has to be sufficient enough at least to travel the distance between the origin and the destination.
+Whether to fulfil a request, or operate a vehicle relocation operation, we now need to track and check every single vehicle in the system over time.
+From a modelling point of view, we have seen previously that vehicles are considered as flows in a time expanded graph.
+Since then, the flow was considered as integer but not necessary unitary.
+This means that an optimal flow could admits some parts where more than a unit flow is passing through an arc.
+From a system point of view, without the need to track single vehicles, it was not a problem and corresponded to merged vehicles itineraries.
+However, in order to identify the route of each vehicle in the system, an interpretation of the flow as a set of unit flows has to be determine.
+
+\begin{figure}[t]
+\begin{center}
+\input{tikz/flowInterpretation}
+\end{center}
+\caption{Different flow interpretations.}
+\label{fig:flowInterpretation}
+\end{figure}
+
+\medskip
+Figure \ref{fig:flowInterpretation} illustrates a unit flow interpretation even when the flow is unitary.
+Suppose that an optimal flow admits a baseline situation as illustrated by the above graph of the figure.
+This solution is feasible since the conservation flow is respected; the number of inner and outer flow is the same in each node.
+Now the question is to recover from this situation vehicles' itineraries as unit flow paths starting and ending at time $t=1$.
+Obviously, a first interpretation could lead to the left figure, where the two colors indicate the vehicles itineraries.
+Another possible interpretation is presented in the right figure, where this time both vehicles do not end their trip in the station they came from.
+Note that even if both cases are feasible solutions, they do not require the same amount of energy.
+In the first case, the blue car will move two times, thus require more energy than the other vehicle which stays in station $1$.
+In the other side, the situation is more equilibrated.
+Both vehicles move exactly one time and share the energetic requirements.
+
+\medskip
+As illustrated by this example, we can enumerate two conclusions.
+First, with a realistic size carsharing system, \ie with much more stations and numerous time-steps, a unique feasible solution could lead to many interpretations in terms of vehicles' itineraries.
+Secondly, every interpretation has its own energetic impact and, besides could not be feasible in that sense. 
+
+Therefore, introduce energy components through a feasible interpretation of vehicles' itineraries do not seem a relevant and reliable solution.
+There is furthermore no guaranty that an optimal solution could be extracted from a solution that do not take into account the energy.
+We finally decided to reuse the model previously used to solve the {\SLP} and adapt it so that it can support and include energy constraints.
+
+
+\subsection{Mathematical program}
+The major issue underlined in the previous section concerns the flow decomposition into unitary flow paths.
+This decomposition is essential to follow every vehicle in the system and be able to track its batteries over time.
+Indeed, with electric vehicles, their availability in a station at a given time is not sufficient to ensure the travel.
+The battery level also take part in the decision process and assesses if the required travel could be support or not.
+In this section, we present how to modify the previous time expanded graph so that it can support energy components.
+A new mathematical model is finally presented.
+
+
+\subsubsection{Graph transformations}
+
+Avoiding the flow interpretation can be simply achieve by duplicate arcs with non unitary bound.
+The basic idea is to force the flow to be unitary by limiting the arcs' capacities.
+In fact, the system remains unchanged if we replicate each arc $a \in \tegArcSet$ into $u(a)$ (the arc capacity) arcs with unitary capacities.
+Figure \ref{fig:tegTransformation} illustrates the transformation.
+The initial TEG introduced in Chapter \ref{chap:sdp} is transformed into a TEG where all the arcs are bounded by $1$.
+Even the relocation arcs, where the capacities were previously set to infinity, can be unitary bounded.
+Again, this could be done without loss of generality since it only limit a vehicle relocation operation to be operate by only one jockey, which is realistic.
+
+\medskip
+This simple transformation allows now the flow to be at most unitary.
+Nevertheless, the operation can be achieve at the cost of a notable increase in the number of arcs.
+More precisely, the only set of arc impacted is the set $\tegArcSet_1$ corresponding to the stock arcs.
+For the record, their original number was about exactly $\nbStations \cdot \nbTimeSteps$ arcs.
+Now, the size of the new set of stock arcs, noted $\tegArcSet_1'$ is exactly:
+\begin{equation}
+|\tegArcSet_1'| = \sum\limits_{i=1}^\nbStations (Z(i) \cdot \nbTimeSteps) = \nbTimeSteps \cdot \sum\limits_{i=1}^\nbStations Z(i)
+\end{equation}
+
+In practice, this means that the increasing factor depends on the maximum size of the carsharing stations, or sites.
+It will be important to keep this result in mind since the number of variables depends directly on the number of arcs.
+
+\begin{figure}[t]
+\begin{center}
+\scalebox{0.7}{\input{tikz/tegTransformation}}
+\end{center}
+\caption{TEG transformation to support energy components.}
+\label{fig:tegTransformation}
+\end{figure}
+
+\subsubsection{Parameters}
+To extend the model with electric components, let's first define some parameters related to batteries and stations' power supply.
+All the other notations or variables have the same meaning that before.
+The total capacity of the vehicle battery is noted $E$.
+It is assumed that all vehicles are equipped with the same type of batteries.
+
+\medskip
+Since the vehicles now consume energy when travelling and have the possibility to recover it when parked in station, some adjustments are required.
+We will associate to each arc $a \in \tegArcSet'$ in the new graph an additional value noted $\enCons$, standing for the energy consumption.
+This value will be positive when the vehicles will performed a trip (\ie for demand arcs $\tegArcSet_2$ and vehicle relocation arcs $\tegArcSet_3$) and negative when parked in station (\ie stock arcs $\tegArcSet_1$).
+Formally,
+\begin{equation}
+\enCons(a) = 
+\end{equation}
+
+
+
+
+
+Arcs in will also be provided with 
+
+Associated with each 
+
+Also, another every stock arc will be 
+
+
+\begin{enumerate}
+\item[•]
+\end{enumerate}
+
+\paragraph{•}
+
+We also add two others notations due to the energy problem:
+\begin{itemize}
+\item E: the battery capacity (in Km);
+\item $Gain_k$: Electric gain ($>0$) or cost ($<0$) of the arc $k$ which depend if the car is in stock or in travel.,
+\end{itemize}
+
+\subsubsection{Variables}
+We have also three variables:
+\begin{itemize}
+\item
+$ \varphi (a) = 1 $ if a flow use the arc $a$, $0$ otherwise.
+This variable is the same as in the previous model except it's now a binary.
+\item
+$E_k$: Energy in the battery before using the arc $k$.
+This variable allow us to check if the vehicle has enough energy to be able to use the arc.
+It also gives us the battery level of the car in an unique way because the arc has a capacity of $1$.
+\item
+$A_{kj}$ = 1 if a flow use arc $k$ and continue with arc $j$, $0$ otherwise.
+This variable allows us to follow every step of the car.
+\end{itemize}
+
+\subsubsection{Mathematical program}
+Using the notations above, we can formulate our model as follows:
+
+\begin{equation}\label{obj:ENERGY:maxDemands}
+\text{[ENERGY]:} \max ~~\sum\limits_{a \in \tegArcSet_2}  \varphi (a)
+\end{equation}
+\begin{numcases}{s.t.}
+E_j \leq E_k + Gain_{k}*A_{kj} + E *(1-A_{kj}) & $\forall (k,j) \in \tegArcSet^2$ \label{constr:ENERGY:a}\\
+E_{k} \leq E_{j} + E *(1-A_{kj}) & $\forall k \in \tegArcSet_1$, $\forall j \in \tegArcSet$ \label{constr:ENERGY:b}\\
+\sum_j A_{kj} = \varphi(k) & $\forall k \in \tegArcSet$ \label{constr:ENERGY:c}\\
+\sum_k A_{kj} = \varphi(j) & $\forall j \in \tegArcSet$ \label{constr:ENERGY:d}\\
+%
+% nb relocs & nb vehicles
+\sum_{a \in \tegArcSet_3} \varphi(a) \leq R \label{constr:ENERGY:nbVROs}\\
+\sum_{a\in \tegArcSet} \varphi(a) \cdot \epsilon_a \leq C \label{constr:ENERGY:nbVehicles}\\
+%
+% jockey constr
+\sum_{a \in \tegArcSet_3^t} \varphi(a) \leq \nbMaxJockeys & $\forall t \in \relocTimeStepSet$ \label{constr:ENERGY:nbJockeys}\\
+%
+% station constr
+\sum_{i=1}^\nbStations b_i \leq \nbMaxStations \label{constr:ENERGY:nbStations}\\
+\varphi(a) \leq b_{\eta(x)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet$ \label{constr:ENERGY:stationInnerFlow} \\
+\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet_2 \cap \tegArcSet_3$ \label{constr:ENERGY:stationOuterFlow}\\
+%
+% variables
+A_{ij} \in \{0,1\} & $\forall (i,j) \in \tegArcSet^2$ \label{constr:ENERGY:varAij}\\
+E_a \in \RR & $\forall a \in \tegArcSet$ \label{constr:ENERGY:varBatteries}\\
+\varphi(a) \in \{0,1\} & $\forall a \in \tegArcSet$ \\
+b_i \in \{0, 1\} & $\forall i \in \{1, \dots, \nbStations\}$ \label{constr:ENERGY:varStations}\\
+\end{numcases}
+
+As always, the objective function \ref{obj:ENERGY:maxDemands} maximizes the number of satisfied demands.
+This model has nine sets of constraints.
+Constraint $(1),(2),(8),(9)$ are the same as in the previous model.\\
+Constraint $(3)$ updates the energy for a car which just takes the ark $k$ and will continue with the arc $j$.
+It also check if the car has enough energy to use the arc $k$.
+Finally, the last part of this constraint is a big M constraint to not constraint $E_{j}$ and $E_{k}$ when $A_{kj} = 0$.\\
+Constraint $(4)$ forbid the car to loose energy when parked.
+This is due to the fact that Cplex would often withdraw all the energy in the car when this energy wasn't needed, which was unrealistic.\\
+Constraint $(5)$ and $(6)$ are the new flow conservation constraints.
+It can be seen as follows (Figure \ref{fig:flowConservation}):
+
+\begin{figure}[t]
+\begin{center}
+\scalebox{1}{\input{tikz/flowConservation}}
+\end{center}
+\caption{Flow conservation.}
+\label{fig:flowConservation}
+\end{figure}
+
+For all arcs coming to A, at most one can continue with the arc $j$.
+And if $\varphi (j)= 1$, then one and only one arc $i$ coming to $A$ has $A_{ij} = 1$ and one arc $k$ leaving from $B$ has $A_{jk} = 1$\\
+Constraint $(7)$ is a new constraint added to takes the jockey into account.
+So instead of having a global number of vehicle relocation, we have a number of possible employees working at a precise time.
+
+\paragraph{Numbers of variables:}
+We have : 
+\begin{itemize}
+\item N: number of stations;
+\item M: number of requests;
+\item R: number of time steps for a vehicle relocation;
+\item T: number of time steps;
+\item P: Average number of parking spots per station;
+\item For $\varphi$ and  $E_{k}$ : $$\underbrace{M}_\textrm{number of requests} + \underbrace{P * N * T}_\textrm{number of stock} + \underbrace{R * N * (N -1)}_\textrm{number of vehicle relocations}$$
+\item For $A_{ij}$ : $$\underbrace{2 * M * P }_\textrm{number of requests} + \underbrace{P^{2} * N * T}_\textrm{number of stock} + \underbrace{2* R * N * (N -1) * P}_\textrm{number of vehicle relocations}$$
+\end{itemize}
+
+\section{Discussions and improvements}
+
+\paragraph{Advantages and inconveniences with this model:}
+This model provides us with an optimal solution for our model.
+Moreover, it's a model quite natural.
+However, this model has several issues:
+\begin{itemize}
+\item it has too much variables;
+\item it has symmetry issues;
+\item it doesn't give a good approximation when relaxed;
+\item Cplex can only run small instances (7 stations) in an acceptable time.
+\end{itemize}
+Because of these issues, we have to try to improve the model.
+
+\paragraph{Improvements:}
+We try three different improvements to be able to improve our model:
+\begin{itemize}
+\item Modify Cplex parameters;
+\item Break the symmetry;
+\item Give to Cplex a solution to start.
+\end{itemize}
+
+\paragraph{Parameters:}
+One improvement of the model was to modify the Cplex parameters to fit our problem and thus be quicker.
+We have found two parameters to improve the resolution:
+\begin{itemize}
+\item \emph{VarSel}:
+the strategy choose the next branch that Cplex is going to explore.
+In our solution, Cplex stays a long time on a branching node before opening a branch.
+It reduces the time spent on each branch and reduce also the memory use.
+\item \emph{RINSHeur}:
+decides how often to apply the relaxation induced neighborhood search (RINS) heuristic.
+It helps Cplex to quickly find a possible solution;
+We also use different cuts to to accelerate the research, as for instance Gomory's cut.
+\end{itemize}
+
+\paragraph{Symmetry:}
+One of the main drawback with this new TEG representation is the arc symmetry.
+By multiplying the arc stocks, we created multiple solutions which are equivalent.
+
+\begin{figure}[t]
+\begin{center}
+\scalebox{1}{\input{tikz/symmetryExample}}
+\end{center}
+\caption{Symmetry example.}
+\label{fig:symetryExample}
+\end{figure}
+
+\begin{figure}[t]
+\begin{center}
+\scalebox{1}{\input{tikz/variableReduction}}
+\end{center}
+\caption{Variable reduction.}
+\label{fig:variableReduction}
+\end{figure}
+
+As we can see in Figure \ref{fig:symetryExample}, there is no difference between paths $P_1$ and $P_2$ both in terms of interpretation and objective function value.
+However, those are different paths so it will offer more possibles solutions to Cplex.
+To break the symmetry, we consider for each node in the TEG with multiple variables $1_{ij}$ only those verifying: $\forall (i, i\prime) \in \mathcal{A}_1^{2},\forall (j, j\prime) \in \mathcal{A}_1^{2}, A_{ij} \neq A_{i\prime j\prime} \text{if} i \neq i\prime \text{and} j\neq j\prime $.
+We can see it in the Figure \ref{fig:variableReduction}.
+
+In term of interpretation, this can represent a car in a parking spot.
+This decrease the number of variables $A_{ij}$ for each node from $|\Gamma^{-}(x)|*|\Gamma^{+}(x)|$ to $|\Gamma^{-}(x)|$.
+The total number of variable $A_{ij}$ in the TEG can be calculated as follow: 
+
+\begin{itemize}
+\item
+For $A_{ij}$ before the symmetry break: $$\underbrace{2 * M * P }_\textrm{number of requests} + \underbrace{P^{2} * N * T}_\textrm{number of stock} + \underbrace{2* R * N * (N -1) * P}_\textrm{number of vehicle relocation}$$
+\item
+For $A_{ij}$ after: $$\underbrace{2 * M * P }_\textrm{number of request} + \underbrace{P * N * T}_\textrm{number of stock} + \underbrace{2* R * N * (N -1) * P}_\textrm{number of vehicle relocation}$$
+$$ = P * ( 2M + N * (T + 2R * (N-1)))$$
+\end{itemize}
+With:
+\begin{itemize}
+\item N: number of stations;
+\item M: number of requests;
+\item R: number of time steps for a vehicle relocation;
+\item T: number of time steps;
+\item P: average number of parking spot per station.
+\end{itemize}
+As we can see, this modification reduce the number of $A_{ij}$ by a $P$ factor.
+
+\paragraph{Rounding:}
+One manner to improve the resolution time is to initialise Cplex with a solution, feasible or not.
+We investigate two type of solutions:
+\begin{itemize}
+\item Rounding technique;
+\item Heuristic.
+\end{itemize}
+Our rounding solution can be find following:
+
+\begin{enumerate}
+\item Solve the problem relaxed for all the variables except for the stations;
+\item Variable value :$\left\{
+\begin{array}{l l}
+if > 0.7 & \text{then fix at 1;} \\
+if < 0.3 & \text{then fix at 0;} \\
+otherwise & \text{keep the same value.}
+\end{array}
+\right.$
+\item Either let Cplex try to repair the solution or try to repair the solution by hand;
+\item Give this solution to Cplex to do a warm start.
+\end{enumerate}
+
+We implemented this solution but unfortunately, Cplex was not able to repair it.
+So, we give up on this solution and try to create an heuristic which can provide a feasible solution.
+
+\paragraph{Heuristic}
+Our heuristic is a modified Dijkstra's algorithm.
+This is due to the fact that our model can be reformulated as a k-minimum path problem with constraints.
+As weight on the arcs, we set: 
+\begin{itemize}
+\item 0 for request arcs;
+\item 1 for stock and vehicle relocation arcs.
+\end{itemize}
+The heuristic search for $C$ minimum paths verifying energy and vehicle relocation constraints.
+These paths have to be cycle due to the following property 
+\begin{prop}
+Every solution of the problem of dimensioning can be decompose in k-cycle, $k \in [1,C]$ with length $l*T, l\in [1,C]$.
+\end{prop}
+
+This property was proved on the paper \cite{carlier_optimization_2014b}.
+To fulfil the energy constraints, we label every node in the graph with a list of couples.
+Those couples keep on the one hand the value of the solution, and on the other hand the remaining energy in the car.
+Every couple with a higher solution value and a lower energy value can be suppressed from the list.
+The algorithm can be expressed as in the \textbf{Algorithm 1} and we can see an example of this heuristic in the \textbf{Figure 5.3}.
+
+\begin{figure}[t]
+\begin{center}
+\scalebox{.9}{\input{tikz/heuristicExample}}
+\end{center}
+\caption{Heuristic example.}
+\label{fig:heuristicExample}
+\end{figure}
+
+It should be noted that the solution found by \textbf{Algorithm 1} can be non-optimal because when the algorithm take a best path, it can block future better path starting from other nodes. 
+This heuristic also makes only a cycle with length of $T$ which can result in lower result.
+
+\begin{algorithm}
+\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
+\KwIn{A TEG : $teg$ , a depart node : $depart$}
+\KwOut{Value of the best path from $depart$ to $depart$ with energy }
+\For{each node}{
+List $\gets$ $(0,0)$ if $depart$ node\;
+List $\gets$  (+$\infty,0$) other node\; 
+}
+\While{$List \neq \phi$} {
+couple $\gets$ couple $\in$ List with the smallest cost\;
+ \If{$node(couple) == depart$}{
+ \Return {$getcost(couple)$}\;
+ 
+ }
+ node $\gets$ node(couple)\;
+\For{any arc adjacent}{
+ $arrive \gets arc destination$\;
+ $cost \gets getcost(couple)$\;
+ $energy \gets getenergy(couple)$\;
+  \If{$arc$ is not a request} {
+    $cost \gets cost + 1$\tcp*{\small{Update cost}}
+   }
+   $energy \gets energy + arc(energy)$\tcp*{Update battery charge}
+   \If{$energy \geq 0$ }{
+   	\For{every couple in $arrive$}{
+   	\If{$energy \geq getenergy(couple)$ and $cost \leq getcost(couple)$}{
+ 		suppress couple\tcp*{This couple is worst}
+  		}
+   	\If{$energy \leq getenergy(couple)$ and $cost \geq getcost(couple)$}{
+  	 $break$\tcp*{A better solution exist}
+ 	 }
+ 	}
+  }
+  }
+}
+\caption{Heuristic to find the best path}
+\label{algo:max}
+\end{algorithm}
+
+\section{Conclusions}
+\subsection{Results}
+In conclusion, we have developed a model to solve the localisation and dimensioning problem with electric constraints.
+We also produced a state of the art on this problem.
+However, due to the complexity of this problem, Cplex was not able to solve it in a reasonable time on instances containing more than $10$ stations.
+To cope with that, we improved the model by breaking symmetries.
+We also developed an rounding technique and an heuristic.
+However the rounding technique didn't give any results.
+We were able to see the impacts of electric constraints in such problem. We saw that the electric constraints have an impact on the solution.
+However, we need to try in a system with more constraints to be able to see the impact.
+
+\subsection{Further research}
+There are several possible ways to pursuit and improve the resolution of this problem.
+One way would be to modify the model to take into account the possible path instead of arcs as variables and run a column generation method with a branch and price.
+Another solution would be to improve the heuristic by using a meta heuristic.
+Further research can also focus on the impact of electricity in system with a lower ratio vehicle/request.
+
+\newpage
+\addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
+\renewcommand{\bibname}{Bibliography of chapter \thechapter}
+\putbib[bib/biblio]
+\end{bibunit}
