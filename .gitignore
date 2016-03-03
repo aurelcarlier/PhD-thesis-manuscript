@@ -8,4 +8,7 @@ master.pdf
 *.out
 *.toc
 *.synctex.gz
+*.maf
+*.bbl
+*.blg
 front_page/*.pdf
