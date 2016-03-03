@@ -432,9 +432,7 @@ The battery level also take part in the decision process and assesses if the req
 In this section, we present how to modify the previous time expanded graph so that it can support energy components.
 A new mathematical model is finally presented.
 
-
 \subsubsection{Graph transformations}
-
 Avoiding the flow interpretation can be simply achieve by duplicate arcs with non unitary bound.
 The basic idea is to force the flow to be unitary by limiting the arcs' capacities.
 In fact, the system remains unchanged if we replicate each arc $a \in \tegArcSet$ into $u(a)$ (the arc capacity) arcs with unitary capacities.
@@ -464,70 +462,86 @@ It will be important to keep this result in mind since the number of variables d
 \label{fig:tegTransformation}
 \end{figure}
 
-\subsubsection{Parameters}
+\subsubsection{Additional parameters}
 To extend the model with electric components, let's first define some parameters related to batteries and stations' power supply.
 All the other notations or variables have the same meaning that before.
-The total capacity of the vehicle battery is noted $E$.
-It is assumed that all vehicles are equipped with the same type of batteries.
+For the record, $\Delta t$ is the time period expressed in minutes between two consecutive time-steps.
+
+The total capacity of the vehicle battery will be noted $E$.
+For sake of simplicity, this value will be expressed in kilometres but could equivalently be expressed in kiloWatts.
+Indeed, it is assumed that the two units are link through a linear relation.
+Besides, it is also assumed that all vehicles are equipped with the same type of batteries.
+
+\medskip
+As said before, there exists different types of station power supply.
+Depending on the battery capacity, the power however can be expressed over time.
+Let $\omega (E)$ be the number of minutes needed to refill an empty battery to full charge.
 
 \medskip
 Since the vehicles now consume energy when travelling and have the possibility to recover it when parked in station, some adjustments are required.
-We will associate to each arc $a \in \tegArcSet'$ in the new graph an additional value noted $\enCons$, standing for the energy consumption.
-This value will be positive when the vehicles will performed a trip (\ie for demand arcs $\tegArcSet_2$ and vehicle relocation arcs $\tegArcSet_3$) and negative when parked in station (\ie stock arcs $\tegArcSet_1$).
-Formally,
-\begin{equation}
-\enCons(a) = 
-\end{equation}
+We associate with each arc $a \in \tegArcSet'$ in the new graph an additional value noted $\enCons$, standing for the energy consumption.
+This value expressed in kilometres will be positive when vehicles performed a trip (\ie for demand arcs $\tegArcSet_2$ and vehicle relocation arcs $\tegArcSet_3$) and negative when parked in station (\ie stock arcs $\tegArcSet_1$).
+The distance in kilometres between stations $s_1$ and $s_2$, both in the set $\stationSet$, is denoted by $d(s_1, s_2)$.
+This value can be recovered from any mapping tool simulation giving exactly the distance between stations by road or it could more simply corresponds to the euclidean distance between them.
+Nevertheless, a penalty coefficient $\rho \geq 1$ revised the value during rush-hours as vehicles consume more energy at lower speed travelling the same distance.
+Outside these periods, we set $\rho = 1$.
 
+\medskip
+Therefore, the energy consumption is formally defined as:
+\begin{numcases}{\enCons(a=(x, y)) =}
+- \frac{E \cdot \Delta t}{\omega (E)} & if $a \in \tegArcSet_1$,\label{eq:consumtionStation}\\
+\rho \cdot d(\eta(x), \eta(y)) & if $a \in \tegArcSet_2 \cup \tegArcSet_3$.\label{eq:consumtionTravel}
+\end{numcases}
 
-
-
-
-Arcs in will also be provided with 
-
-Associated with each 
-
-Also, another every stock arc will be 
-
-
-\begin{enumerate}
-\item[•]
-\end{enumerate}
-
-\paragraph{•}
-
-We also add two others notations due to the energy problem:
-\begin{itemize}
-\item E: the battery capacity (in Km);
-\item $Gain_k$: Electric gain ($>0$) or cost ($<0$) of the arc $k$ which depend if the car is in stock or in travel.,
-\end{itemize}
+\medskip
+First equation \eqref{eq:consumtionStation} assigns to every stock arc the number of kilometres a vehicle could travel if it recharge its battery during one time-steps; stock arcs connect nodes spaced from a single time-step interval.
+Second equation \eqref{eq:consumtionTravel} stands for the travel distance between stations raised by the penalty coefficient during rush periods.
 
 \subsubsection{Variables}
-We have also three variables:
-\begin{itemize}
-\item
-$ \varphi (a) = 1 $ if a flow use the arc $a$, $0$ otherwise.
-This variable is the same as in the previous model except it's now a binary.
-\item
-$E_k$: Energy in the battery before using the arc $k$.
-This variable allow us to check if the vehicle has enough energy to be able to use the arc.
-It also gives us the battery level of the car in an unique way because the arc has a capacity of $1$.
-\item
-$A_{kj}$ = 1 if a flow use arc $k$ and continue with arc $j$, $0$ otherwise.
-This variable allows us to follow every step of the car.
-\end{itemize}
+The set of variables is extended to three sets.
+The first one remains the flow variables.
+Assign to every arc of the graph, they identify as before vehicles' routes through the system.
+Note however that now the flow do not longer need to be integer.
+A boolean domain is sufficient since all the arc capacities were set to $1$.
+Next set of variables aim at avoiding path interpretations after having run the optimization process.
+In each node, a boolean variable $A_{ij}$ indicates if the flow coming from arc $i$ is continuing to arc $j$.
+We refer to those variables as the \emph{flow affectation} variables.
+As discussed later on, this set is probably the major drawback of this model due to the substantially augmentation of the number of variables.
+Their number however grows polynomially with respect to the number of arcs.
+Lastly, let $E_a$ the \emph{battery level} of the flow (vehicle) entering the arc $a$.
+Similarly to the energy consumption, those variables are expressed in kilometres.
+
+\medskip
+The three sets of variables are summarized in the following:
+\begin{enumerate}
+\item $\forall a \in \tegArcSet$,
+\begin{numcases}{ ~~~~~~\varphi(a) =}
+1 & if a flow enters arc $a$,\\
+0 & if otherwise.
+\end{numcases}
+
+\item $\forall x \in \tegNodeSet$ such that $ i \in \Gamma^-(x)$ and $j \in \Gamma^+(x)$,
+\begin{numcases}{ ~~~~~~A_{ij} =}
+1 & if the flow coming from arc $i$ follows to arc $j$,\\
+0 & if otherwise.
+\end{numcases}
+
+\item $\forall a \in \tegArcSet$, $E_a \in (0, E)$.
+\end{enumerate}
 
 \subsubsection{Mathematical program}
-Using the notations above, we can formulate our model as follows:
+Using the notations above, we can formulate the energy model as follows:
 
 \begin{equation}\label{obj:ENERGY:maxDemands}
 \text{[ENERGY]:} \max ~~\sum\limits_{a \in \tegArcSet_2}  \varphi (a)
 \end{equation}
 \begin{numcases}{s.t.}
-E_j \leq E_k + Gain_{k}*A_{kj} + E *(1-A_{kj}) & $\forall (k,j) \in \tegArcSet^2$ \label{constr:ENERGY:a}\\
-E_{k} \leq E_{j} + E *(1-A_{kj}) & $\forall k \in \tegArcSet_1$, $\forall j \in \tegArcSet$ \label{constr:ENERGY:b}\\
-\sum_j A_{kj} = \varphi(k) & $\forall k \in \tegArcSet$ \label{constr:ENERGY:c}\\
-\sum_k A_{kj} = \varphi(j) & $\forall j \in \tegArcSet$ \label{constr:ENERGY:d}\\
+E_j \leq E_i - \enCons(i) \cdot A_{ij} + E \cdot (1 - A_{ij}) & $\forall (i,j) \in \tegArcSet^2$ \label{constr:ENERGY:a}\\
+E_i \leq E_j + E *(1 - A_{ij}) & $\forall (i, j) \in \tegArcSet_1 \times \tegArcSet$ \label{constr:ENERGY:b}\\
+\varphi(a) \cdot \enCons(a) \leq E_a & $\forall a \in \tegArcSet_2 \cup \tegArcSet_3$ \label{constr:ENERGY:c}\\
+E_a \leq E \cdot \varphi(a) & $\forall a \in \tegArcSet$ \label{constr:ENERGY:d}\\
+\sum_j A_{kj} = \varphi(k) & $\forall k \in \tegArcSet$ \label{constr:ENERGY:flowCons:a}\\
+\sum_k A_{kj} = \varphi(j) & $\forall j \in \tegArcSet$ \label{constr:ENERGY:flowCons:b}\\
 %
 % nb relocs & nb vehicles
 \sum_{a \in \tegArcSet_3} \varphi(a) \leq R \label{constr:ENERGY:nbVROs}\\
@@ -543,12 +557,21 @@ E_{k} \leq E_{j} + E *(1-A_{kj}) & $\forall k \in \tegArcSet_1$, $\forall j \in 
 %
 % variables
 A_{ij} \in \{0,1\} & $\forall (i,j) \in \tegArcSet^2$ \label{constr:ENERGY:varAij}\\
-E_a \in \RR & $\forall a \in \tegArcSet$ \label{constr:ENERGY:varBatteries}\\
+E_a \in (0, E) & $\forall a \in \tegArcSet$ \label{constr:ENERGY:varBatteries}\\
 \varphi(a) \in \{0,1\} & $\forall a \in \tegArcSet$ \\
 b_i \in \{0, 1\} & $\forall i \in \{1, \dots, \nbStations\}$ \label{constr:ENERGY:varStations}\\
 \end{numcases}
 
 As always, the objective function \ref{obj:ENERGY:maxDemands} maximizes the number of satisfied demands.
+The first six groups of constraints are related to the energy components and the flow affectation variables.
+Equation \eqref{constr:ENERGY:a} defines the upper bound of the battery level.
+If the flow coming from arc $i$ is continuing its path to arc $j$ (\ie if $A_{ij}=1$), then the battery level $E_j$ is at most $E_i$ minus the energy consumption when passing thought arc $i$ (\ie $\enCons(i)$).
+In the case of $A_{ij}=0$, there is no need to limit $E_j$ and its upper bound is relaxed to $E_i + E$, a getter value than the battery capacity.
+
+
+Next constraints \eqref{constr:ENERGY:b} 
+
+
 This model has nine sets of constraints.
 Constraint $(1),(2),(8),(9)$ are the same as in the previous model.\\
 Constraint $(3)$ updates the energy for a car which just takes the ark $k$ and will continue with the arc $j$.
