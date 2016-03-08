@@ -432,7 +432,7 @@ The battery level also take part in the decision process and assesses if the req
 In this section, we present how to modify the previous time expanded graph so that it can support energy components.
 A new mathematical model is finally presented.
 
-\subsubsection{Graph transformations}
+\subsubsection{Graph transformations} \label{sec:graphTransformations}
 Avoiding the flow interpretation can be simply achieve by duplicate arcs with non unitary bound.
 The basic idea is to force the flow to be unitary by limiting the arcs' capacities.
 In fact, the system remains unchanged if we replicate each arc $a \in \tegArcSet$ into $u(a)$ (the arc capacity) arcs with unitary capacities.
@@ -529,6 +529,15 @@ The three sets of variables are summarized in the following:
 \item $\forall a \in \tegArcSet$, $E_a \in (0, E)$.
 \end{enumerate}
 
+Obviously, the total number of variables is much more greater than before.
+Although flow variables and battery variables follow the number of arcs in the graph, this is not the case for the flow affectation variables.
+%Indeed, their number grows polynomially with respect to the number of arcs.
+At each node $x \in \tegNodeSet$ there is exactly $|\Gamma^-(x)| \cdot |\Gamma^+(x)|$ affectation variables that indicate the arc sequence in this specific node $x$.
+Since $|\tegArcSet_1| \gg |\tegArcSet_2 \cup \tegArcSet_3|$ with the TEG transformation, their number can be approximated to
+\begin{equation*}
+\nbTimeSteps \cdot \sum\limits_{i=1}^\nbStations Z_i^2 = \Theta(|\tegArcSet|^2).
+\end{equation*}
+
 \subsubsection{Mathematical program}
 Using the notations above, we can formulate the energy model as follows:
 
@@ -544,8 +553,8 @@ E_a \leq E \cdot \varphi(a) & $\forall a \in \tegArcSet$ \label{constr:ENERGY:d}
 \sum_k A_{kj} = \varphi(j) & $\forall j \in \tegArcSet$ \label{constr:ENERGY:flowCons:b}\\
 %
 % nb relocs & nb vehicles
-\sum_{a \in \tegArcSet_3} \varphi(a) \leq R \label{constr:ENERGY:nbVROs}\\
-\sum_{a\in \tegArcSet} \varphi(a) \cdot \epsilon_a \leq C \label{constr:ENERGY:nbVehicles}\\
+\sum_{a \in \tegArcSet_3} \varphi(a) \leq \nbVROs \label{constr:ENERGY:nbVROs}\\
+\sum_{a\in \tegArcSet} \varphi(a) \cdot \epsilon_a \leq \nbVehicles \label{constr:ENERGY:nbVehicles}\\
 %
 % jockey constr
 \sum_{a \in \tegArcSet_3^t} \varphi(a) \leq \nbMaxJockeys & $\forall t \in \relocTimeStepSet$ \label{constr:ENERGY:nbJockeys}\\
@@ -556,31 +565,31 @@ E_a \leq E \cdot \varphi(a) & $\forall a \in \tegArcSet$ \label{constr:ENERGY:d}
 \varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet_2 \cap \tegArcSet_3$ \label{constr:ENERGY:stationOuterFlow}\\
 %
 % variables
-A_{ij} \in \{0,1\} & $\forall (i,j) \in \tegArcSet^2$ \label{constr:ENERGY:varAij}\\
 E_a \in (0, E) & $\forall a \in \tegArcSet$ \label{constr:ENERGY:varBatteries}\\
-\varphi(a) \in \{0,1\} & $\forall a \in \tegArcSet$ \\
+A_{ij} \in \{0,1\} & $\forall (i,j) \in \tegArcSet^2$ \label{constr:ENERGY:varAij}\\
+\varphi(a) \in \{0,1\} & $\forall a \in \tegArcSet$ \label{constr:ENERGY:varFlows}\\
 b_i \in \{0, 1\} & $\forall i \in \{1, \dots, \nbStations\}$ \label{constr:ENERGY:varStations}\\
 \end{numcases}
 
-As always, the objective function \ref{obj:ENERGY:maxDemands} maximizes the number of satisfied demands.
+\bigskip
+As always, the objective function \eqref{obj:ENERGY:maxDemands} maximizes the number of satisfied demands.
 The first six groups of constraints are related to the energy components and the flow affectation variables.
 Equation \eqref{constr:ENERGY:a} defines the upper bound of the battery level.
-If the flow coming from arc $i$ is continuing its path to arc $j$ (\ie if $A_{ij}=1$), then the battery level $E_j$ is at most $E_i$ minus the energy consumption when passing thought arc $i$ (\ie $\enCons(i)$).
-In the case of $A_{ij}=0$, there is no need to limit $E_j$ and its upper bound is relaxed to $E_i + E$, a getter value than the battery capacity.
-
-
-Next constraints \eqref{constr:ENERGY:b} 
-
-
-This model has nine sets of constraints.
-Constraint $(1),(2),(8),(9)$ are the same as in the previous model.\\
-Constraint $(3)$ updates the energy for a car which just takes the ark $k$ and will continue with the arc $j$.
-It also check if the car has enough energy to use the arc $k$.
-Finally, the last part of this constraint is a big M constraint to not constraint $E_{j}$ and $E_{k}$ when $A_{kj} = 0$.\\
-Constraint $(4)$ forbid the car to loose energy when parked.
-This is due to the fact that Cplex would often withdraw all the energy in the car when this energy wasn't needed, which was unrealistic.\\
-Constraint $(5)$ and $(6)$ are the new flow conservation constraints.
-It can be seen as follows (Figure \ref{fig:flowConservation}):
+If the flow coming from arc $i$ is continuing its path to arc $j$ (\ie if $A_{ij} = 1$), then the battery level $E_j$ is at most the previous battery level $E_i$ minus the energy consumption when passing thought arc $i$ (\ie $\enCons(i)$).
+In the case of $A_{ij} = 0$, there is no need to limit $E_j$ and its upper bound is relaxed to $E_i + E$, a greater value than the battery capacity.
+%
+Next constraints \eqref{constr:ENERGY:b} ensures that the battery do not discharge when parked in station.
+After being parked in station, the battery level of each vehicle must at least equals to its value before the operation.
+This situation is expressed as $E_i \leq E_j$ when $A_{ij} = 1$ and $i \in \tegArcSet_1$.
+%
+Equation \eqref{constr:ENERGY:c} connects the battery level and the energy consumption when vehicles are travelling.
+It requires the battery to dispose of a sufficient level in order to achieve the trip, whether it is a demand or a vehicle relocation.
+%
+Constraints \eqref{constr:ENERGY:d} set the battery level variables to $0$ if there is no vehicle passing through the arc $a$.
+%
+Finally, constraints \eqref{constr:ENERGY:flowCons:a} and \eqref{constr:ENERGY:flowCons:b} are flow conservation constraints.
+As illustrated in Figure \ref{fig:flowConservation}, it ensures that no more than one unit of flow is coming from the predecessors of node $x$.
+Similarly, at most one unit of flow can continue to the successor of node $y$ after passing through the arc $j$.
 
 \begin{figure}[t]
 \begin{center}
@@ -590,106 +599,79 @@ It can be seen as follows (Figure \ref{fig:flowConservation}):
 \label{fig:flowConservation}
 \end{figure}
 
-For all arcs coming to A, at most one can continue with the arc $j$.
-And if $\varphi (j)= 1$, then one and only one arc $i$ coming to $A$ has $A_{ij} = 1$ and one arc $k$ leaving from $B$ has $A_{jk} = 1$\\
-Constraint $(7)$ is a new constraint added to takes the jockey into account.
-So instead of having a global number of vehicle relocation, we have a number of possible employees working at a precise time.
-
-\paragraph{Numbers of variables:}
-We have : 
-\begin{itemize}
-\item N: number of stations;
-\item M: number of requests;
-\item R: number of time steps for a vehicle relocation;
-\item T: number of time steps;
-\item P: Average number of parking spots per station;
-\item For $\varphi$ and  $E_{k}$ : $$\underbrace{M}_\textrm{number of requests} + \underbrace{P * N * T}_\textrm{number of stock} + \underbrace{R * N * (N -1)}_\textrm{number of vehicle relocations}$$
-\item For $A_{ij}$ : $$\underbrace{2 * M * P }_\textrm{number of requests} + \underbrace{P^{2} * N * T}_\textrm{number of stock} + \underbrace{2* R * N * (N -1) * P}_\textrm{number of vehicle relocations}$$
-\end{itemize}
+\medskip
+Next equations are the same as in the station location model.
+For the record, note that $\nbVROs$, $\nbVehicles$, $\nbMaxJockeys$ and $\nbMaxStations$ denote respectively for the maximum number of relocation operations, vehicles, jockeys and opened carsharing sites.
+Equations \eqref{constr:ENERGY:stationInnerFlow} and \eqref{constr:ENERGY:stationOuterFlow} forbid the inner and outer flow coming or leaving not selected sites.
+%
+Finally, Equations \eqref{constr:ENERGY:varBatteries} to \eqref{constr:ENERGY:varStations} express the respective variable domains.
 
 \section{Discussions and improvements}
+\subsection{Model statements}
 
-\paragraph{Advantages and inconveniences with this model:}
-This model provides us with an optimal solution for our model.
-Moreover, it's a model quite natural.
-However, this model has several issues:
-\begin{itemize}
-\item it has too much variables;
-\item it has symmetry issues;
-\item it doesn't give a good approximation when relaxed;
-\item Cplex can only run small instances (7 stations) in an acceptable time.
-\end{itemize}
-Because of these issues, we have to try to improve the model.
+The model {\ENERGY} allows us to tackle the station location problem while taking into account energy components including the stations' power supply and vehicles' batteries.
+Moreover, vehicles' routes do not longer have to be deduced or calculated from an optimal flow solution.
+Following successive non-zero values of flow affectation variables (\ie $A_{ij}, A_{jk} \dots$) allow to constitute vehicle itineraries and avoid routes interpretation.
+Besides, any feasible solution provides the energy consumption profile of all vehicles by simply reporting every battery variable value along vehicle itineraries.
+As a results, this model seams promising.
+Unfortunately, the number of variables, directly related to the total number of arcs, has increased dramatically.
+More importantly, the number of arcs has already grown compared to the previous model (\see Section \ref{sec:graphTransformations}, page \pageref{sec:graphTransformations} about the graph transformations).
+We present in the following some solutions to reduce the number of variables and improve the model sustainability.
 
-\paragraph{Improvements:}
-We try three different improvements to be able to improve our model:
-\begin{itemize}
-\item Modify Cplex parameters;
-\item Break the symmetry;
-\item Give to Cplex a solution to start.
-\end{itemize}
+%\item Modify Cplex parameters;
+%\item Break the symmetry;
+%\item Give to Cplex a solution to start.
 
-\paragraph{Parameters:}
-One improvement of the model was to modify the Cplex parameters to fit our problem and thus be quicker.
-We have found two parameters to improve the resolution:
-\begin{itemize}
-\item \emph{VarSel}:
-the strategy choose the next branch that Cplex is going to explore.
-In our solution, Cplex stays a long time on a branching node before opening a branch.
-It reduces the time spent on each branch and reduce also the memory use.
-\item \emph{RINSHeur}:
-decides how often to apply the relaxation induced neighborhood search (RINS) heuristic.
-It helps Cplex to quickly find a possible solution;
-We also use different cuts to to accelerate the research, as for instance Gomory's cut.
-\end{itemize}
+%\begin{itemize}
+%\item \emph{VarSel}:
+%the strategy choose the next branch that Cplex is going to explore.
+%In our solution, Cplex stays a long time on a branching node before opening a branch.
+%It reduces the time spent on each branch and reduce also the memory use.
+%\item \emph{RINSHeur}:
+%decides how often to apply the relaxation induced neighborhood search (RINS) heuristic.
+%It helps Cplex to quickly find a possible solution;
+%We also use different cuts to to accelerate the research, as for instance Gomory's cut.
+%\end{itemize}
 
-\paragraph{Symmetry:}
-One of the main drawback with this new TEG representation is the arc symmetry.
-By multiplying the arc stocks, we created multiple solutions which are equivalent.
+\subsection{Removing the symmetries}
+One of the main drawback leading to the surge of the number of variables is the arc symmetries.
+By duplicating the stock arcs during the graph transformation, and then defining the flow affectation variables, we created multiple equivalent situations.
+In practice, it is not necessary to create a flow affectation variable to each pairs of successive stock arcs.
+Perhaps the best way to understand the reduction is via an example.
 
 \begin{figure}[t]
 \begin{center}
-\scalebox{1}{\input{tikz/symmetryExample}}
+\scalebox{1}{\input{tikz/symetryExample}}
 \end{center}
 \caption{Symmetry example.}
 \label{fig:symetryExample}
 \end{figure}
 
-\begin{figure}[t]
-\begin{center}
-\scalebox{1}{\input{tikz/variableReduction}}
-\end{center}
-\caption{Variable reduction.}
-\label{fig:variableReduction}
-\end{figure}
+\medskip
+Let consider the situation depicted in Figure \ref{fig:symetryExample}, where it is assumed that the arcs belong to the set of stock arcs ($\tegArcSet_1$).
+Until then, four flow affectation variables were considered: $A_{ab}$, $A_{ad}$, $A_{cb}$, $A_{cd}$.
+From a system point of view, a flow passing through an arc coming from node $x$, passing through $y$ and then going to node $z$ means that a vehicle is parked in the station during two time-steps.
+This situation corresponds to the cases where one of the flow affectation variable enumerated above is set to $1$.
+However, there is no difference in term of interpretation for a flow entering node y between continuing to arc $b$ or continuing to arc $d$.
+In a certain way it can be viewed as a ``parking slot swap''.
+It is as if the vehicle parked in slot $1$ need to change to slot $2$.
+This distinction might be interesting if we had included the possibility to stations not to have all their parking slots equipped with power supply points.
+But so far, this possibility has not been assumed in the model.
 
-As we can see in Figure \ref{fig:symetryExample}, there is no difference between paths $P_1$ and $P_2$ both in terms of interpretation and objective function value.
-However, those are different paths so it will offer more possibles solutions to Cplex.
-To break the symmetry, we consider for each node in the TEG with multiple variables $1_{ij}$ only those verifying: $\forall (i, i\prime) \in \mathcal{A}_1^{2},\forall (j, j\prime) \in \mathcal{A}_1^{2}, A_{ij} \neq A_{i\prime j\prime} \text{if} i \neq i\prime \text{and} j\neq j\prime $.
-We can see it in the Figure \ref{fig:variableReduction}.
+\medskip
+As a consequence, the number of flow affectation variables can be highly reduced.
+Distinctive pairs of successive arcs are sufficient to cover realistic situations without reducing the possibilities.
+With this idea, the number of flow affectation variables related to stock arcs decreases from $|\Gamma^-(x) \cap \tegArcSet_1|\cdot|\Gamma^+(x) \cap \tegArcSet_1| = Z(\eta(x))^2$ to $Z(\eta(x))$ for all $x \in \tegNodeSet$.
 
-In term of interpretation, this can represent a car in a parking spot.
-This decrease the number of variables $A_{ij}$ for each node from $|\Gamma^{-}(x)|*|\Gamma^{+}(x)|$ to $|\Gamma^{-}(x)|$.
-The total number of variable $A_{ij}$ in the TEG can be calculated as follow: 
+%\begin{figure}[t]
+%\begin{center}
+%\scalebox{1}{\input{tikz/variableReduction}}
+%\end{center}
+%\caption{Variable reduction.}
+%\label{fig:variableReduction}
+%\end{figure}
 
-\begin{itemize}
-\item
-For $A_{ij}$ before the symmetry break: $$\underbrace{2 * M * P }_\textrm{number of requests} + \underbrace{P^{2} * N * T}_\textrm{number of stock} + \underbrace{2* R * N * (N -1) * P}_\textrm{number of vehicle relocation}$$
-\item
-For $A_{ij}$ after: $$\underbrace{2 * M * P }_\textrm{number of request} + \underbrace{P * N * T}_\textrm{number of stock} + \underbrace{2* R * N * (N -1) * P}_\textrm{number of vehicle relocation}$$
-$$ = P * ( 2M + N * (T + 2R * (N-1)))$$
-\end{itemize}
-With:
-\begin{itemize}
-\item N: number of stations;
-\item M: number of requests;
-\item R: number of time steps for a vehicle relocation;
-\item T: number of time steps;
-\item P: average number of parking spot per station.
-\end{itemize}
-As we can see, this modification reduce the number of $A_{ij}$ by a $P$ factor.
-
-\paragraph{Rounding:}
+\subsection{Rounding solutions and heuristic}
 One manner to improve the resolution time is to initialise Cplex with a solution, feasible or not.
 We investigate two type of solutions:
 \begin{itemize}

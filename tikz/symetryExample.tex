@@ -1,0 +1,25 @@
+\begin{tikzpicture}[>=stealth, thick]
+\node[dumbnode] (dumb) at (0,0) {};
+\node[station] (x) {$x$};
+\node[station] (y) [right of = x, node distance = 2cm] {$y$};
+\node[station] (z) [right of = y, node distance = 2cm] {$z$};
+\node [below of = y, node distance = 1.5cm]{$\{A_{ab}, A_{cd}\}$};
+
+\draw (x) edge [->, dashed, bend left = 20] node[above]{$a$} (y);
+\draw (y) edge [->, dashed, bend left = 20] node[above]{$b$} (z);
+\draw (x) edge [arcStock, bend right = 20] node[below]{$c$} (y);
+\draw (y) edge [arcStock, bend right = 20] node[below]{$d$} (z);
+
+
+\node (equi) [right of = z, node distance = 2cm] {\huge $\Leftrightarrow$};
+
+\node[station] (x2) [right of = equi, node distance = 2cm] {$x$};
+\node[station] (y2) [right of = x2, node distance = 2cm] {$y$};
+\node[station] (z2) [right of = y2, node distance = 2cm] {$z$};
+\node [below of = y2, node distance = 1.5cm]{$\{A_{ad}, A_{cb}\}$};
+
+\draw (x2) edge [->, dashed, bend left = 20] node[above]{$a$} (y2);
+\draw (y2) edge [arcStock, bend left = 20] node[above]{$b$} (z2);
+\draw (x2) edge [arcStock, bend right = 20] node[below]{$c$} (y2);
+\draw (y2) edge [->, dashed, bend right = 20] node[below]{$d$} (z2);
+\end{tikzpicture}
