@@ -634,25 +634,29 @@ We present in the following some solutions to reduce the number of variables and
 %\end{itemize}
 
 \subsection{Removing the symmetries}
-One of the main drawback leading to the surge of the number of variables is the arc symmetries.
-By duplicating the stock arcs during the graph transformation, and then defining the flow affectation variables, we created multiple equivalent situations.
+One of the main drawback leading to the surge of the number of variables is the \emph{arc symmetries}.
+By duplicating the stock arcs during the graph transformation phase, we created multiple equivalent situations.
+Indeed, the number of flow affectation variables depends on the number of inner and outer arcs in each node of the TEG.
 In practice, it is not necessary to create a flow affectation variable to each pairs of successive stock arcs.
-Perhaps the best way to understand the reduction is via an example.
+Perhaps the best way to understand the possible reduction is via an example.
 
 \begin{figure}[t]
 \begin{center}
-\scalebox{1}{\input{tikz/symetryExample}}
+\scalebox{1}{\input{tikz/symmetryExample}}
 \end{center}
-\caption{Symmetry example.}
-\label{fig:symetryExample}
+\caption{A case of symmetry.}
+\label{fig:symmetryExample}
 \end{figure}
 
 \medskip
-Let consider the situation depicted in Figure \ref{fig:symetryExample}, where it is assumed that the arcs belong to the set of stock arcs ($\tegArcSet_1$).
+Let consider the situation depicted in Figure \ref{fig:symmetryExample}, where it is assumed that the arcs belong to the set of stock arcs ($\tegArcSet_1$).
+Three time-consecutive nodes are represented.
+The station they symbolized have a maximum capacity of two parking lots, thus nodes are link by a pair of arcs; \eg $a$ and $c$ between nodes $x$ and $y$.
 Until then, four flow affectation variables were considered: $A_{ab}$, $A_{ad}$, $A_{cb}$, $A_{cd}$.
-From a system point of view, a flow passing through an arc coming from node $x$, passing through $y$ and then going to node $z$ means that a vehicle is parked in the station during two time-steps.
-This situation corresponds to the cases where one of the flow affectation variable enumerated above is set to $1$.
-However, there is no difference in term of interpretation for a flow entering node y between continuing to arc $b$ or continuing to arc $d$.
+Those situations are depicted on the left side of the Figure.
+From a system point of view, a unit-flow leaving $x$, then entering $y$ to finally arrive at node $z$ means that a single vehicle is parked in the station during two time-steps.
+In this case, one of the flow affectation variable enumerated above is set to $1$.
+However, there is no difference in term of interpretation for a unit-flow entering node $y$ whether continuing through arc $b$ or continuing through arc $d$.
 In a certain way it can be viewed as a ``parking slot swap''.
 It is as if the vehicle parked in slot $1$ need to change to slot $2$.
 This distinction might be interesting if we had included the possibility to stations not to have all their parking slots equipped with power supply points.
@@ -661,7 +665,7 @@ But so far, this possibility has not been assumed in the model.
 \medskip
 As a consequence, the number of flow affectation variables can be highly reduced.
 Distinctive pairs of successive arcs are sufficient to cover realistic situations without reducing the possibilities.
-With this idea, the number of flow affectation variables related to stock arcs decreases from $|\Gamma^-(x) \cap \tegArcSet_1|\cdot|\Gamma^+(x) \cap \tegArcSet_1| = Z(\eta(x))^2$ to $Z(\eta(x))$ for all $x \in \tegNodeSet$.
+Following this idea, the number of flow affectation variables related to stock arcs decreases from $|\Gamma^-(x) \cap \tegArcSet_1|\cdot|\Gamma^+(x) \cap \tegArcSet_1| = Z(\eta(x))^2$ to $Z(\eta(x))$ for all $x \in \tegNodeSet$.
 
 %\begin{figure}[t]
 %\begin{center}
@@ -671,49 +675,60 @@ With this idea, the number of flow affectation variables related to stock arcs d
 %\label{fig:variableReduction}
 %\end{figure}
 
-\subsection{Rounding solutions and heuristic}
-One manner to improve the resolution time is to initialise Cplex with a solution, feasible or not.
-We investigate two type of solutions:
-\begin{itemize}
-\item Rounding technique;
-\item Heuristic.
-\end{itemize}
-Our rounding solution can be find following:
+\subsection{A greedy heuristic}
 
-\begin{enumerate}
-\item Solve the problem relaxed for all the variables except for the stations;
-\item Variable value :$\left\{
-\begin{array}{l l}
-if > 0.7 & \text{then fix at 1;} \\
-if < 0.3 & \text{then fix at 0;} \\
-otherwise & \text{keep the same value.}
-\end{array}
-\right.$
-\item Either let Cplex try to repair the solution or try to repair the solution by hand;
-\item Give this solution to Cplex to do a warm start.
-\end{enumerate}
+Running the {\ENERGY} model induce limitations due to computation time and solver capability.
+In practice, even on small instances ($20$ stations, 15-minute time-steps and $600$ daily requests), CPLEX encounters great difficulties to converge.
+The relaxed problem resolution is solved relatively quickly (within minutes) but fail most of the time at founding a good quality lower integer bound.
+To deal with this issue, we investigated an approaches based on the \emph{warm start} technique.
+The idea is to provide the solver a solution before starting the MIP optimization.
+The solution may be incomplete and, basically it consists in defining value assignments for a set of variables (discrete and/or continuous).
 
-We implemented this solution but unfortunately, Cplex was not able to repair it.
-So, we give up on this solution and try to create an heuristic which can provide a feasible solution.
+\medskip
+Because we do not have observed so far a noteworthy pattern in the solutions, it seams difficult a priori to come up with a rounded solution.
+We denote by \emph{rounded solution} a set of variables' values coming from the optimization of a relaxed instance of the problem and then rounded following more or less sophisticated rules.
+In our experimentations, we only used binary rules.
+For instance, suppose a binary variable $x$.
+For an observed non-integer optimum value $x^\star$, its rounded value is set to $\lfloor x^\star \rfloor$ if $x^\star \leq v \in (0, 1)$ and $\lceil x^\star \rceil$ otherwise.
 
-\paragraph{Heuristic}
-Our heuristic is a modified Dijkstra's algorithm.
-This is due to the fact that our model can be reformulated as a k-minimum path problem with constraints.
-As weight on the arcs, we set: 
-\begin{itemize}
-\item 0 for request arcs;
-\item 1 for stock and vehicle relocation arcs.
-\end{itemize}
-The heuristic search for $C$ minimum paths verifying energy and vehicle relocation constraints.
+Unfortunately, neither the vehicles' trip profiles or the station attendances showed notable patterns what could help us defining that could be a good quality solution.
+Although we tested numerous rounding configurations, we have not succeeded in decreasing solver computation times using rounded solutions.
+
+\medskip
+To cope with solving times, we finally opted for a greedy heuristic implementation.
+Unlike the previous solution, an heuristic benefits from a fast execution and come up with a feasible solution satisfying energy constraints.
+The next of the section describes the mechanics of the algorithm.
+A simple example running the first steps of the heuristic is finally presented.
+
+
+\subsubsection{Functional description}
+The main idea is to build vehicles' routes from a weight modified TEG while taking into account the energy viability of vehicles' itineraries.
+Since the {\ENERGY} problem aims at maximize the number of satisfied demands, the heuristic is based on a modified Dijkstra's algorithm where the weights on the arcs are modified as followed:
+\begin{numcases}{u(a)=}
+0 & if $a \in \tegArcSet_2$, \nonumber\\
+1 & otherwise. \nonumber
+\end{numcases}
+
+Arcs are weighted according to their contribution to to objective function.
+Because the weight on demands arcs is null, the shorter path between two nodes is the one passing through the maximum number of demand arcs.
+Basically, a call of the classic Dijkstra's algorithm can return a solution to this problem in a polynomial time.
+However, the path may not be feasible according to energy constraints.
+Thus, in addition to the standard distance label value, we associate to each node an energy label standing for for vehicle battery level at this node.
+This value will play a role during the solution feasibility phase.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 These paths have to be cycle due to the following property 
 \begin{prop}
 Every solution of the problem of dimensioning can be decompose in k-cycle, $k \in [1,C]$ with length $l*T, l\in [1,C]$.
 \end{prop}
 
-This property was proved on the paper \cite{carlier_optimization_2014b}.
+The heuristic search for $C$ minimum paths verifying energy and vehicle relocation constraints.
 To fulfil the energy constraints, we label every node in the graph with a list of couples.
 Those couples keep on the one hand the value of the solution, and on the other hand the remaining energy in the car.
 Every couple with a higher solution value and a lower energy value can be suppressed from the list.
+
 The algorithm can be expressed as in the \textbf{Algorithm 1} and we can see an example of this heuristic in the \textbf{Figure 5.3}.
 
 \begin{figure}[t]
@@ -729,8 +744,9 @@ This heuristic also makes only a cycle with length of $T$ which can result in lo
 
 \begin{algorithm}
 \DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
-\KwIn{A TEG : $teg$ , a depart node : $depart$}
-\KwOut{Value of the best path from $depart$ to $depart$ with energy }
+\KwIn{A modified TEG where weights are set to 0 in demands arcs and 1 elsewhere, a depart node : $depart$}
+\KwOut{A set of vehicles' routes verifying energy constraints.
+Value of the best path from $depart$ to $depart$ including energy constraints}
 \For{each node}{
 List $\gets$ $(0,0)$ if $depart$ node\;
 List $\gets$  (+$\infty,0$) other node\; 
