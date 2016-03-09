@@ -703,101 +703,121 @@ A simple example running the first steps of the heuristic is finally presented.
 
 \subsubsection{Functional description}
 The main idea is to build vehicles' routes from a weight modified TEG while taking into account the energy viability of vehicles' itineraries.
-Since the {\ENERGY} problem aims at maximize the number of satisfied demands, the heuristic is based on a modified Dijkstra's algorithm where the weights on the arcs are modified as followed:
-\begin{numcases}{u(a)=}
+Since the {\ENERGY} problem aims at maximize the number of satisfied demands, the heuristic is based on a modified Dijkstra's algorithm \cite{dijkstra_1959} where the weights on the arcs are set as followed:
+\begin{numcases}{w(a)=}
 0 & if $a \in \tegArcSet_2$, \nonumber\\
 1 & otherwise. \nonumber
 \end{numcases}
 
-Arcs are weighted according to their contribution to to objective function.
-Because the weight on demands arcs is null, the shorter path between two nodes is the one passing through the maximum number of demand arcs.
-Basically, a call of the classic Dijkstra's algorithm can return a solution to this problem in a polynomial time.
-However, the path may not be feasible according to energy constraints.
-Thus, in addition to the standard distance label value, we associate to each node an energy label standing for for vehicle battery level at this node.
-This value will play a role during the solution feasibility phase.
+Equivalently, we refer to $w_{ij}$ as the weight value between nodes $i$ and $j$, \ie $w_{ij} = w(a)$ for any $a = (i, j) \in \tegArcSet$.
+As a consequence, arcs are weighted according to their contribution to the objective function.
+By doing so, find the path with the highest number of demands arcs linking two nodes in the TEG is equivalent to find the shortest path therebetween.
+To deal with this shortest path problem, we chose to use the Dijkstra's algorithm, a label-setting algorithm returning a solution in a polynomial time.
+However, the path may not be feasible according to energy constraints and some algorithmic adjustments are needed.
+It should be noted here that we actually are looking for cycles, due to the Theorem \ref{th:decomp} (page \pageref{th:decomp}).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%
+\medskip
+In addition to the standard distance label value, we associate to each node $i$ an energy label $e(i)$ standing for the vehicle battery level at this node, which is an lower bound of the energy remaining in the battery at this specific node.
+At each iteration and similarly to the distance label, the energy label will be updated according to the energy consumption it takes to reach adjacent nodes.
+At any intermediate step, the energy label of a node $i$ is the maximum battery level of a vehicle performing the trip from the source.
+It is assumed that the vehicle recharged its battery when parked in station whenever it is possible.
+
+\medskip
+The algorithm iterates over a set of starting nodes defined as $\tegNodeSet_t = \{x \in \tegNodeSet \mid \theta (x) = t\}$.
+This set represents a temporal snapshot of the system at a given time-step $t \in \timeStepSet$.
+In practice, we usually use $\tegNodeSet_1$ and the algorithm tries to find as many cycles as possible from this set.
+The algorithm terminates when no more cycle can be found.
+It should be noted that the problem we address here is not to find shorter paths from a source node to every other nodes in the network.
+The problematic is more to find shortest cycles, which can be viewed as paths starting and ending at the same vertex.
+To solve the problem faster, we could terminate the algorithm as soon as it has selected the departure node from the list of temporary labelled nodes, even though some nodes are still in this list.
+
+\medskip
+Algorithm \ref{algo:dijEnergy} gives a formal algorithmic description of the modified Dijkstra's algorithm.
+
+\begin{algorithm}
+%\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
+\KwIn{
+\begin{itemize}
+\item $\teg = (\tegNodeSet, \tegArcSet, e)$, a binary weighted TEG where weights are set to 0 on demands arcs and 1 elsewhere;
+\item A set of departure nodes $\tegNodeSet_1 = \{x \in \tegNodeSet \mid \theta (x) = 1\}$.
+\end{itemize}}
+\KwOut{A set of vehicles' routes verifying energy constraints.}
+
+\bigskip
+$C \leftarrow \emptyset$\;
+\While{$\tegNodeSet_1 \not= \emptyset$}{
+	\medskip
+	\tcp{Initialisation}
+	$S \leftarrow \emptyset$ and $\bar{S} \leftarrow \tegNodeSet$\;
+	$d(x) \leftarrow +\infty$ and $e(x) \leftarrow 0$, for each node $ x \in \bar{S}$\;
+	\ForEach{$j \in \Gamma^+(s)$}{
+		$d(j) \leftarrow w_{sj}$\;
+		$e(j) \leftarrow \max\{E, e(s) - \gamma_{sj}\}$\;
+		$pred(j) \leftarrow s$\;
+	}
+		
+	\medskip
+	\tcp{Begin the main loop}
+	\While{$\bar{S} \neq \emptyset$ {\bf or} $s \in \bar{S}$}{
+		let $i \in \bar{S}$ be the node for which $d(i) = \min\{d_j : j \in \bar{S}\}$\;
+		$S \leftarrow S \cup \{i\}$\;
+		$\bar{S} \leftarrow \bar{S} - \{i\}$\;
+		
+		\medskip
+		\ForEach{$j \in \Gamma^+(i)$}{
+			\If{$d(j) > d(i) + w_{ij}$ {\bf and} $e(j) < \max\{E, e(i) - \gamma_{ij}\}$}{
+				\medskip
+				\tcp{update distance and energy}				
+				$d(j) \leftarrow d(i) + w_{ij}$\;
+				$e(j) \leftarrow \max\{E, e(i) - \gamma_{ij}\}$\;
+				$pred(j) \leftarrow i$\;
+			}
+		}
+	}
+	
+	\medskip
+	\tcp{update sets before iterate}
+	$cycle(s) \leftarrow $ the shortest cycle given by the directed out-tree\; % maintained with pred(i) $\forall i \in \tegNodeSet$\;
+	\lIf{$\tegArcSet_2 \cap cycle(s) \not= \emptyset$}{$\tegArcSet \leftarrow \tegArcSet - \{cycle(s)\}$}	
+	$\tegNodeSet_1 \leftarrow \tegNodeSet_1 - \{s\}$\;	
+}
+
+\caption{Modified Dijkstra's algorithm;}
+\label{algo:dijEnergy}
+\end{algorithm}
 
 
-These paths have to be cycle due to the following property 
-\begin{prop}
-Every solution of the problem of dimensioning can be decompose in k-cycle, $k \in [1,C]$ with length $l*T, l\in [1,C]$.
-\end{prop}
+%It should be noted that the solution found by \textbf{Algorithm 1} can be non-optimal because when the algorithm take a best path, it can block future better path starting from other nodes. 
+%This heuristic also makes only a cycle with length of $T$ which can result in lower result.
 
-The heuristic search for $C$ minimum paths verifying energy and vehicle relocation constraints.
-To fulfil the energy constraints, we label every node in the graph with a list of couples.
-Those couples keep on the one hand the value of the solution, and on the other hand the remaining energy in the car.
-Every couple with a higher solution value and a lower energy value can be suppressed from the list.
-
-The algorithm can be expressed as in the \textbf{Algorithm 1} and we can see an example of this heuristic in the \textbf{Figure 5.3}.
 
 \begin{figure}[t]
-\begin{center}
+\centering
 \scalebox{.9}{\input{tikz/heuristicExample}}
-\end{center}
-\caption{Heuristic example.}
+\caption{Illustrating the modified Dijkstra's algorithm considering energy components.}
 \label{fig:heuristicExample}
 \end{figure}
 
-It should be noted that the solution found by \textbf{Algorithm 1} can be non-optimal because when the algorithm take a best path, it can block future better path starting from other nodes. 
-This heuristic also makes only a cycle with length of $T$ which can result in lower result.
+Figure \ref{fig:heuristicExample} shows a simple instance to be familiar with the algorithm routine.
 
-\begin{algorithm}
-\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
-\KwIn{A modified TEG where weights are set to 0 in demands arcs and 1 elsewhere, a depart node : $depart$}
-\KwOut{A set of vehicles' routes verifying energy constraints.
-Value of the best path from $depart$ to $depart$ including energy constraints}
-\For{each node}{
-List $\gets$ $(0,0)$ if $depart$ node\;
-List $\gets$  (+$\infty,0$) other node\; 
-}
-\While{$List \neq \phi$} {
-couple $\gets$ couple $\in$ List with the smallest cost\;
- \If{$node(couple) == depart$}{
- \Return {$getcost(couple)$}\;
- 
- }
- node $\gets$ node(couple)\;
-\For{any arc adjacent}{
- $arrive \gets arc destination$\;
- $cost \gets getcost(couple)$\;
- $energy \gets getenergy(couple)$\;
-  \If{$arc$ is not a request} {
-    $cost \gets cost + 1$\tcp*{\small{Update cost}}
-   }
-   $energy \gets energy + arc(energy)$\tcp*{Update battery charge}
-   \If{$energy \geq 0$ }{
-   	\For{every couple in $arrive$}{
-   	\If{$energy \geq getenergy(couple)$ and $cost \leq getcost(couple)$}{
- 		suppress couple\tcp*{This couple is worst}
-  		}
-   	\If{$energy \leq getenergy(couple)$ and $cost \geq getcost(couple)$}{
-  	 $break$\tcp*{A better solution exist}
- 	 }
- 	}
-  }
-  }
-}
-\caption{Heuristic to find the best path}
-\label{algo:max}
-\end{algorithm}
 
-\section{Conclusions}
-\subsection{Results}
-In conclusion, we have developed a model to solve the localisation and dimensioning problem with electric constraints.
-We also produced a state of the art on this problem.
-However, due to the complexity of this problem, Cplex was not able to solve it in a reasonable time on instances containing more than $10$ stations.
-To cope with that, we improved the model by breaking symmetries.
-We also developed an rounding technique and an heuristic.
-However the rounding technique didn't give any results.
-We were able to see the impacts of electric constraints in such problem. We saw that the electric constraints have an impact on the solution.
-However, we need to try in a system with more constraints to be able to see the impact.
 
-\subsection{Further research}
-There are several possible ways to pursuit and improve the resolution of this problem.
-One way would be to modify the model to take into account the possible path instead of arcs as variables and run a column generation method with a branch and price.
-Another solution would be to improve the heuristic by using a meta heuristic.
-Further research can also focus on the impact of electricity in system with a lower ratio vehicle/request.
+\section{Conclusion}
+%\subsection{Results}
+%In conclusion, we have developed a model to solve the localisation and dimensioning problem with electric constraints.
+%We also produced a state of the art on this problem.
+%However, due to the complexity of this problem, Cplex was not able to solve it in a reasonable time on instances containing more than $10$ stations.
+%To cope with that, we improved the model by breaking symmetries.
+%We also developed an rounding technique and an heuristic.
+%However the rounding technique didn't give any results.
+%We were able to see the impacts of electric constraints in such problem. We saw that the electric constraints have an impact on the solution.
+%However, we need to try in a system with more constraints to be able to see the impact.
+%
+%\subsection{Further research}
+%There are several possible ways to pursuit and improve the resolution of this problem.
+%One way would be to modify the model to take into account the possible path instead of arcs as variables and run a column generation method with a branch and price.
+%Another solution would be to improve the heuristic by using a meta heuristic.
+%Further research can also focus on the impact of electricity in system with a lower ratio vehicle/request.
 
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
