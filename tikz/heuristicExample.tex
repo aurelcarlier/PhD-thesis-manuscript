@@ -38,7 +38,7 @@
 
 % BEGIN ALGO
 % 1st step
-\begin{scope}[xshift = 0cm, yshift = -6cm]
+\begin{scope}[xshift = 0cm, yshift = -4cm]
 \node[station, fill = red!20] (1) {$1$};
 \node[station, right of = 1] (2) {$2$};
 \node[station, right of = 2] (4) {$4$};
@@ -47,9 +47,9 @@
 \node[station, right of = 3] (5) {$5$};
 \node[station, right of = 5] (7) {$7$};
 
-\draw (1) node[shift={(110:.9cm)}]{$\mathbf{(\infty,0)}$};
-\draw (2) node[above = .5cm]{$(1,10)$};
-\draw (3) node[below = .5cm]{$(0,3)$};
+\draw (1) node[shift={(110:.9cm)}]{$(\infty,0)$};
+\draw (2) node[above = .5cm]{$\mathbf{(1,10)}$};
+\draw (3) node[below = .5cm]{$\mathbf{(0,3)}$};
 \draw (4) node[above = .5cm]{$(\infty,0)$};
 \draw (5) node[below = .5cm]{$(\infty,0)$};
 \draw (6) node[shift={(70:.9cm)}]{$(\infty,0)$};
@@ -69,11 +69,11 @@
 \path (1) edge[line width = 7pt, opacity=.2, color=red] (3);
 
 % caption
-\draw (1) node[below = 3.5cm, anchor = north west]{\textbf{(a)} First step: Initialisation};
+\draw (1) node[below = 2cm, anchor = center]{\large\textbf{(a)}};
 \end{scope}
 
 % 2ND STEP
-\begin{scope}[xshift = 9cm, yshift = -6cm]
+\begin{scope}[xshift = 9cm, yshift = -4cm]
 \node[station] (1) {$1$};
 \node[station, right of = 1] (2) {$2$};
 \node[station, right of = 2] (4) {$4$};
@@ -84,9 +84,9 @@
 
 \draw (1) node[shift={(110:.9cm)}]{$(\infty,0)$};
 \draw (2) node[above = .5cm]{$(1,10)$};
-\draw (3) node[below = .5cm]{$\mathbf{(0,3)}$};
-\draw (4) node[above = .5cm]{$(\infty,0)$};
-\draw (5) node[below = .5cm]{$(1,6)$};
+\draw (3) node[below = .5cm]{$(0,3)$};
+\draw (4) node[above = .5cm]{$\mathbf{(\infty,0)}$};
+\draw (5) node[below = .5cm]{$\mathbf{(1,6)}$};
 \draw (6) node[shift={(70:.9cm)}]{$(\infty,0)$};
 \draw (7) node[below = .5cm]{$(\infty,0)$};
 
@@ -104,11 +104,11 @@
 \path (3) edge[line width = 7pt, opacity=.2, color=red] (5);
 
 % caption
-\draw (1) node[below = 3.5cm, anchor = north west]{\textbf{(b)} Second step};
+\draw (1) node[below = 2cm, anchor = center]{\large\textbf{(b)}};
 \end{scope}
 
 % 3RD STEP
-\begin{scope}[xshift = 0, yshift = -13cm]
+\begin{scope}[xshift = 0, yshift = -10cm]
 \node[station] (1) {$1$};
 \node[station, right of = 1] (2) {$2$};
 \node[station, right of = 2] (4) {$4$};
@@ -121,9 +121,9 @@
 \draw (2) node[above = .5cm]{$(1,10)$};
 \draw (3) node[below = .5cm]{$(0,3)$};
 \draw (4) node[above = .5cm]{$(\infty,0)$};
-\draw (5) node[below = .5cm]{$\mathbf{(1,6)}$};
-\draw (6) node[shift={(70:.9cm)}]{$(1,2)$};
-\draw (7) node[below = .5cm]{$(2,9)$};
+\draw (5) node[below = .5cm]{$(1,6)$};
+\draw (6) node[shift={(70:.9cm)}]{$\mathbf{(1,2)}$};
+\draw (7) node[below = .5cm]{$\mathbf{(2,9)}$};
 
 \path (1) edge[arcStock]     (2)
 		  edge[arcDemandBig] (3);
@@ -139,11 +139,11 @@
 \path (5) edge[line width = 7pt, opacity=.2, color=red] (7);
 
 % caption
-\draw (1) node[below = 3.5cm, anchor = north west]{\textbf{(c)} Third step};
+\draw (1) node[below = 2cm, anchor = center]{\large\textbf{(c)}};
 \end{scope}
 
 % 4TH STEP
-\begin{scope}[xshift = 9cm, yshift = -13cm]
+\begin{scope}[xshift = 9cm, yshift = -10cm]
 \node[station] (1) {$1$};
 \node[station, right of = 1] (2) {$2$};
 \node[station, right of = 2] (4) {$4$};
@@ -152,12 +152,12 @@
 \node[station, right of = 3, fill = gray!20] (5) {$5$};
 \node[station, right of = 5] (7) {$7$};
 
-\draw (1) node[shift={(110:.9cm)}]{$(2,5)$};
+\draw (1) node[shift={(110:.9cm)}]{$\mathbf{(2,5)}$};
 \draw (2) node[above = .5cm]{$(1,10)$};
 \draw (3) node[below = .5cm]{$(0,3)$};
 \draw (4) node[above = .5cm]{$(\infty,0)$};
 \draw (5) node[below = .5cm]{$(1,6)$};
-\draw (6) node[shift={(70:.9cm)}]{$\mathbf{(1,2)}$};
+\draw (6) node[shift={(70:.9cm)}]{$(1,2)$};
 \draw (7) node[below = .5cm]{$(2,9)$};
 
 \path (1) edge[arcStock]     (2)
@@ -173,7 +173,78 @@
 \path (6) edge[line width = 7pt, opacity=.2, color=red, bend right = 55] (1);
 
 % caption
-\draw (1) node[below = 3.5cm, anchor = north west]{\textbf{(d)} Fourth step};
+\draw (1) node[below = 2cm, anchor = center]{\large\textbf{(d)}};
+\end{scope}
+
+% 5TH STEP
+\begin{scope}[xshift = 0cm, yshift = -16cm]
+\node[station] (1) {$1$};
+\node[station, right of = 1, fill = red!20] (2) {$2$};
+\node[station, right of = 2] (4) {$4$};
+\node[station, right of = 4, fill = gray!20] (6) {$6$};
+\node[station, below of = 2, fill = gray!20] (3) {$3$};
+\node[station, right of = 3, fill = gray!20] (5) {$5$};
+\node[station, right of = 5] (7) {$7$};
+
+\draw (1) node[shift={(110:.9cm)}]{$(2,5)$};
+\draw (2) node[above = .5cm]{$(1,10)$};
+\draw (3) node[below = .5cm]{$(0,3)$};
+\draw (4) node[above = .5cm]{$\mathbf{(2,10)}$};
+\draw (5) node[below = .5cm]{$(1,6)$};
+\draw (6) node[shift={(70:.9cm)}]{$(1,2)$};
+\draw (7) node[below = .5cm]{$(2,9)$};
+
+\path (1) edge[arcStock]     (2)
+		  edge[arcDemandBig] (3);
+\path (2) edge[arcStock]     (4);
+\path (3) edge[arcStock]     (4)
+		  edge[arcStock]     (5);
+\path (4) edge[arcStock]     (6);
+\path (5) edge[arcDemandBig] (6)
+		  edge[arcStock]     (7);
+\path (6) edge[arcStock, bend right = 55] (1);
+
+\path (2) edge[line width = 7pt, opacity=.2, color=red] (4);
+
+% caption
+\draw (1) node[below = 2cm, anchor = center]{\large\textbf{(e)}};
+\end{scope}
+
+% 6TH STEP
+\begin{scope}[xshift = 9cm, yshift = -16cm]
+\node[station, fill = red!20] (1) {$1$};
+\node[station, right of = 1, fill = gray!20] (2) {$2$};
+\node[station, right of = 2] (4) {$4$};
+\node[station, right of = 4, fill = gray!20] (6) {$6$};
+\node[station, below of = 2, fill = gray!20] (3) {$3$};
+\node[station, right of = 3, fill = gray!20] (5) {$5$};
+\node[station, right of = 5] (7) {$7$};
+
+\draw (1) node[shift={(110:.9cm)}]{$(2,5)$};
+\draw (2) node[above = .5cm]{$(1,10)$};
+\draw (3) node[below = .5cm]{$(0,3)$};
+\draw (4) node[above = .5cm]{$(2,10)$};
+\draw (5) node[below = .5cm]{$(1,6)$};
+\draw (6) node[shift={(70:.9cm)}]{$\mathbf{(1,2)}$};
+\draw (7) node[below = .5cm]{$(2,9)$};
+
+\path (1) edge[arcStock]     (2)
+		  edge[arcDemandBig] (3);
+\path (2) edge[arcStock]     (4);
+\path (3) edge[arcStock]     (4)
+		  edge[arcStock]     (5);
+\path (4) edge[arcStock]     (6);
+\path (5) edge[arcDemandBig] (6)
+		  edge[arcStock]     (7);
+\path (6) edge[arcStock, bend right = 55] (1);
+
+\path (1) edge[line width = 7pt, opacity=.4, color=gray] (3);
+\path (3) edge[line width = 7pt, opacity=.4, color=gray] (5);
+\path (5) edge[line width = 7pt, opacity=.4, color=gray] (6);
+\path (6) edge[line width = 7pt, opacity=.4, color=gray, bend right = 55] (1);
+
+% caption
+\draw (1) node[below = 2cm, anchor = center]{\large\textbf{(f)}};
 \end{scope}
 
 \end{tikzpicture}
