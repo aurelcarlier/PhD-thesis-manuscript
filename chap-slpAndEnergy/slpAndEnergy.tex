@@ -698,7 +698,7 @@ Although we tested numerous rounding configurations, we have not succeeded in de
 To cope with solving times, we finally opted for a greedy heuristic implementation.
 Unlike the previous solution, an heuristic benefits from a fast execution and come up with a feasible solution satisfying energy constraints.
 The next of the section describes the mechanics of the algorithm.
-A simple example running the first steps of the heuristic is finally presented.
+A simple example running the some steps of the heuristic is finally presented.
 
 
 \subsubsection{Functional description}
@@ -735,13 +735,12 @@ To solve the problem faster, we could terminate the algorithm as soon as it has 
 \medskip
 Algorithm \ref{algo:dijEnergy} gives a formal algorithmic description of the modified Dijkstra's algorithm.
 
-\begin{algorithm}
+\begin{algorithm}[h]
 %\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
 \KwIn{
-\begin{itemize}
-\item $\teg = (\tegNodeSet, \tegArcSet, e)$, a binary weighted TEG where weights are set to 0 on demands arcs and 1 elsewhere;
-\item $t \in \timeStepSet$ defining $\tegNodeSet_t = \{x \in \tegNodeSet \mid \theta (x) = t\}$: a set of departure nodes.
-\end{itemize}}
+$\teg = (\tegNodeSet, \tegArcSet, e)$, a binary weighted TEG where weights are set to 0 on demands arcs and 1 elsewhere;
+$t \in \timeStepSet$ defining $\tegNodeSet_t = \{x \in \tegNodeSet \mid \theta (x) = t\}$, a set of departure nodes.
+}
 \KwOut{$C$: a set of vehicles' routes verifying energy constraints.}
 
 \bigskip
@@ -751,7 +750,7 @@ $C \leftarrow \emptyset$\;
 	\tcp{Initialisation}
 	pick $s \in \tegNodeSet_t$\;
 	$S \leftarrow \emptyset$ and $\bar{S} \leftarrow \tegNodeSet$\;
-	$d(x) \leftarrow +\infty$ and $e(x) \leftarrow 0$, for each node $ x \in \bar{S}$\;
+	$d(x) \leftarrow +\infty$ and $e(x) \leftarrow -\infty$, for each node $ x \in \bar{S}$\;
 	\ForEach{$j \in \Gamma^+(s)$}{
 		$d(j) \leftarrow w_{sj}$\;
 		$e(j) \leftarrow \max\{E, e(s) - \gamma_{sj}\}$\;
@@ -759,8 +758,8 @@ $C \leftarrow \emptyset$\;
 	}
 		
 	\medskip
-	\tcp{Begin the main loop}
-	\While{$\bar{S} \neq \emptyset$ {\bf or} $s \in \bar{S}$}{
+	\tcp{Cycle search routine}
+	\While{$\bar{S} \neq \emptyset$ {\bf and} $d(s) \not= \min\{d_j : j \in \bar{S}\}$}{
 		let $i \in \bar{S}$ be the node for which $d(i) = \min\{d_j : j \in \bar{S}\}$\;
 		$S \leftarrow S \cup \{i\}$\;
 		$\bar{S} \leftarrow \bar{S} - \{i\}$\;
@@ -778,9 +777,9 @@ $C \leftarrow \emptyset$\;
 	}
 	
 	\medskip
-	\tcp{update sets before iterate}
+	\tcp{Recover the cycle and update sets before iterate}
 	$cycle(s) \leftarrow $ the shortest cycle given by the directed out-tree\; % maintained with pred(i) $\forall i \in \tegNodeSet$\;
-	\If{$\tegArcSet_2 \cap cycle(s) \not= \emptyset$}{
+	\If{$\tegArcSet_2 \cap cycle(s) \not= \emptyset$ {\bf and} $e(s)\geq 0$}{
 		$\tegArcSet \leftarrow \tegArcSet - \{cycle(s)\}$\;
 		$C \leftarrow C \cup cycle(s)$\;
 		}
@@ -799,18 +798,21 @@ $C \leftarrow \emptyset$\;
 \begin{figure}[t]
 \centering
 \scalebox{.9}{\input{tikz/heuristicExample}}
-\caption{Illustrating the modified Dijkstra's algorithm considering energy components.}
+\caption{Illustrating the modified Dijkstra's algorithm considering energy constraints.}
 \label{fig:heuristicExample}
 \end{figure}
 
-We illustrate the mechanics of the algorithm \ref{algo:dijEnergy} using the numerical example given in Figure \ref{fig:heuristicExample}. 
-The algorithm permanently labels the nodes $3$, $5$, $6$ and $2$ in this given sequence.
-Then, nodes $1$, $4$ and $7$ are equivalent choices since they all admit a distance label $d(i) = 2$.
-Because the source node (node $1$) can now pretend to be permanently labeled, the cycle search routine can ends in this iteration.
-As a result, the shortest cycle is $(1, 3, 5, 6, 1)$ and satisfied two demands.
-Energy constraints are 
+We illustrate the mechanics of the algorithm \ref{algo:dijEnergy} using the numerical example given in Figure \ref{fig:heuristicExample}.
+We consider the node $1$ as the source node and a maximum battery capacity of $10$ kilometres is assumed (\ie $E = 10$).
+The above right figure summarises the data.
+Figure \ref{fig:heuristicExample}(a) initialize the successors' labels of the source node.
+Then, the algorithm permanently labels the nodes $3$, $5$, $6$ and $2$ in this given sequence.
+Figure \ref{fig:heuristicExample}(b) to (e) illustrate the operations for some of these iterations.
 
- shows a simple instance to be familiar with the algorithm routine.
+Finally, in Figure \ref{fig:heuristicExample}(f), nodes $1$, $4$ and $7$ are equivalent choices since they all admit a distance label $d(i) = 2$.
+Because the source node (node $1$) can now pretend to be permanently labeled, the cycle search routine ends in this iteration.
+As a result, the shortest cycle is $(1, 3, 5, 6, 1)$ and two demands are satisfied.
+Note that energy constraints are satisfied since the energy label of node source is positive ($e(1) = 5$).
 
 
 
