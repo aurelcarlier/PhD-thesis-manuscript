@@ -1,51 +1,61 @@
-\begin{tikzpicture}
-\begin{axis}[ybar stacked, enlarge x limits=false, width=\linewidth, ybar, bar width=1pt] %,height=7cm ,ybar interval=0
-\addplot table[col sep=semicolon, x index=0, y index=1]{tikz/D200.csv};
-\addplot table[col sep=semicolon, x index=0, y index=2]{tikz/D200.csv};
+\begin{tikzpicture}[>=stealth, thick, scale = 1]
+\begin{axis}[
+	ybar,
+	bar width=6pt,
+	stacked ignores zero = true,
+	height = 10cm,
+	width = 16cm,
+	axis x line = bottom,
+	axis y line = left,
+	xmin = -3,
+	xmax = 93,
+	ymin = 0,
+	ymax = 17,
+	xtick = {0,4,...,95},
+%	xticklabels = {0h, 1h, 2h, 3h, 4h, 5h, 6h, 7h, 8h, 9h, 10h, 11h, 12h, 13h, 14h, 15h, 16h, 17h, 18h, 19h, 20h, 21h, 22h, 23h},
+	xticklabels = {0h, ~, 2h, ~, 4h, ~, 6h, ~, 8h, ~, 10h, ~, 12h, ~, 14h, ~, 16h, ~, 18h, ~, 20h, ~, 22h, ~},
+	ytick={0,2,...,16},
+	ymajorgrids,
+	legend entries = {~Satisfied demand, ~Unsatisfied demand},
+	legend style = {at = {(0.02,0.92)}, anchor = north west, },
+	legend cell align = left,
+	xlabel = {Time of the day},
+	ylabel = {Number of satisfied - unsatisfied demands},
+]
+%
+% PLOT SATISFIED DEMANDS
+\addplot+[
+	blue!25,
+	draw = 	none,
+	y filter/.expression = {y==0 ? nan : y},
+	] table[col sep = semicolon, x = TS, y = SATISFIED_DEMAND,]{tikz/D200-1h.csv};
+%
+% PLOT UNSATISFIED DEMANDS
+\addplot+[
+	red!30,
+	draw = none,
+	postaction = {pattern = north east lines},
+	y filter/.expression = {y==0 ? nan : y},
+	] table[col sep = semicolon, x = TS, y = UNSATISFIED_DEMAND]{tikz/D200-1h.csv}; % draw = red,  
 \end{axis}
-\end{tikzpicture}
-
-
-%\begin{tikzpicture}
-%\begin{axis}%[]
 %
-%\addplot table[x index=0, y index=1]{tikz/D.txt};
-%
-%width=.45\linewidth,
-%xlabel=Number of stations,
-%ylabel=Building times (in seconds),
-%legend pos=north west,
-%legend cell align=left,
-%axis x line=bottom,
-%axis y line=left,
+%\begin{axis}[ % DEMAND PROFILE
+%	height = 15cm,
+%	width = 20cm,
+%	axis x line = none,
+%	axis y line = none,
+%	xmin = -1,
+%	xmax = 97,
+%	ymin = 0,
+%	ymax = 150,
+%%	ytick=\empty,
+%%	enlarge x limits = false,
+%%	enlarge y limits = false,
 %]
+%\addplot[mark = none, draw = blue!40, smooth, line width=2pt] table [col sep=semicolon, x=TS, y=DEMAND]{tikz/DemandProfile.csv};
+%\draw node[] (d) at (axis cs:75,60) {};
+%\draw node[] (o) at (axis cs:90,63) {demand profile};
 %
-%\addplot[smooth,mark=*,color=green] plot coordinates {
-%(10,211)
-%(20,997)
-%(30,1417)
-%(40,2481)
-%(50,4735)
-%};
-%\addlegendentry{$\nbTimeSteps = 288$}
-%
-%\addplot[smooth,mark=*,color=red] plot coordinates {
-%(10,53)
-%(20,234)
-%(30,343)
-%(40,632)
-%(50,1437)
-%};
-%\addlegendentry{$\nbTimeSteps = 144$}
-%
-%\addplot[smooth,mark=*,color=blue] plot coordinates {
-%(10,14)
-%(20,59)
-%(30,138)
-%(40,147)
-%(50,310)
-%};
-%\addlegendentry{$\nbTimeSteps = 72$}
-%
+%\draw[->] (o.west) -> (d);
 %\end{axis}
-%\end{tikzpicture}
+\end{tikzpicture}

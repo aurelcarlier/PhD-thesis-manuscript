@@ -1,4 +1,4 @@
-\chapter{SLP and energy experimentations} \label{chap:slpEnergyExp}
+\chapter{Battery range study} \label{chap:slpEnergyExp}
 \begin{bibunit}[ieeetr]
 \minitoc
 \vspace{2cm}
@@ -17,97 +17,282 @@ blabla\\
 \end{abstract}
 \end{minipage}
 
-
+\newpage
 \section{Introduction}
-Intro
+We have seen in the last chapter that running the {\ENERGY} model may be difficult according to its complexity.
+The size of the model depends on three parameters: the number of time-steps, the number of stations (or potential sites according to the version) and their associated maximum size (number of parking slots).
+Fundamentally, for large systems and narrow time-steps, the solving process may lead to impracticable computation times.
 
-\section{test graphs}
+\medskip
+In this chapter, we study a realistic and practicable model based on $15$ stations.
+As detailed thereafter, the data has been made so that the system could be similar to the Parisian carsharing system Autoblib' in terms of operational performance (average number of satisfied requests captured by vehicles and average daily time spent on road).
+
+On the one hand, we have seen at the beginning of this thesis that carsharing vehicles were more used than private vehicles (\see Chapter \ref{chap:}, page \pageref{chap:}).
+Especially the time spent on the road is much more higher due to the higher utilisation rate of the vehicle.
+%Consequently, the total distance a shared vehicle travelled during a day is approximately 
+
+On the other hand, including electric constraints into the system optimization raises the question of system viability.
+More particularly, battery range still remains today a major concern when using electric vehicles \cite{franke_experiencing_2012}.
+This apprehension, also known as \emph{range anxiety}, is considered as the major barrier to large scale adoption of all-electric cars.
+By extension, carsharing systems equipped with EVs also suffer from this psychologic side effect.
+Carsharing operator, as well as car manufacturers, tends to deploy different strategies to handle it.
+Basically, vehicle range can be extended by deploying more charging infrastructure or better guide drivers on roads with more accurate navigation tools.
+Besides, other strategies more focussed on battery themselves can be considered.
+Battery swapping technology, range extenders and the development of higher battery capacity at a cost-effective price are the main approaches.
+
+\medskip
+Determining sufficient EV range has been the focus of numerous studies.
+Answering this question is difficult and depends not only on range needs, but also on customer preferences.
+Results reveal a substantial discrepancy between both notions, sometimes refer as the ``range paradox'' in EVs \cite{franke_what_2013}.
+While currently common $160$-kilometres range is generally estimated sufficient for a sizeable share of the car driving population \cite{pearre_electric_2011, chlond_market_2012}, other studies report that the average customer wants a vehicle range of approximately $350$ kilometres \cite{bunzeck_preferences_2011}.
+However, is the battery range still sufficient in the context of urban carsharing where vehicles are more intensively used?
+And what could be the optimal battery size of a carsharing vehicle in the future transportation context where more and more demands will have to be satisfied?
+% it becomes natural to ask whether the 
+
+\medskip
+For the most part, in this chapter we wish to address the following questions:
+\begin{enumerate}
+\item Are actual EV-battery capacities well suited for a carsharing usage?
+\item What is the minimum battery-range allowing the system to run at its highest efficiency?
+\item What role does the power supply plays in the system dimensioning?
+\end{enumerate}
+The chapter is organised as follow.
+Section \ref{sec:energyExp:context} describes the experimental context of the study.
+Assumptions and method are especially exposed.
+Next, numerical results and global indicators are presented in Section \ref{sec:energyExp:results}.
+Insights on vehicles' energetic profiles are especially detailed.
+Finally, Section \ref{sec:energyExp:conclusion} concludes with possible extensions and further research are discussed.
+
+\section{Experimental context} \label{sec:energyExp:context}
+%In actual carsharing systems, vehicles are intensively used, at least more than private vehicles.
+In the urban area of Paris, Autolib' is a carsharing service of more than $1000$ stations maintaining a fleet of $3800$ electric vehicles \cite{autolib_chiffres_2016}.
+As of February 2016, $4.5$ trips on average are realized by each vehicle.
+Approximately $47$ minutes are spent on road each time a vehicle is rent for a total of $3$ daily hours in travel.
+
+\medskip
+In this study, we intend to base our experimentations on a comparable system to Autolib', not in size but rather in term of operative indicators.
+Indeed, take advantage of the {\ENERGY} model while avoiding computation issues imply to limit the total number of stations, their maximum size and the time-step interval considered for the time period. % benefit from
+This section presents some global model parameters leading after the solver computation to similar operating indicator values.
+Mathematical programs were solved using the Java API of IBM ILOG CPLEX 12.5.1.
+
+\medskip
+Using the random data generator describes in Chapter \ref{chap:}, we investigate a specific carsharing use-case.
+It addresses a common scenario where an area poorly served by public transport is covered by two emitter poles.
+A maximum inter-station distance of $30$ kilometres was assumed and the centroid area is $15$ kilometres far from each pole.
+In addition, no demand intra-pole was considered.
+It is assumed that most people want to join the centroid in the morning while the exact reverse phenomenon is observed the evening.
+A total $200$ demands over the day were generated between $15$ geographically fixed stations.
+% + introduire le nombre de véhicules ici
+Vehicle relocation operations are defined at specific periods of the day.
+Basically, the system can be rebalanced by $10$ jockeys during the morning ($6$h, $7$h and $8$h), around mid-day ($12$h, $13$h and $14$h) and the evening ($20$h, $21$h and $22$h).
+% + justif
+Vehicles admit a standard battery capacity of $160$ kilometres and stations are equipped with home-charging points.
+Loading an empty battery takes $6$ hours.
+Finally, a maximum of $30$ electric vehicles and $20$ vehicle relocations during the day has been assumed.
+
+\medskip\noindent
+Model parameters are summarized in the following:
+\begin{itemize}
+\item Time: $\Delta t = 15$ and $\nbTimeSteps = 96$.
+\item Stations: $\nbStations = 15$ with $Z(i) \sim \mathcal{U}[4,6]$, $\forall i \in \stationSet$.
+\item Vehicle relocation operations: $\relocTimeStepSet = \{24, 28, 32 ,48, 52, 56, 80, 84, 88\}$.
+\item Energy: $E = 160$, $\omega (E) = 360$.
+\item Demand and upper bounds: $\nbDemands = 200$, $\nbVROs = 20$, $\nbVehicles = 30$,  $\nbMaxJockeys = 10$.
+\end{itemize}
+
+
+\section{Results} \label{sec:energyExp:results}
 
 \begin{figure}[t]
-\centering
+\flushleft
 \input{tikz/plotDemand}
-\caption{A caption}
-\label{plot:graphdensities}
+\caption{Global demand repartition between satisfied and unsatisfied demands over time according to the optimal solution based on $200$ daily demands.}
+\label{fig:plotDemand}
 \end{figure}
 
+\medskip
+Considering a $15$-minutes time-step period, the model finds the exact solution in $10$ seconds.
+% + spec machine
+Figure \ref{fig:plotDemand} depicts both satisfied and unsatisfied demands for each hour of the day.
+Note that the global demand can be recovered summing the both values for each time of the day.
+Between midnight and $1$ am for instance, two requests were generated.
+The optimal solution succeeded to fulfil one of the two.
+More globally, the demand satisfaction rate over the day stands at $88$\%.
 
-\section{Results}
-The optimisation models and heuristic were run in an Intel® Xeon® processor 3.10 GHz, 16Gb RAM computer under Ubuntu using Cplex as a solver.
-The code was written in java with the java API of Cplex. 
+\medskip
+Numerous reasons can explain why a demand is unsatisfied.
+For instance , no vehicle can be available at the origin station, the remaining battery level cannot support the requested trip, or even the station of destination will not allow the car to park due to the lack of available parking slot.
+Nevertheless, whatever the reasons for not fulfil a request, by using an exact solving method (Branch and bound method), we make sure that the solution (\ie this set of vehicles route configuration) is the one satisfying the maximum number of demands.
+Thus, vehicle routes can be made in order to anticipate future demands since all the requests over the day are known.
+In particular, the unsatisfied demand at midnight observed in Figure \ref{fig:plotDemand} enables the vehicle parked in the station to meet more demands later in the day.
 
-\subsection{Resolution time}
-The first result we try to have is to know which instance we can resolve in a reasonable time.
-The \textbf{Figure 6.3} gives us the resolution time for instances between 10 and 30 stations.
-We can see that for 30 stations, some instances need 32 hours to be resolved.
-Also, we can see that the heuristic have an impact for small instance but with 30 stations, it can have a impact null or even a bad impact. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t]
+\centering
+\input{tikz/plotVehicleDistVsNbTSTraveling}
+\caption{Vehicles repartition with respect to the distance covered and the time spent on road.}
+\label{fig:VehicleDistVsNbTSTraveling}
+\end{figure}
+\medskip
+Looking at operative indicators, the average number of trip performed by each vehicles ($5,8$) and the number of daily hours on road ($3$ hours) are aligned with those of Autolib'.
+However, we observed a significant difference with respect to the daily distance travelled.
+On average, vehicles cover $108$ kilometres while Autolib' reports $44.6$ kilometres \cite{autolib_rapport_2014}.
+This dissimilarity results directly from the specific geographical topology of our system where stations are distributed among distant poles.
+More precisely, the inter-station distance ($13.7$ km) is higher in our use-case than in the Autolib' system where only $363$ metres separate two stations.
+From an energetic point of view, this observation may provide an additional interest since vehicles are limited by the range of the battery.
+As observed in Figure \ref{fig:VehicleDistVsNbTSTraveling}, only four vehicles ($13$\%) need to refill during the day to perform their trips since their total travelled distance exceeds the battery capacity threshold.
+In that sense, the total battery capacity do not seem as an issue.
 
-~\\~\\~\\Figure\\~\\~\\
+It is interesting to note that the vehicle repartition appears uniform regarding the daily covered distance and the time spent on road.
+Besides, the relation looks linear, following the natural intuition that the more a vehicle travels, the more time it spends on the road.
+A similar result can be observed regarding the distance travelled and the number of satisfied demands.
+However, with respect to the vehicle distribution, no distinct scheme or cluster stands out clearly.
+Contrary to what one might expect, there are no group of vehicles intensively used while others fill the remaining demand.
 
-We can also notice that the y axis is on a logarithmic scale which tell us that the time to solve an instance is exponential on the number of station.
 
-\subsection{Energy versus no energy}
-Our second experiment was to see the impact of the electric car opposed to fuel car in an optimal solution.
-The \textbf{Figure 6.4} show us the difference in the number of request accepted, car used and vehicle relocation in each solution.
-The number of request accepted stay the same with or without energy.
-However, a solution with energy requires in average more cars  than a solution without.
-If we restrain the number of car, then the energy solution cannot achieves the same number of request accepted than the solution without energy.
-So, even if the solution seems to be equal in term of accepted request, the solution with  the energy constraint is different from a solution without such constraint.
-
-\begin{figure}
-\begin{tabularx}{\textwidth}{|X|c|c|c|c|}
-\hline
-Instances & Nb stations & Nb requests & Nb cars & Nb veh-reloc \\
-\hline
-Without energy & 10 & 74 & 12 & 20 \\
-With energy & 10 & 74 & 14 & 19\\
-\hline
-With energy restraint \newline to 12 cars and 20 \newline vehicle relocations & 10 & 72 & 12 & 14\\
-\hline  
-Without energy & 20 & 361 & 60 & 50 \\
-With energy & 20 & 361 & 60 & 50 \\
-\hline
-Without energy & 30 & 461 & 83 & 50\\
-With energy & 30 & 461 & 84 & 50\\
-\hline
-Without energy & 50 & 790 & 149 & 50\\
-With energy & 50 & 790 & 149 & 50\\
-\hline
-\end{tabularx}
-\caption{Impacts of the energy on solutions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t]
+\centering
+\input{tikz/plotMaxEnergyUsedVsNbTSTraveling}
+\caption{A caption.}
+\label{fig:MaxEnergyUsedVsNbTSTraveling}
 \end{figure}
 
-\subsection{Energy result}
-The last experiment was to see how each car and station were used in a optimal solution with energy constraint.
-We choose to create instances with the same ratio between station number, car and request as in the autolib system in Paris.
-This mean for a system with $N$ stations, we have 3 x $N$ cars and 20 x $N$ requests.
-The \textbf{Figure 6.5} shows the results for different instances.
-We evaluate the average number of request, number of vehicle relocation, battery level and time spent in station of a car in an optimal solution.
-The last column gives us the average energy a station delivers in a solution in comparison to maximum energy possible to delivers by a station.\\
+\bigskip
+The interest in using the {\ENERGY} model is its ability to track any vehicle in the system and display the associated energy consumption profile over the day.
+In particular, the highest energy variation sustained by the battery in an important indicator to state on the sufficient range a vehicle needs.
+Figure \ref{fig:MaxEnergyUsedVsNbTSTraveling} depicts for each vehicle the observed battery level range (difference between the minimum and the maximum value) according to the number of satisfied demands during the day.
+Clearly, the actual $160$ km battery capacity appears widely sufficient.
+The higher observed battery range value, standing at $75$ kilometres, indicates that decreasing the battery by half do not alter the solution quality.
+Moreover, $80$\% of vehicles can operate their route with a total battery capacity of $50$ kilometres.
+
+\medskip
+This result opens many perspectives toward the battery range in carsharing context.
+First, from the car manufacturer point of view, adjust vehicles' range to their daily usage may result in saving important financial costs while improving the performance of the vehicles.
+Indeed, reducing the battery capacity also decreases its size.
+A direct consequence is that the battery is cheaper and lighter.
+%, altering the price and the weight.
+As of 2016, a standard 22 kWh battery represents $20$\% of the overall cost of the electric vehicle \cite{avem_prixEVs}.
+
+Secondly, the residual capacity enhanced by results in Figure \ref{fig:MaxEnergyUsedVsNbTSTraveling} could also be intended for other uses.
+Today, increasing attention is paid to include more renewable energy in the global mix consumption  scheme.
+Many applications may arise from this highlighted available battery capacity.
+For instance, other vehicles can fill their battery with electricity coming from an internal fleet stock.
+Also, a direct consequence of a capacity greater than necessary is a lower rate of charge.
+The battery lifespan is positively impacted since it relies on the number of cycles the battery experiences over time.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+  may be consequent.
+ and may have a huge impact on 
+
+This result, though, must be consider carefully.
+Technically, the lifespan of actual batteries (regardless of the technology) depends primarily on the number of charge cycles.
+More precisely, the depth of discharge have is correlated with the number of charge discharge cycles a battery can performed \cite{}.
+
+When 
+Another interesting result concerns 
+As depicted 
+
 
 \begin{figure}[h]
-\newcolumntype{C}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{|C|C|C|C|C|C|}
-\hline
-Nb Stations & Nb requests done by a car & Nb veh-reloc by a car & Battery level ($\%$) & Time in station ($\%$) & Energy delivers by a station ($\%$)\\
-\hline
-10 & 6.06 & 0.96 & 35.21 & 73.65 & 37.48 \\
-\hline
-20 & 6.01 & 0.83 & 28.63 & 75.57 & 28.38 \\
-\hline
-30 & 5.48 & 0.76 & 33.39 & 71.43 & 27.42 \\
-\hline
-50 & 5.28 & 0.33 & 22.66 & 75.00 & 23.89 \\
-\hline
-\end{tabularx}
-\caption{Results on average for a solution with energy}
+\centering
+\input{tikz/plotProfileV4}
+\caption{Energetic profile of vehicle 4.}
+\label{fig:plotProfileV4}
 \end{figure}
 
-This result shows us that even if the energy has an impact in the solution as seen in \textbf{Figure 6.4}, the impact is small.
-Indeed, a car stay in station almost $75\%$ of the day but has very low battery level.
-And thanks to the last column, we can see that a car spends time in station without charging.
-This show that in a system with the same proportion as autolib, the electric component isn't such a constraint as we might except. 
-\newpage
+% FIGURE TEMPLATE
+%\begin{figure}[t]
+%\flushleft
+%\input{tikz/}
+%\caption{}
+%\label{fig:}
+%\end{figure}
 
+\newpage
+\section{Conclusion} \label{sec:energyExp:conclusion}
+
+
+
+%\section{Results}
+%The optimisation models and heuristic were run in an Intel® Xeon® processor 3.10 GHz, 16Gb RAM computer under Ubuntu using Cplex as a solver.
+%The code was written in java with the java API of Cplex. 
+%
+%\subsection{Resolution time}
+%The first result we try to have is to know which instance we can resolve in a reasonable time.
+%The \textbf{Figure 6.3} gives us the resolution time for instances between 10 and 30 stations.
+%We can see that for 30 stations, some instances need 32 hours to be resolved.
+%Also, we can see that the heuristic have an impact for small instance but with 30 stations, it can have a impact null or even a bad impact. 
+%
+%~\\~\\~\\Figure\\~\\~\\
+%
+%We can also notice that the y axis is on a logarithmic scale which tell us that the time to solve an instance is exponential on the number of station.
+%
+%\subsection{Energy versus no energy}
+%Our second experiment was to see the impact of the electric car opposed to fuel car in an optimal solution.
+%The \textbf{Figure 6.4} show us the difference in the number of request accepted, car used and vehicle relocation in each solution.
+%The number of request accepted stay the same with or without energy.
+%However, a solution with energy requires in average more cars  than a solution without.
+%If we restrain the number of car, then the energy solution cannot achieves the same number of request accepted than the solution without energy.
+%So, even if the solution seems to be equal in term of accepted request, the solution with  the energy constraint is different from a solution without such constraint.
+%
+%\begin{figure}
+%\begin{tabularx}{\textwidth}{|X|c|c|c|c|}
+%\hline
+%Instances & Nb stations & Nb requests & Nb cars & Nb veh-reloc \\
+%\hline
+%Without energy & 10 & 74 & 12 & 20 \\
+%With energy & 10 & 74 & 14 & 19\\
+%\hline
+%With energy restraint \newline to 12 cars and 20 \newline vehicle relocations & 10 & 72 & 12 & 14\\
+%\hline  
+%Without energy & 20 & 361 & 60 & 50 \\
+%With energy & 20 & 361 & 60 & 50 \\
+%\hline
+%Without energy & 30 & 461 & 83 & 50\\
+%With energy & 30 & 461 & 84 & 50\\
+%\hline
+%Without energy & 50 & 790 & 149 & 50\\
+%With energy & 50 & 790 & 149 & 50\\
+%\hline
+%\end{tabularx}
+%\caption{Impacts of the energy on solutions}
+%\end{figure}
+%
+%\subsection{Energy result}
+%The last experiment was to see how each car and station were used in a optimal solution with energy constraint.
+%We choose to create instances with the same ratio between station number, car and request as in the autolib system in Paris.
+%This mean for a system with $N$ stations, we have 3 x $N$ cars and 20 x $N$ requests.
+%The \textbf{Figure 6.5} shows the results for different instances.
+%We evaluate the average number of request, number of vehicle relocation, battery level and time spent in station of a car in an optimal solution.
+%The last column gives us the average energy a station delivers in a solution in comparison to maximum energy possible to delivers by a station.\\
+%
+%\begin{figure}[h]
+%\newcolumntype{C}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{|C|C|C|C|C|C|}
+%\hline
+%Nb Stations & Nb requests done by a car & Nb veh-reloc by a car & Battery level ($\%$) & Time in station ($\%$) & Energy delivers by a station ($\%$)\\
+%\hline
+%10 & 6.06 & 0.96 & 35.21 & 73.65 & 37.48 \\
+%\hline
+%20 & 6.01 & 0.83 & 28.63 & 75.57 & 28.38 \\
+%\hline
+%30 & 5.48 & 0.76 & 33.39 & 71.43 & 27.42 \\
+%\hline
+%50 & 5.28 & 0.33 & 22.66 & 75.00 & 23.89 \\
+%\hline
+%\end{tabularx}
+%\caption{Results on average for a solution with energy}
+%\end{figure}
+%
+%This result shows us that even if the energy has an impact in the solution as seen in \textbf{Figure 6.4}, the impact is small.
+%Indeed, a car stay in station almost $75\%$ of the day but has very low battery level.
+%And thanks to the last column, we can see that a car spends time in station without charging.
+%This show that in a system with the same proportion as autolib, the electric component isn't such a constraint as we might except. 
+%\newpage
 
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}

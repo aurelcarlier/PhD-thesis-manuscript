@@ -1,0 +1,40 @@
+\begin{tikzpicture}[>=stealth, thick, scale = 1]
+\begin{axis}[
+	only marks,
+	height = 8cm,
+	width = 14cm,
+	axis x line = bottom,
+	axis y line = left,
+	xmin = 40,
+	xmax = 190,
+	ymin = 4,
+	ymax = 22,
+%
+	xtick = {40,60,...,180},
+	ytick={4,8,...,24},
+	yticklabels = {1h, 2h, 3h, 4h, 5h, 6h},
+	ymajorgrids,
+	xmajorgrids,
+	legend entries = {~Vehicle},
+	legend style = {at = {(0.05,0.92)}, anchor = north west, },
+	legend cell align = left,
+	xlabel = {Total covered distance per day (in kilometres)},
+	ylabel = {Time spent on road},
+]
+%
+% PLOT VEHICLES
+\addplot+[] table[col sep = semicolon, x = totalTraveledDistanceKm, y = nbTSTraveling,]{tikz/D200-vehDistVsNbTSTraveling.csv};
+%
+% red line for battery capacity
+\draw node[] (o) at (axis cs:160,4) {};
+\draw node[] (d) at (axis cs:160,23) {};
+\draw[red, line width = 2pt, dashed] (o) -- (d);
+\draw node[red, align=center] (battCapa) at (axis cs:170,10) {\footnotesize Range\\ \footnotesize threshold};
+%
+% blue dashed line for linear relation
+\draw node[] (ob) at (axis cs:42,5) {};
+\draw node[] (db) at (axis cs:188,21) {};
+\draw[blue!20, line width = 2pt, dashed] (ob) -- (db);
+%
+\end{axis}
+\end{tikzpicture}

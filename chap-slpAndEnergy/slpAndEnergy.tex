@@ -3,13 +3,22 @@
 \minitoc
 \vspace{2cm}
 
-\begin{minipage}[c]{0.45\linewidth}
-\includegraphics[width=\textwidth]{stationLocations}
+\noindent
+\begin{minipage}[c]{0.25\linewidth}
+\flushleft
+\includegraphics[width=\linewidth]{stationLocations}
 \end{minipage}
 \hfill
-\begin{minipage}[c]{0.45\linewidth}
+\begin{minipage}[c]{0.8\linewidth}
 \begin{abstract}
-~
+This chapter is dedicated to the study of the Station Location Problem (SLP).
+The problem, its challenges and related work are first described.
+We then present a mathematical program expanding the SDP model seen in Chapter \ref{chap:sdp} and including new features in the model like the number of jockeys.
+Next section is dedicated to the integration of energy components in the model.
+After having exhibit some modelling issues with respect to the model we previously developed, a new model is presented.
+The latter include battery range and power supply constraints.
+The chapter terminates giving some discussions and improvements about the model.
+More particularly, an heuristic is detailed and a basic example illustrates its mechanics.
 \end{abstract}
 \end{minipage}
 
@@ -168,18 +177,18 @@ Then, the constraint under the maximum number of simultaneous vehicle relocation
 
 
 \subsubsection{Outputs and Solution}
-A solution to the SLP consist of assigning a stations' configuration to the carsharing system, \ie settle the value of $b \in \{0, 1\}^\nbStations$ satisfying constraint (\ref{const:nbMaxStations}).
-For any value of $b$, which means that the stations' locations are now fixed, we can solve the system dimensioning problem upgraded with the limitation under the number of jockeys (constraint group \ref{const:nbJockeys}).
+A solution to the SLP consists of assigning a stations' configuration to the carsharing system, \ie settle the value of $b \in \{0, 1\}^\nbStations$ satisfying constraint (\ref{const:nbMaxStations}).
+For any fixed value of $b$, which means that the stations' locations are now fixed, we can solve the system dimensioning problem upgraded with the limitation under the number of jockeys (constraint group \ref{const:nbJockeys}).
 Its resolution gives the maximum number of demands this station configuration is able to fulfil.
-Then, the optimal solution of the SLP is the vector value $b \in \{0, 1\}^\nbStations$ which maximize the system efficiency for fixed values of the maximal number of vehicles, vehicle relocation operations and jockeys.
+Then, the optimal solution of the SLP is the vector $b \in \{0, 1\}^\nbStations$ maximizing the system efficiency for fixed values of the maximal number of vehicles, vehicle relocation operations and jockeys.
 %The number of vehicles as well as the vehicles' routes the and the vehicle relocation plan can also be part of the solution.
 The expected outputs of the problem resolution are listed below:
 \begin{itemize}
-\item a system configuration, \ie a value of $b \in \{0, 1\}^\nbStations$,
+\item a system configuration, \ie a value $b \in \{0, 1\}^\nbStations$,
 \item the vehicles' routes through the system.
 \end{itemize}
 
-\bigskip
+\medskip
 As for the system dimensioning problem, we can extract a lot of information from vehicles' routes.
 Those extended outputs can be deduced from any solution and are summarized in the following:
 \begin{itemize}
@@ -190,7 +199,6 @@ Those extended outputs can be deduced from any solution and are summarized in th
 \end{itemize}
 
 \subsection{Mathematical program}
-
 To cope with the station location problem, we opted for the linear programming approach.
 The mathematical model presented thereafter is based on a enhanced model of the system dimensioning problem described in Chapter \ref{chap:sdp}.
 The later is actually a solid basis since the two problems are linked to each other.
@@ -240,34 +248,35 @@ Finally, Equations \eqref{constr:MS:varFlows} and \eqref{constr:MS:varStations} 
 
 \subsubsection{The mathematical program}
 The detailed linear program of the {\SLP} is given bellow.
+
 \begin{equation}\label{obj:SLP:maxDemands}
 \text{[SLP]:} \max ~~\sum_{\substack{a\in \tegArcSet_2}} \varphi(a)
 \end{equation}
 \begin{numcases}{s.t.}
 \sum_{i=1}^\nbStations b_i \leq \nbMaxStations \label{constr:SLP:nbStations}\\
-\varphi(a) \leq b_{\eta(x)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet$ \label{constr:SLP:stationInnerFlow} \\
-\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet_2 \cap \tegArcSet_3$ \label{constr:SLP:stationOuterFlow}\\
-\sum_{a \in \tegArcSet_3} \varphi(a) \leq R \label{constr:SLP:nbVROs}\\
-\sum_{a\in \tegArcSet} \varphi(a) \cdot \epsilon_a \leq C \label{constr:SLP:nbVehicles}\\
-\sum_{a \in \tegArcSet_3^t} \varphi(a) \leq \nbMaxJockeys \quad, \forall t \in \relocTimeStepSet \label{constr:SLP:nbJockeys}\\
+\varphi(a) \leq b_{\eta(x)} \cdot \tegCapacity(a) & $\forall a = (x, y) \in \tegArcSet$ \label{constr:SLP:stationInnerFlow} \\
+\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) & $\forall a = (x, y) \in \tegArcSet_2 \cap \tegArcSet_3$ \label{constr:SLP:stationOuterFlow}\\
+\sum_{a \in \tegArcSet_3^t} \varphi(a) \leq \nbMaxJockeys & $\forall t \in \relocTimeStepSet$ \label{constr:SLP:nbJockeys}\\
+\sum_{a \in \tegArcSet_3} \varphi(a) \leq \nbVROs \label{constr:SLP:nbVROs}\\
+\sum_{a\in \tegArcSet} \varphi(a) \cdot \epsilon_a \leq \nbVehicles \label{constr:SLP:nbVehicles}\\
 \varphi(a) \leq u(a) & $\forall a \in \tegArcSet$ \label{constr:SLP:arcCapacities}\\
 \sum_{\substack{y\in \Gamma^-(x)}} \varphi((y,x)) = \sum_{\substack{y\in \Gamma^+(x)}} \varphi((x,y)) & $\forall x \in \tegNodeSet$ \label{constr:SLP:flowConservation}\\
 \varphi(a) \in \N & $\forall a\in\tegArcSet$ \label{constr:SLP:varFlows}\\
 b_i \in \{0, 1\} & $\forall i \in \{1, \dots, \nbStations\}$ \label{constr:SLP:varStations}
 \end{numcases}
 
+\bigskip
+Equation \eqref{obj:SLP:maxDemands} expresses the maximization of the global demand.
+Equation \eqref{constr:SLP:nbStations} bounds the total number of carsharing sites to $\nbMaxStations$.
+Equations \eqref{constr:SLP:stationInnerFlow} and \eqref{constr:SLP:stationOuterFlow} limit the inner and outer flow in every arc.
+Those two sets of constraints express the dependence between the state of the site (selected or not) and the possibility for vehicles to parked in the station.
+Next, Equation \eqref{constr:SLP:nbJockeys} limits the maximum number of simultaneous vehicle relocation operations to $\nbMaxJockeys$.
+As noted before, it can be viewed as the number of available jockeys operating each time the system is rebalancing.
 
-\eqref{obj:SLP:maxDemands}
-\eqref{constr:SLP:nbStations}
-\eqref{constr:SLP:stationInnerFlow}
-\eqref{constr:SLP:stationOuterFlow}
-\eqref{constr:SLP:nbVROs}
-\eqref{constr:SLP:nbVehicles}
-\eqref{constr:SLP:nbJockeys}
-\eqref{constr:SLP:arcCapacities}
-\eqref{constr:SLP:flowConservation}
-\eqref{constr:SLP:varFlows}
-\eqref{constr:SLP:varStations}
+\medskip
+Equations \eqref{constr:SLP:nbVROs} to \eqref{constr:SLP:varFlows} are the same as those presented in the {\SDP} linear program.
+They respectively limit the number of vehicle relocation operations and the total number of vehicles while the next two other are classical flow constraints.
+Finally, Equations \eqref{constr:SLP:varFlows} and \eqref{constr:SLP:varStations} define the variables' domains.
 
 
 \newpage
@@ -720,7 +729,9 @@ It should be noted here that we actually are looking for shortest \emph{cycles},
 \medskip
 In addition to the standard distance label value $d(i)$, we associate to each node $i$ an energy label $e(i)$ standing for the vehicle battery level at this node, which is an lower bound of the energy remaining in the battery for this specific node.
 At each iteration, and similarly to the distance label, the energy label will be updated according to the energy consumption it takes to reach adjacent nodes.
-At any intermediate step of the algorithm, the energy label of a node $i$ is the maximum battery level of a vehicle performing the trip from the source.
+Any adjacent nodes $j$ for which $e(i)- w_{ij} < 0$ can not pretend being a feasible successor of node $i$.
+As a consequence, neither its distance label nor energy label should be updated.
+At any intermediate step of the algorithm, the energy label of a node $i$ stores the maximum battery level of a vehicle performing the shortest energetically viable path from the source.
 It is assumed that the vehicle recharged its battery when parked in station whenever it is possible.
 
 \medskip
@@ -728,22 +739,22 @@ The algorithm iterates over a set of starting nodes defined as $\tegNodeSet_t = 
 This set represents a temporal snapshot of the system at a given time-step $t \in \timeStepSet$.
 In practice, we usually use $\tegNodeSet_1$ and the algorithm tries to find as many cycles as possible from this set.
 The algorithm terminates when no more cycle containing demand arcs can be found.
-It should be noted that the problem we address here is not to find shorter paths from a source node to every other nodes in the network.
-The problematic is more to find shortest cycles, which can be viewed as paths starting and ending at the same vertex.
-To solve the problem faster, we could terminate the algorithm as soon as it has selected the departure node from the list of temporary labelled nodes, even though some nodes are still in this list.
+It should be noted that the problem we address here is not to find shorter paths from a source to every other nodes in the network but rather to find shortest cycles, which can be viewed as paths starting and ending at the same vertex.
+To solve the problem faster, the algorithm terminates the cycle search procedure as soon as the source can pretend to be selected from the list of temporary labelled nodes, even though some nodes are still in this list.
 
 \medskip
-Algorithm \ref{algo:dijEnergy} gives a formal algorithmic description of the modified Dijkstra's algorithm.
+Algorithm \ref{algo:dijEnergy} gives a formal algorithmic description of the modified Dijkstra's algorithm taking into account energy constraints.
 
 \begin{algorithm}[h]
 %\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
+\BlankLine
 \KwIn{
 $\teg = (\tegNodeSet, \tegArcSet, e)$, a binary weighted TEG where weights are set to 0 on demands arcs and 1 elsewhere;
 $t \in \timeStepSet$ defining $\tegNodeSet_t = \{x \in \tegNodeSet \mid \theta (x) = t\}$, a set of departure nodes.
 }
 \KwOut{$C$: a set of vehicles' routes verifying energy constraints.}
 
-\bigskip
+\BlankLine
 $C \leftarrow \emptyset$\;
 \While{$\tegNodeSet_t \not= \emptyset$}{
 	\medskip
@@ -790,10 +801,22 @@ $C \leftarrow \emptyset$\;
 \label{algo:dijEnergy}
 \end{algorithm}
 
+We illustrate the mechanics of the algorithm \ref{algo:dijEnergy} using the numerical example given in Figure \ref{fig:heuristicExample}.
+We consider the node $1$ as the source node and a maximum battery capacity of $10$ kilometres is assumed (\ie $E = 10$).
+The above right figure depicts the graph topology as well as weights and energy consumption values in each arc.
 
-%It should be noted that the solution found by \textbf{Algorithm 1} can be non-optimal because when the algorithm take a best path, it can block future better path starting from other nodes. 
-%This heuristic also makes only a cycle with length of $T$ which can result in lower result.
+\medskip
+Figure \ref{fig:heuristicExample}(a) initialize the successors' labels of the source node.
+Then, the algorithm permanently labels the nodes $3$, $5$, $6$ and $2$ in this given sequence.
+Figure \ref{fig:heuristicExample}(b) to (e) illustrate the operations for some of these iterations.
+Note in Figure \ref{fig:heuristicExample}(b) that $d(4)$ and $e(4)$ has not been updated.
+Since the remaining energy at node $3$ was not sufficient for the trip requirements ($e(3) = 3 < \gamma_{34} = 5$), the path is not energetically viable in practice.
 
+\medskip
+Finally, in Figure \ref{fig:heuristicExample}(f), nodes $1$, $4$ and $7$ are equivalent choices since they all admit a distance label $d(i) = 2$.
+Because the source node (node $1$) can now pretend to be permanently labeled, the cycle search routine ends in this iteration.
+As a result, the shortest cycle is $(1, 3, 5, 6, 1)$ and two demands are satisfied.
+Note that energy constraints are satisfied since the energy label of node source is positive ($e(1) = 5$).
 
 \begin{figure}[t]
 \centering
@@ -802,21 +825,41 @@ $C \leftarrow \emptyset$\;
 \label{fig:heuristicExample}
 \end{figure}
 
-We illustrate the mechanics of the algorithm \ref{algo:dijEnergy} using the numerical example given in Figure \ref{fig:heuristicExample}.
-We consider the node $1$ as the source node and a maximum battery capacity of $10$ kilometres is assumed (\ie $E = 10$).
-The above right figure summarises the data.
-Figure \ref{fig:heuristicExample}(a) initialize the successors' labels of the source node.
-Then, the algorithm permanently labels the nodes $3$, $5$, $6$ and $2$ in this given sequence.
-Figure \ref{fig:heuristicExample}(b) to (e) illustrate the operations for some of these iterations.
-
-Finally, in Figure \ref{fig:heuristicExample}(f), nodes $1$, $4$ and $7$ are equivalent choices since they all admit a distance label $d(i) = 2$.
-Because the source node (node $1$) can now pretend to be permanently labeled, the cycle search routine ends in this iteration.
-As a result, the shortest cycle is $(1, 3, 5, 6, 1)$ and two demands are satisfied.
-Note that energy constraints are satisfied since the energy label of node source is positive ($e(1) = 5$).
-
-
-
+\newpage
 \section{Conclusion}
+In this chapter, we introduced several mathematical model for solving the station location problem.
+This problem deals with the optimal selection of a sub-set of potential carsharing sites which maximize the global demand.
+A first model {\SLP} relies on an enhanced version of the system dimensioning model {\SDP} exposed in Chapter \ref{chap:sdp} and combines diverse additional features.
+In particular, the model limits the total number of \emph{jockeys} (employees in charge of the vehicle relocation operations) restraining the number of simultaneous vehicle relocation operations.
+We highlighted the dependence between both models exhibiting a master-slave scheme.
+Finally, a detailed {\SDP} generalised version of the {\SLP} model was presented.
+
+\medskip
+The second part of the chapter coped with the energy integration.
+In practice, electric vehicles bring many specific attributes involved in the design of a carsharing system.
+Among them, we have elected two major components: the battery range and the power supply of the charging points.
+The first limits the total distance a vehicle can travel without recharging while the second defines the electric rate of charge the power supply delivers.
+The main issue at including those parameters concerns the necessity to track every single vehicles during the period so that a trip can be rejected if the battery level is not sufficient.
+We have shown that the previous model {\SLP} was not suitable at following vehicles.
+More particularly, the transition from a flow-based solution to single vehicle routes cannot be achieve without an interpretation of the flow.
+Besides, this interpretation leading to many vehicle routes configurations has no guaranty that a energetically feasible solution can be found.
+As a consequence, a updated model was required.
+
+\medskip
+We finally introduced the model {\ENERGY}.
+Based on unit-flows, the model avoids vehicle routes interpretation including \emph{rooting variables} (called affectation variables) at each nodes in a modified TEG.
+Although vehicle routes can now be extracted very quickly, their integration in the model has lead to drastically increase the number of variables.
+We thus provided a new set of variables exhibiting some symmetry configurations in the graph and decreasing their number from $\Theta (\nbTimeSteps \cdot \sum\limits_{i \in \stationSet} Z(i)^2)$ to $\Theta (\nbTimeSteps \cdot \sum\limits_{i \in \stationSet} Z(i))$.
+
+\medskip
+The chapter concludes with the description of a greedy heuristic, based on a modified Dijkstra's algorithm including energy components.
+Some limitations due to computation time and solver (CPLEX) capability pointed out the necessity to provide a feasible solution before staring the optimization.
+The algorithm adapts the label-setting algorithm so that the problem become a shorter path problem.
+The main idea is to determine feasible vehicle routes providing boolean weights on arcs so that null values are assigned to arcs contributing to the objective function.
+Adjustments on specific added labels aim to converge to a shorter path verifying energy constraints.
+A formal description of the algorithm as well as a detailed example are provided.
+
+
 %\subsection{Results}
 %In conclusion, we have developed a model to solve the localisation and dimensioning problem with electric constraints.
 %We also produced a state of the art on this problem.
