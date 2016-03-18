@@ -1,7 +1,7 @@
 \begin{tikzpicture}[>=stealth, thick, scale = 1]
 \begin{axis}[
-	height = 10cm,
-	width = 15cm,
+	height = 9cm,
+	width = 14.5cm,
 	axis x line = bottom,
 	axis y line = left,
 	xmin = -3,
@@ -13,26 +13,26 @@
 %	ytick={0,2,...,16},
 	ymajorgrids,
 %	legend entries = {~Satisfied demand, ~Unsatisfied demand},
-%	legend style = {at = {(0.02,0.92)}, anchor = north west, },
-%	legend cell align = left,
+	legend style = {at = {(0.02,0.92)}, anchor = north west, },
+	legend cell align = left,
 	xlabel = {Time of the day},
-	ylabel = {Battery level in kilometres},
+	ylabel = {Energy variations in the battery (in kilometres)},
 	legend pos = north west,
 ]
 %
 % PLOT PROFILE
 \addplot+[mark = none, smooth, fill = blue!30, draw = none,] table[col sep = semicolon, x = TS, y = Vehicle4Profile,]{tikz/D200-vehicle4Profile.csv};
-\addlegendentry{profile}
+\addlegendentry{~Battery variations}
 % ADDITIONAL LEGEND
 \addlegendimage{line legend, red}
-\addlegendentry{spot}
+\addlegendentry{~Electricity price}
 %
 \end{axis}
 %
 % SPOT
 \begin{axis}[
-	height = 10cm,
-	width = 15cm,
+	height = 9cm,
+	width = 14.5cm,
 	axis x line = none,
 	axis y line = right,
 	xmin = -3,

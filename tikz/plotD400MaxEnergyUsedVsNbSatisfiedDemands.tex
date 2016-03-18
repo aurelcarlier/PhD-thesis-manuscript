@@ -1,0 +1,29 @@
+\begin{tikzpicture}[>=stealth, thick, scale = 1]
+\begin{axis}[
+	only marks,
+	height = 9cm,
+	width = 15cm,
+	axis x line = bottom,
+	axis y line = left,
+	xmin = 20,
+	xmax = 150,
+	ymin = 6.5,
+	ymax = 18.5,
+%
+	xtick = {20,40,...,160},
+	ytick={7,...,18},
+	ymajorgrids,
+	xmajorgrids,
+	legend entries = {~Vehicle},
+	legend style = {at = {(0.05,0.92)}, anchor = north west, },
+	legend cell align = left,
+	xlabel = {Battery range value},
+	ylabel = {Number of satisfied demands},
+]
+%
+% PLOT VEHICLES
+\addplot+[] table[col sep = semicolon, x = maxBatteryLevelKm, y = nbDemands,]{tikz/D400-MaxBatteryLevelVsNbSatisfiedDemands.csv};
+%
+%	
+\end{axis}
+\end{tikzpicture}

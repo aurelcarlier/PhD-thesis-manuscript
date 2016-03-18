@@ -1,4 +1,4 @@
-\chapter{Battery range study} \label{chap:slpEnergyExp}
+\chapter{Electric battery range study} \label{chap:slpEnergyExp}
 \begin{bibunit}[ieeetr]
 \minitoc
 \vspace{2cm}
@@ -9,11 +9,11 @@
 \hfill
 \begin{minipage}[c]{.7\linewidth}
 \begin{abstract}
-blabla\\
-blabla\\
-blabla\\
-blabla\\
-blabla\\
+In this chapter, we study the energetic profile of electric vehicles through a carsharing use-case.
+Based on a reduced version of a real carsharing service, we analyse optimal solutions given by the computation of the {\ENERGY} model.
+We focus the experimentations on the study of sufficient EV range in carsharing systems.
+Results show that decreasing actual battery range ($160$ km - $22$ kWh) by half do not alter solution quality.
+Outlooks toward the exhibited residual battery capacity are discussed.
 \end{abstract}
 \end{minipage}
 
@@ -85,7 +85,7 @@ A total $200$ demands over the day were generated between $15$ geographically fi
 % + introduire le nombre de véhicules ici
 Vehicle relocation operations are defined at specific periods of the day.
 Basically, the system can be rebalanced by $10$ jockeys during the morning ($6$h, $7$h and $8$h), around mid-day ($12$h, $13$h and $14$h) and the evening ($20$h, $21$h and $22$h).
-% + justif
+Those arbitrary hours have been considered so that jockeys' working hours can be realistic.
 Vehicles admit a standard battery capacity of $160$ kilometres and stations are equipped with home-charging points.
 Loading an empty battery takes $6$ hours.
 Finally, a maximum of $30$ electric vehicles and $20$ vehicle relocations during the day has been assumed.
@@ -101,7 +101,7 @@ Model parameters are summarized in the following:
 \end{itemize}
 
 
-\section{Results} \label{sec:energyExp:results}
+\section{Results and analysis} \label{sec:energyExp:results}
 
 \begin{figure}[t]
 \flushleft
@@ -113,7 +113,7 @@ Model parameters are summarized in the following:
 \medskip
 Considering a $15$-minutes time-step period, the model finds the exact solution in $10$ seconds.
 % + spec machine
-Figure \ref{fig:plotDemand} depicts both satisfied and unsatisfied demands for each hour of the day.
+Figure~\ref{fig:plotDemand} depicts both satisfied and unsatisfied demands for each hour of the day.
 Note that the global demand can be recovered summing the both values for each time of the day.
 Between midnight and $1$ am for instance, two requests were generated.
 The optimal solution succeeded to fulfil one of the two.
@@ -124,7 +124,7 @@ Numerous reasons can explain why a demand is unsatisfied.
 For instance , no vehicle can be available at the origin station, the remaining battery level cannot support the requested trip, or even the station of destination will not allow the car to park due to the lack of available parking slot.
 Nevertheless, whatever the reasons for not fulfil a request, by using an exact solving method (Branch and bound method), we make sure that the solution (\ie this set of vehicles route configuration) is the one satisfying the maximum number of demands.
 Thus, vehicle routes can be made in order to anticipate future demands since all the requests over the day are known.
-In particular, the unsatisfied demand at midnight observed in Figure \ref{fig:plotDemand} enables the vehicle parked in the station to meet more demands later in the day.
+In particular, the unsatisfied demand at midnight observed in Figure~\ref{fig:plotDemand} enables the vehicle parked in the station to meet more demands later in the day.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[t]
@@ -140,7 +140,7 @@ On average, vehicles cover $108$ kilometres while Autolib' reports $44.6$ kilome
 This dissimilarity results directly from the specific geographical topology of our system where stations are distributed among distant poles.
 More precisely, the inter-station distance ($13.7$ km) is higher in our use-case than in the Autolib' system where only $363$ metres separate two stations.
 From an energetic point of view, this observation may provide an additional interest since vehicles are limited by the range of the battery.
-As observed in Figure \ref{fig:VehicleDistVsNbTSTraveling}, only four vehicles ($13$\%) need to refill during the day to perform their trips since their total travelled distance exceeds the battery capacity threshold.
+As observed in Figure~\ref{fig:VehicleDistVsNbTSTraveling}, only four vehicles ($13$\%) need to refill during the day to perform their trips since their total travelled distance exceeds the battery capacity threshold.
 In that sense, the total battery capacity do not seem as an issue.
 
 It is interesting to note that the vehicle repartition appears uniform regarding the daily covered distance and the time spent on road.
@@ -153,15 +153,15 @@ Contrary to what one might expect, there are no group of vehicles intensively us
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[t]
 \centering
-\input{tikz/plotMaxEnergyUsedVsNbTSTraveling}
-\caption{A caption.}
+\input{tikz/plotD200MaxEnergyUsedVsNbSatisfiedDemands}
+\caption{Vehicle repartition according to their observed battery range (difference between the largest and smallest level) and the number of satisfied requests during the day.}
 \label{fig:MaxEnergyUsedVsNbTSTraveling}
 \end{figure}
 
 \bigskip
 The interest in using the {\ENERGY} model is its ability to track any vehicle in the system and display the associated energy consumption profile over the day.
 In particular, the highest energy variation sustained by the battery in an important indicator to state on the sufficient range a vehicle needs.
-Figure \ref{fig:MaxEnergyUsedVsNbTSTraveling} depicts for each vehicle the observed battery level range (difference between the minimum and the maximum value) according to the number of satisfied demands during the day.
+Figure~\ref{fig:MaxEnergyUsedVsNbTSTraveling} depicts for each vehicle the observed battery level range (difference between the minimum and the maximum value) according to the number of satisfied demands during the day.
 Clearly, the actual $160$ km battery capacity appears widely sufficient.
 The higher observed battery range value, standing at $75$ kilometres, indicates that decreasing the battery by half do not alter the solution quality.
 Moreover, $80$\% of vehicles can operate their route with a total battery capacity of $50$ kilometres.
@@ -174,35 +174,65 @@ A direct consequence is that the battery is cheaper and lighter.
 %, altering the price and the weight.
 As of 2016, a standard 22 kWh battery represents $20$\% of the overall cost of the electric vehicle \cite{avem_prixEVs}.
 
-Secondly, the residual capacity enhanced by results in Figure \ref{fig:MaxEnergyUsedVsNbTSTraveling} could also be intended for other uses.
+Secondly, the residual capacity enhanced by results in Figure~\ref{fig:MaxEnergyUsedVsNbTSTraveling} could also be intended for other uses.
 Today, increasing attention is paid to include more renewable energy in the global mix consumption  scheme.
 Many applications may arise from this highlighted available battery capacity.
-For instance, other vehicles can fill their battery with electricity coming from an internal fleet stock.
-Also, a direct consequence of a capacity greater than necessary is a lower rate of charge.
-The battery lifespan is positively impacted since it relies on the number of cycles the battery experiences over time.
+
+A direct consequence of an overcapacity is a lower loading frequency.
+Technically, the lifespan of actual batteries (regardless of the technology) depends primarily on the number of charge cycles the battery experiences over time.
+In order to increase the battery lifespan, it is better to do micro-loadings than full charges.
+Indeed, going through full discharge deteriorate actual EV battery.
+%Thus, decreasing the consumption range the battery endures each time it is charge helps improve its lifespan.
+
+Also, the substantial energy may supply housing needs and, more globally, every energy consumer.
+With the recent development of smart grid technologies, electric vehicles are no longer considered as energy consumers, but also as energy providers (\see vehicle-to-grid - V2G).
+In addition, reducing energy during peak hours is important and a higher electricity storage may result in performing peak curtailments.
+
+Finally, the overall fleet stock might serve the vehicles themselves.
+In a same station, vehicles can charge their batteries with electricity delivered from the internal fleet stock rather than the global electric network.
+As a result, the carsharing system emancipate itself from the financial dependency with the transmission system operator.
 
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-  may be consequent.
- and may have a huge impact on 
-
-This result, though, must be consider carefully.
-Technically, the lifespan of actual batteries (regardless of the technology) depends primarily on the number of charge cycles.
-More precisely, the depth of discharge have is correlated with the number of charge discharge cycles a battery can performed \cite{}.
-
-When 
-Another interesting result concerns 
-As depicted 
-
-
-\begin{figure}[h]
-\centering
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[p]
+%\centering
+\flushleft
 \input{tikz/plotProfileV4}
-\caption{Energetic profile of vehicle 4.}
+\caption{Energy profile of a specific vehicle during the day in relation to the electricity price variation in France (November, 10th 2015).}
 \label{fig:plotProfileV4}
 \end{figure}
+
+\bigskip
+Looking more closely at vehicle energy consumption, Figure~\ref{fig:plotProfileV4} shows the consumption profile of the vehicle achieving the higher battery range; \ie the vehicle on the right side of the {Figure~\ref{fig:MaxEnergyUsedVsNbTSTraveling}} performing six demands over the day.
+The battery level peak of $75$ km is reached just before $4$ pm.
+It is justified by the necessity to satisfy three successive demands between $4$ pm and $6$ pm without any time to load the battery.
+The peak at $20$ pm is a vehicle relocation.
+
+The red curve plot represents the electricity price variation in France during November, 10th 2015.
+Clearly, the time range in which the vehicle is in charge corresponds to the moments the electricity is expensive.
+This is due to the fact that the price follows the electricity demand, precisely similar to the travel demand.
+Besides, no constraints on the accurate time to charge vehicles nor relations with electricity prices are consider in the model {\ENERGY}.
+Further research indents to improve the consumption price charging vehicles by night when the system can benefit from low prices.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[p]
+%\centering
+\flushleft
+\input{tikz/plotD400MaxEnergyUsedVsNbSatisfiedDemands}
+\caption{Vehicle repartition according to the observed battery range and the number of satisfied demands. Results are based on the $400$-demands scenario solution.}
+\label{fig:plotD400MaxEnergyUsedVsNbSatisfiedDemands}
+\end{figure}
+
+\bigskip
+When the carsharing demand doubles to $400$ daily requests, the global satisfaction rate looses $6$\%, reaching a value of $82$\%.
+With the same system holding $30$ vehicles, this loss is understandable.
+On average, $11$ trips are ensured by each vehicle and slightly less than six hours are spent on roads.
+Globally, similar profiles regarding the daily cover distance and the time spent on road are observed.
+Vehicles travel however $214$ kilometres on average, twice more than previously and $4.5$ times more than Autolib'.
+This time, $83$\% of vehicles need to charge during the day as their total cover distance exceeds the battery capacity.
+Interesting result can be observed in Figure~\ref{fig:plotD400MaxEnergyUsedVsNbSatisfiedDemands} showing the range in vehicles' batteries for this demand scenario.
+With actual battery range ($160$ km), no vehicle is limited by the battery capacity to perform its route.
+Moreover, almost $76$\% of vehicles still can do it with a range of $85$ kilometres.
 
 % FIGURE TEMPLATE
 %\begin{figure}[t]
@@ -212,9 +242,35 @@ As depicted
 %\label{fig:}
 %\end{figure}
 
-\newpage
+%\newpage
 \section{Conclusion} \label{sec:energyExp:conclusion}
+With the help of the model {\ENERGY} previously introduced, this chapter studied a realistic carsharing use-case.
+As a first step, a scenario based on a fixed system of $15$ stations and $30$ vehicles investigated the electric battery usage when vehicles are requested as observed in the reality.
+A total of $200$ daily demands allow to observe similar operational performance as the Parisian carsharing system Autolib'.
+Targeted indicators were the average number of satisfied demands per vehicle and the average daily hours spent on roads.
 
+\medskip
+Results shown that the necessity to charge during the day, according to a standard battery capacity of $160$ kilometres ($22$ kWh), is almost non existent.
+On average, a vehicle covers $108$ km per day and its easy to state that starting with a full-charge battery in the morning, most of them can achieve their route at the end of the day.
+More interestingly, the observed maximum battery range (difference between the largest and smallest level) indicates that divided the capacity by half do not depreciate the solution quality.
+In other words, the exact same solution is still viable if the total battery capacity is set to $80$ kilometres.
+
+\medskip
+We discussed the perspectives of using this induced residual capacity.
+More especially, two opportunities has been highlighted.
+For car manufacturers, it can lead to financial costs savings; a smaller battery is both cheaper and lighter. %  while increase the performance of the vehicle
+For the system itself and its direct environment, the substantial stock of energy may be used for many other usages as load adjustments or peak levelling.
+Those outcomes may help urban planning policymakers design more efficient systems.
+
+\medskip
+A deeper look at vehicles' energy consumption let us noticed that vehicles are not charged at appropriate periods when energy is cheap.
+As previous results shown, the unused battery capacity might probably help to store energy during the night when the electricity price is attractive.
+Further research intend to improve the energy management of the carsharing system in accordance with the costs.
+
+\medskip
+Finally, we investigated the consequences of an increasing demand on the system sustainability and optimal battery range.
+In this second scenario with twice demands, we observed that vehicles really need to charge.
+However, actual battery range still appeared well suited and the maximum battery range never exceeded $160$ kilometres.
 
 
 %\section{Results}
