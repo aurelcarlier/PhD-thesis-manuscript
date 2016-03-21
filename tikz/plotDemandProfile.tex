@@ -1,0 +1,29 @@
+\begin{tikzpicture}[>=stealth, thick, scale = 1]
+%
+\begin{axis}[ % DEMAND PROFILE
+	height = 10cm,
+	width = 15cm,
+	axis x line = bottom,
+	axis y line = none,
+	xlabel = {Hours of the day},
+	xtick={0,2,...,24},
+	xticklabels = {0h, 2h, 4h, 6h, 8h, 10h, 12h, 14h, 16h, 18h, 20h, 22h, 0h},
+	xmin = -0.5,
+	xmax = 24.5,
+	ymin = 0,
+	ymax = 95,
+	legend entries = {~Demand profile},
+	legend style = {at = {(0,1)}, anchor = north west, },
+	legend cell align = left,
+]
+\fill[red!20, ] (axis cs:7,0) rectangle (axis cs:9,100);
+\fill[red!20, ] (axis cs:15,0) rectangle (axis cs:19,100);
+
+\draw (axis cs:7,5) edge[red, <->, line width = .7pt] (axis cs:9,5);
+\draw (axis cs:15,5) edge[red, <->, line width = .7pt] (axis cs:19,5);
+\draw node[rotate = 90, red, anchor = west] at (axis cs:8,7){Morning Rush};
+\draw node[rotate = 90, red, anchor = west] at (axis cs:17,7){Evening Rush};
+
+\addplot[mark = none, draw = blue!60, smooth, line width=2pt] table [col sep=semicolon, x=TS, y=DEMAND]{tikz/DemandProfile.csv};
+\end{axis}
+\end{tikzpicture}

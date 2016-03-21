@@ -10,19 +10,25 @@
 %\pagenumbering{roman}
 %\include{remerciements-acknowledgments/remerciements-acknowledgments}
 %\include{resume-abstract/resume-abstract}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \renewcommand*\contentsname{Table of contents}
 \dominitoc
+\cleardoublepage
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
 \tableofcontents
 \cleardoublepage
-\pagenumbering{arabic}
-\setcounter{page}{1}
+%\pagenumbering{arabic}
+%\setcounter{page}{1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\listoffigures
+%\listoftables
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\include{chap-introduction/intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\include{chap-backgroundAndProblem/backgroundAndProblem}
+\include{chap-backgroundAndProblem/backgroundAndProblem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-\setcounter{chapter}{4}
+%\setcounter{chapter}{4}
 %\part{The System Dimensioning Problem}
 %\include{chap-sdp/sdp}
 %\include{chap-sdpExp/sdpExp}
@@ -30,7 +36,7 @@
 %%%
 %\part{The Station Location Problem and energy aspects}
 %\include{chap-slpAndEnergy/slpAndEnergy}
-\include{chap-slpAndEnergyExp/slpAndEnergyExp}
+%\include{chap-slpAndEnergyExp/slpAndEnergyExp}
 %\include{chap-conclusionPart2/conclusionPart2}
 %%%
 %\include{chap-conclusion/conclusion}
