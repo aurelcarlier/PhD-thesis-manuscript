@@ -88,46 +88,114 @@ Propitious indicators and worldwide experts anticipate further development for t
 
 
 \subsection{Carsharing models}
-We can find over the world three different types of carsharing systems called respectively 'Round-trip', 'One-way' and 'Free-floating' systems.
-They can be distinguished by the fact of having or not stations.
-The fist two are station-based whereas the third one, appeared recently, offers even more flexibility leaving the choice to the user to leave a vehicle where he wants.
+In this thesis, we focus on carsharing systems managed by private operators.
+Three different models called respectively 'Round-trip', 'One-way' and 'Free-floating' can be find around the world.
+They can be distinguished by their constraints related to the use of vehicles and the fact of having or not stations.
+In order to access the service, carsharing companies generally required members to pay a yearly registration fees.
+Then, a monthly membership based on the time spent on roads and the distance travelled testifies to the personal usage of each member.
+
+\medskip
+The technology provided by the operator can vary enormously but generally, members have access to vehicles on-the-go.
+They can also make a reservation online or using (smart)phones to guarantee the availability of a vehicle.
+
+Round-trip and one-way systems are said \textit{station-based}.
+Vehicles are dispersed all across the city through many indicated stations.
+Station-based systems can be formally defined as \cite{shaheen_short_1999} follows:
+\begin{quote}
+``Carsharing involves a small to medium fleet of vehicles, available at several stations, to be used by a relatively large group of members.''
+\end{quote}
+Generally, they dispose of their own dedicated parking lots and provide additional specific infrastructure if necessary.
+The carsharing service Autolib' in Paris, France for instance offers charging points for electric vehicles and kiosks for customer service.
+
+% whereas the third one, appeared recently, offers more flexibility leaving the choice to the user to leave a vehicle where he wants.
 
 
 \subsubsection{The Round-Trip system}
+\begin{wrapfigure}[6]{r}{3cm}
+\vspace{-.4cm}
+\begin{tikzpicture}[scale = .6]
+\draw[very thick, rounded corners] (-.5,-.5) rectangle(.5,.5);
+\draw node at (0,0){\textbf{P}};
+%\fill[black] (0,0) circle (.5);
+\draw[very thick, ->, > = stealth,] (0,-.7) arc (-160:160:2);
+\end{tikzpicture}
+\end{wrapfigure}
 Historically, the first carsharing scheme to be implemented was the round-trip system.
-It requires users to return vehicles to the station they were picked up.
-They are simple to design and manage since the incoming demand in each station is sufficient to plan stocks.
-The user behaviour in such systems is mainly oriented to leisure and household shopping purpose \cite{barth_shared_use_2002, costain_synopsis_2012}.
+As such, it is today the best established commercially and has been largely studied.
+Basically, It requires users to return vehicles to the station they were picked up.
+Such systems are simple to design since the incoming demand in each station is sufficient to plan vehicle stocks.
+The user behaviour is mainly oriented to leisure and household shopping purpose \cite{barth_shared_use_2002, costain_synopsis_2012}.
 
 
-\subsubsection{One-way systems}
-Shaheen et al. (1999) \cite{shaheen_short_1999}:
-\begin{quote}
-Carsharing involves a small to medium fleet of vehicles, available at several stations, to be used by a relatively large group of members.
-\end{quote}
-The second one, called ``one-way'' carsharing system, is much more flexible since it allows users to pick up a vehicle from a station and return it in a different one, which can be different from the origin.
-Unfortunately, this greater flexibility comes with hard operational problems, listed and described below, due to the uneven nature of the trip pattern in urban areas.
-However, let notice that despite these difficulties for the operator, one-way system captures more trips than the alternative system thanks to this flexibility which is, as showed in \cite{efthymiou_which_2012}, a critical factor to join a carsharing scheme.
+\subsubsection{The One-way system}
+
+\begin{wrapfigure}[6]{l}{3cm}
+\vspace{-.4cm}
+\centering
+\begin{tikzpicture}[scale = .6]
+\draw[very thick, rounded corners] (-.5,-.5) rectangle(.5,.5);
+\draw node at (0,0){\textbf{P}};
+\draw[very thick, rounded corners] (2.5,2.5) rectangle(3.5,3.5);
+\draw node at (3,3){\textbf{P}};
+%\fill[black] (0,0) circle (.5);
+%\fill[black] (3,3) circle (.5);
+\draw (.5,.5) edge[very thick, ->, > = stealth,] (2.5,2.5);
+\end{tikzpicture}
+\end{wrapfigure}
+
+One-way carsharing scheme is more flexible than round-trip.
+It allows users to pick up a vehicle from a station and return it in a different one, possibly distinct from the origin.
+Unfortunately, this greater flexibility comes with hard operational problems due to the uneven nature of the trip pattern in urban areas.
+Indeed, empty stations exclude potential requests to be satisfied.
+Conversely, crowded stations do not allow an incoming vehicle to park.
+Thus, the system imbalance must be corrected so that vehicles can be relocated to suitable places.
+This problem referred as the vehicle imbalance problem is discussed thereafter.
+%, listed and described below,
+
+However, let notice that despite these difficulties for the operator, one-way system captures more trips than the alternative system thanks to this flexibility which is a critical factor to join a carsharing scheme \cite{efthymiou_which_2012}.
 
 
-\subsubsection{Free-floating systems}
+\subsubsection{The Free-floating system}
+
+\begin{wrapfigure}[6]{r}{3cm}
+\vspace{-.4cm}
+\centering
+\begin{tikzpicture}[scale = .6, > = stealth,]
+\fill[black] (0,0) circle (.5);
+\foreach \angle in {0,45,...,315} {
+\draw (\angle:0.6) edge[very thick, ->, > = stealth,] (\angle:2);
+};
+\end{tikzpicture}
+\end{wrapfigure}
+
 Nowadays, many carsharing schemes have been tested and experimented.
-Although the first of them have been station-based designed, we have witnessed in the last decade the trend to create carsharing without stations.
+Although the first of them have been station-based designed, we have witnessed in the last decade the emergence of carsharing models without stations.
 This new feature comes with the propensity to assign more and more flexibility to the system.
+Point-to-point free-floating carsharing (often referred to as flexible carsharing) corresponds to a sharing scheme where usage is typically spontaneous.
+Vehicle reservations 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%% intro Sean
-%\subsection{Advantages and drawbacks}
-%Today, it continues to grow in major cities and tries to conquer middle sized cities.
-%In 2014, carsharing had 4.94 million members and 92 200 cars \cite{frost_strategic_2014}.
-%We can explain this will to make carsharing succeed by three facts.
-%Firstly, carsharing vehicle spend more time on the road in order to fulfil other requests so require fewer parking spaces \cite{mitchell_reinventing_2010} than personal car which spends 90\% of its time parked \cite{hu_summary_2004}.
-%Secondly, research \cite{sioui_carsharing_2013} proves that carsharing tends to reduce the average time spent driving.
-%And finally, carsharing has also positive impacts on the environment.
+The system operator ensures a service quality based on vehicle maintenance and available parking places.
+
+\subsection{Positive impacts}
+% on the transportation system
+As an innovative alternative to private car ownership, carsharing is a interesting trade off between distance and flexibility.
+On the one hand, the car provides the freedom to cover entire urban areas.
+Even with electric vehicles, for which the autonomy is limited, distances of more than $150$ kilometres can be considered.
+On the other hand, the fact that cars are available on-demand relieves users from the rigidity of public transport timetables.
+Moreover, carsharing reduces the time spent at finding a parking lot, which is often important in dense urban areas.
+In France, its contribution to the global congestion is evaluated between $5$ and $10$\%  \cite{stationnement_intelligent_cerema}.
+
+\medskip
+In this section, 
 
 
-\subsection{Impacts on the transportation system}
+%It services offers many benefits to various actors.
+ 
 
-Different studies have evaluated that for a user driving less than $10,000$ kilometres per year (as much as $15,000$ km/y), it also could be a real alternative to private car, in a financial way, with respect to local costs \cite{litman_evaluating_2000, prettenthaler_ownership_1999}.
+Different studies evaluated that carsharing could be a real alternative to private car.
+With respect to local costs, a car user driving less than $10,000$ kilometres per year (as much as $15,000$ km/y) could save money using carsharing \cite{litman_evaluating_2000, prettenthaler_ownership_1999}.
+
+%fill the gap 
 
 \subsubsection{Urban mobility}
 
