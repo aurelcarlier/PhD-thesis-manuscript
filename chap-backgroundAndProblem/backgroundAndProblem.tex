@@ -35,8 +35,10 @@
 The main idea of carsharing is to share a fleet of cars between users.
 Basically, it's a model of car rental where people rent cars for short periods of time.
 Carsharing systems are mainly intended for occasional drivers whom gain the benefit of private vehicle use without the costs and responsibilities of ownership \cite{shaheen_carsharing_1998}.
+Its principle is based on the vehicle usage rather than vehicle possession.
 Costs related to insurance, maintenance, fuel (or electricity), taxes, depreciation, etc. are supported by car owners, \ie mostly cooperative organizations or private operators.
 They differ and have to be distinguished from traditional auto-rental services mainly because they are oriented to short-term rentals and fuel costs are included in the rental fee.
+Mainly located in dense urban areas, they contribute to fill the gap between existing modes of transportation \cite{louvet_enquete_2013}.
 
 \medskip
 Nowadays, there are many implementations of carsharing systems adopting many different forms but generally, individuals access vehicles on an as-needed basis by joining an organisation that maintains a fleet of vehicles (essentially cars and light trucks) in a network of locations.
@@ -70,9 +72,9 @@ Founded in 2000, its global vehicle fleet exceeds $12,000$ vehicles and $950,000
 \medskip
 Last decade has recorded the highest carsharing market growth.
 In 2007, the total worldwide number of carsharing members was estimated to $348,000$ and the shared fleet of vehicles to nearly $11,700$ \cite{shaheen_growth_2007}.
-Almost ten years later, in 2014, these numbers are approximated to $4,94$ billions ($\simeq \times 14$) and $92,200$ vehicles respectively ($\simeq \times 8$) \cite{statista_carsharingNumbers}.
+Almost ten years later, in 2014, these numbers are approximated to $4,94$ millions ($\simeq \times 14$) and $92,200$ vehicles respectively ($\simeq \times 8$) \cite{statista_carsharingNumbers}.
 Numerous programs are launched here and there among all continents.
-It continues to expand in large part due to advanced technologies as .
+It continues to expand in large part due to advanced technologies whose the greatest representatives are surely smart-phones.
 Besides, incentive public policies allows private firms to reserve public on-street parking making the service more convenient and attractive.
 Propitious indicators and worldwide experts anticipate further development for the forthcoming years \cite{shaheen_carsharing_2013}.
 
@@ -83,7 +85,7 @@ Propitious indicators and worldwide experts anticipate further development for t
 % If the organisation renting the fleet may be , most of them are today run by a company managing the system. % a reformuler
 % , as peer-to-peer carsharing for instance,
 
-\cite{louvet_enquete_2013} (présentation CS)
+% (présentation CS)
 
 
 
@@ -92,22 +94,25 @@ In this thesis, we focus on carsharing systems managed by private operators.
 Three different models called respectively 'Round-trip', 'One-way' and 'Free-floating' can be find around the world.
 They can be distinguished by their constraints related to the use of vehicles and the fact of having or not stations.
 In order to access the service, carsharing companies generally required members to pay a yearly registration fees.
-Then, a monthly membership based on the time spent on roads and the distance travelled testifies to the personal usage of each member.
+Sometimes it is a deposit that is refunded when membership ends.
+Then, a monthly rate based on the time spent on roads and the distance travelled testifies to the personal usage of each member.
 
 \medskip
-The technology provided by the operator can vary enormously but generally, members have access to vehicles on-the-go.
+The technology provided by the operator can vary enormously.
+In Europe, most operator offer different kind of vehicles, from small city cars to large cargo vehicles.
+Generally, members have access to vehicles on-the-go using smart cards or PIN (personal identification number).
 They can also make a reservation online or using (smart)phones to guarantee the availability of a vehicle.
+The service can sometimes be related to public transport, offering a large mobility supply to individuals.
 
+\medskip
 Round-trip and one-way systems are said \textit{station-based}.
-Vehicles are dispersed all across the city through many indicated stations.
-Station-based systems can be formally defined as \cite{shaheen_short_1999} follows:
-\begin{quote}
-``Carsharing involves a small to medium fleet of vehicles, available at several stations, to be used by a relatively large group of members.''
-\end{quote}
-Generally, they dispose of their own dedicated parking lots and provide additional specific infrastructure if necessary.
-The carsharing service Autolib' in Paris, France for instance offers charging points for electric vehicles and kiosks for customer service.
-
-% whereas the third one, appeared recently, offers more flexibility leaving the choice to the user to leave a vehicle where he wants.
+They involve a small to medium fleet of vehicles, available at several stations, to be used by a relatively large group of members \cite{shaheen_short_1999}.
+Vehicles are dispersed all across the city through many indicated stations, where a fixed number of parking places stores the vehicles.
+Generally, carsharing companies dispose of their own dedicated parking lots situated on-street or off-street according to contractual arrangement with the entity (private or public) managing the parking.
+The number of lots can varies according to the size of the system and the available urban space, but since carsharing is mainly implanted in dense urban areas, stations are often small.
+In Paris, for instance, the number of parking places is between $4$ and $7$ \cite{autolib_rapport_2014}.
+Also, station-based systems can provide additional specific infrastructure if necessary.
+The carsharing service Autolib' in Paris, offers charging points for electric vehicles and kiosks for customer service.
 
 
 \subsubsection{The Round-Trip system}
@@ -169,12 +174,15 @@ However, let notice that despite these difficulties for the operator, one-way sy
 \end{wrapfigure}
 
 Nowadays, many carsharing schemes have been tested and experimented.
-Although the first of them have been station-based designed, we have witnessed in the last decade the emergence of carsharing models without stations.
-This new feature comes with the propensity to assign more and more flexibility to the system.
+Although first ones have been station-based designed, we have witnessed in the last decade the emergence of carsharing models without stations.
+The user can picked up on-street parked vehicles owned by the system operator and parked on any legal parking space within a defined area.
+This new feature comes with the propensity to assign more and more flexibility to the service.
 Point-to-point free-floating carsharing (often referred to as flexible carsharing) corresponds to a sharing scheme where usage is typically spontaneous.
-Vehicle reservations 
-
+Vehicle reservations are mostly made several minutes in advance.
 The system operator ensures a service quality based on vehicle maintenance and available parking places.
+The largest free-floating system is operate by car2go mainly in Germany.
+In 2015, the service account for more than one million members.
+% whereas the third one, appeared recently, offers more flexibility 
 
 \subsection{Positive impacts}
 % on the transportation system
@@ -182,26 +190,64 @@ As an innovative alternative to private car ownership, carsharing is a interesti
 On the one hand, the car provides the freedom to cover entire urban areas.
 Even with electric vehicles, for which the autonomy is limited, distances of more than $150$ kilometres can be considered.
 On the other hand, the fact that cars are available on-demand relieves users from the rigidity of public transport timetables.
-Moreover, carsharing reduces the time spent at finding a parking lot, which is often important in dense urban areas.
+Moreover, station-based carsharing systems aim at reducing the time spent at searching for a parking lot, which is often important in dense urban areas.
 In France, its contribution to the global congestion is evaluated between $5$ and $10$\%  \cite{stationnement_intelligent_cerema}.
+As a consequence, carsharing is now considered as an attractive transportation mode filling the gap between traditional public transport and private vehicle use.
 
 \medskip
-In this section, 
+In the last decade, several authors have showed that carsharing systems have positive impacts on users, the transportation system and the environment.
+Although not all of these commonly attested benefits are documented with empirical data, next sections present substantial agreements about carsharing on the urban mobility, financial gains and the environment.
 
-
-%It services offers many benefits to various actors.
- 
-
-Different studies evaluated that carsharing could be a real alternative to private car.
-With respect to local costs, a car user driving less than $10,000$ kilometres per year (as much as $15,000$ km/y) could save money using carsharing \cite{litman_evaluating_2000, prettenthaler_ownership_1999}.
-
-%fill the gap 
 
 \subsubsection{Urban mobility}
 
-In the last decade, several authors have showed that these systems have a positive impact on urban mobility, mainly because of a higher utilization rate than private vehicle \cite{litman_evaluating_2000, schuster_assessing_2005}.
-Indeed, shared vehicles spend more time on the road and less time parked (which represent for a private car almost 95\% of its total use time, as mentioned in \cite{transflash_2013}), thereby decreasing parking requirements in dense areas \cite{mitchell_reinventing_2010} and reducing the average number of vehicles per household \cite{martin_impact_2010, ter_schure_cumulative_2012}.
+The carsharing economic model is founded on the use of the vehicles.
+The cost for moving from A to B depends on the distance and the time the user spend on the road.
+As such, carsharing infers on user behaviours, whom aligned their car usage on those criterion, and consequently provides greater incentive for members to be selective about driving.
+
+% inherent
+% infer
+A study conducted in 2004 reports that carsharing users reduce their vehicle kilometres traveled (VKT) - or vehicle miles traveled (VMT) - by $50$\% after joining the organisation \cite{cervero_city_2004}.
+More recent result evaluated this decrease to $27$\% in 2011 \cite{martin_greenhouse_2011}.
+
+% Besides, some surveys indicate that carsharing users tend to optimize their trips more often than with their own car.
+
+Besides, the use of carsharing systems led to a fall in car ownership rates and lower car use.
+The number of vehicles per household is half lower for carsharing users \cite{martin_impact_2010, ter_schure_cumulative_2012}.
+
+Moreover, the 
+
+
+ shared vehicles spend more time on the road and less time parked (which represent for a private car almost 95\% of its total use time, as mentioned in \cite{transflash_2013})
+Sharing a vehicle allows members to share its cost.
+
+
+
+
 It also decreases the total number of vehicles on the road, since one vehicle can be driven by several users and thus improving the traffic fluidity.
+
+
+
+
+As a consequence, parking requirements in dense areas decreases \cite{mitchell_reinventing_2010} as well as the average number of vehicles per household \cite{martin_impact_2010, ter_schure_cumulative_2012}.
+
+Because of higher utilization rates than private vehicles \cite{litman_evaluating_2000, schuster_assessing_2005}, many studies show that using carsharing help decrease the number of vehicles on the road.
+
+\subsubsection{Economical aspects}
+General costs related to car ownership are commonly split into fixed and variable expenses.
+According to the total distance travelled, driving habits or local parking costs, the variable costs might be very different from one car owner to the other.
+However, the share of fixed costs, such as the purchase price of the vehicle, its depreciation over time or insurance, still remains predominant \cite{cout_reel_auto}.
+In this context, embracing a carhsharing service where the price only depends on the vehicle usage can grants its users the car mobility at interesting costs.
+
+\medskip
+Nevertheless, those benefits are not relevant for every car user.
+Basically, the less the car is used, the more carsharing services become interesting.
+With respect to local costs, researches have shown that only car users driving less than $10,000$ kilometres per year (as much as \hbox{$15,000$ km/y}) could save money using carsharing \cite{litman_evaluating_2000, prettenthaler_ownership_1999}.
+
+% using carsharing is considered as a complementary affordable mobility solution that may replace the car ownership for some individuals.
+
+% Different studies evaluated that carsharing could be a real alternative to private car.
+
 
 \subsubsection{Environmental effects}
 Furthermore, it is now recognized that carsharing systems have positive environmental effects.
