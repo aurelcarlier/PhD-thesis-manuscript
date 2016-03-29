@@ -45,13 +45,13 @@ Nowadays, there are many implementations of carsharing systems adopting many dif
 These are usually deploy in the vicinity of public transport stations, neighbourhoods, employment centres and universities \cite{shaheen_carsharing_1998}.
 
 \bigskip
-Although the concept of carsharing is constantly evolving, one of the most concise definition could be the one given by Millard-Ball et al. in (2005) \cite{millard_ball_car_sharing_2005} which defines carshaing as
-\begin{quote} % there are plenty of formal definition in the literature
+Although the concept of carsharing is constantly evolving, one of the most concise definition could be the one given by \cite{millard_ball_car_sharing_2005} which defines carshaing as
+\begin{quote}
 ``a membership program intended to offer an alternative to car ownership under which persons or entities that become members are permitted to use vehicles from a fleet on an hourly basis.''
 \end{quote}
-More recently, in 2010, the french law defined carsharing systems under these terms \cite{cs_loi_2010}:
+More recently, in 2010, the french law defined carsharing systems under these terms :
 \begin{quote}
-``Carsharing is the pooling of an inland transport motor vehicles fleet for the benefit of subscribers. Each one of them can access a driverless vehicle for the ride of his choice for a limited time.''
+``Carsharing is the pooling of an inland transport motor vehicles fleet for the benefit of subscribers. Each one of them can access a driverless vehicle for the ride of his choice for a limited time.'' \cite{cs_loi_2010}
 \end{quote}
 
 \bigskip
@@ -261,91 +261,116 @@ Addressed problems are generally segmented into the following categories \cite{c
 \end{itemize}
 
 Although slightly outdated, this categorization is inspired by a literature review of Millard-Ball et al. \cite{millard_ball_car_sharing_2005}.
-A complete updated overview on problems arising in such systems can however be found in \cite{jorge_carsharing_2013}.
+A complete updated overview on problems arising in such systems can however be found in the work of Jorge et al. \cite{jorge_carsharing_2013}.
 
 \medskip
 In a previous talk, we have already given an overview of the positive impacts carsharing can provide.
-Consequently, the following focus on market analysis and problems related to system operations and management.
+The following sections will consequently focus on market analysis and problems related to system operations and management.
 
 % categories
 % more attention 
 
 \subsubsection{Social aspects}
-Some studies are also conducted to characterize and analyse who the users of these systems are.
-Using statistical data and surveys, most studies demonstrated important tendencies: high correlation with the use of public transports, dwelling place in dense areas \cite{cervero_city_2003, millard_ball_car_sharing_2005, burkhardt_who_2006}, age between mid-30s to mid-40s, people highly educated and environmentally aware \cite{costain_synopsis_2012, efthymiou_which_2012, millard_ball_car_sharing_2005, brook_carsharingstart_2004, lane_phillycarshare_2005, zheng_carsharing_2009}.
-Moreover, as showed in \cite{costain_synopsis_2012, efthymiou_which_2012, zheng_carsharing_2009}, the accessibility to the stations, in terms of distance between home/work and the nearest station, is a critical factor to joining a carsharing system.
+Who are the users and why they use the service are probably the major addressed questions about carsharing.
+In the domain of transportation, this popular topic is known as the \emph{demand modelling}.
+Most works aim at characterize and analyse members' behaviour, so that the specific transportation demand associated to carsharing can be estimated mathematically.
+The outputs of such models are then used to deal with operational research problems and system management.
+By doing so, carsharing decision makers are endowed with accurate inputs helping the resolution of other problems more efficiently.
 
 \medskip
-To be able to give a good prediction of a carsharing service, it's really important to identify the main factors which generate and influence the demand.
-% Sean : Main factors to join a carsharing program are: the accessibility to the stations, the nearest station, the age of the station and the percentage of people using their personal car \cite{jorge_carsharing_2013}.
-Stillwater et al. \cite{stillwater_carsharing_2009} have concluded that the most significant variables were: the street width (-), the provision of a railway service (-), the percentage of drive-alone commuters (-), the percentage of households with one vehicle (+), and the average age of the stations (+).
-We indicate by (-) or (+) when the indicator is negatively or positively related to carsharing demand.
+Using statistical data and user surveys, most studies have demonstrated important tendencies.
+Basically, the average carsharing member has the following characteristics \cite{brook_carsharingstart_2004, millard_ball_car_sharing_2005, lane_phillycarshare_2005, zheng_carsharing_2009, costain_synopsis_2012, efthymiou_which_2012}:
+\begin{itemize}
+\item age between mid-30s to mid-40s,
+\item people highly educated and environmentally aware,
+\item income higher than average.
+\end{itemize}
+
+\bigskip
+Regarding the geographical aspects of carsharing, its usage is highly correlated with the use of public transports and most successful applications are running in dense urban areas \cite{cervero_city_2003, millard_ball_car_sharing_2005, burkhardt_who_2006}.
+Moreover, the accessibility to the stations, in terms of distance between home/work and the nearest station, is identified as a critical factor to joining a carsharing system \cite{zheng_carsharing_2009, costain_synopsis_2012, efthymiou_which_2012}.
+
+
+\medskip
+Identify the main factors which generate and influence the demand greatly contribute to give a good prediction of a carsharing service.
+Stillwater et al. \cite{stillwater_carsharing_2009} compared the use of carsharing vehicles to build-environment and demographic factors in the US.
+They concluded that the most significant variables were: the street width ($-$), the provision of a railway service ($-$), the percentage of drive-alone commuters ($-$), 
+the percentage of households with one vehicle ($+$), and the average age of the stations ($+$).
+Signs ($-$) or ($+$) are used to indicate whether the indicator is negatively or positively related to the carsharing demand.
 The street width and the percentage of drive-alone commuters may not have a clear intuitive explanation at first sight although those metrics are significantly related to the level of carsharing demand.
-The authors postulate that street width contains informations about pedestrian environment (where narrow streets are more pedestrian friendly) and about the land use in general (narrow streets trend to denote older residential or mixed-use development) witch make sense since carsharing and walking behaviour are known (see e.g. \cite{cervero_city_2003}) to be strongly related.
-The proportion of drive-alone commuters are negatively related because these people generally would already own vehicles and high level of vehicle commuting tend to signify a neighbourhood that has poor public transit or other high-density mode amenities.
+The authors postulated that street width contains informations about pedestrian environment (where narrow streets are more pedestrian friendly) and about the land use in general (narrow streets trend to denote older residential or mixed-use development) which make sense since carsharing and walking behaviour are known to be strongly related \cite{cervero_city_2003}.
+The proportion of drive-alone commuters are negatively related because these people are in general already vehicle-owners.
+Indeed, a high level of commuting vehicles tend to signify that the neighbourhood has a poor public transit or is already provided with high-density mode amenities.
+
 
 \medskip
-Another study conducted by Ciari et al. \cite{ciari_estimation_2013} uses an activity-based micro-simulation model to estimate travel demand and understand the effect carsharing system on urban mobility, considering others transportation modes such as public transport, car, bicycle and walking.
-They suggested and evaluated a cost function in an open-source activity-based multi-agent simulator called MATSim \cite{matsim_webPage} which informs the user of the cost using carsharing as mode of transportation.
-Thus, they have led to a modal split model, giving plausible results compared to real data (the urban area of Zurich, Switzerland), which can capture the proportion of total demand that could use this mode of transportation, depending on the access to the cars and the dependent fee structure.
-In most cases, studies are context specific.
+Another study conducted by Ciari et al. \cite{ciari_estimation_2013} uses an activity-based micro-simulation model to estimate travel demand.
+The authors also try to understand the effects of a carsharing system on urban mobility, considering others transportation modes such as public transport, car, bicycle and walking.
+They suggested and evaluated a carsharing demand model using an open-source activity-based multi-agent simulator called MATSim \cite{matsim_webPage}.
+The framework simulates the daily life of individuals (agents) and produces travel demand as a side product.
+The system process iteratively computes transportation plans and traffic flow simulations until a relaxed state is reach.
+A transportation plan is a list of transportation modes deduced from a user activity-chain.
+The latter is the activities a user plans to do during the day with respect to its socio-demographic attributes.
+An aggregated cost function (including carsharing as a mode in itself) returns a score, evaluating quantitatively the plans of each users.
+The agents continuously try to improve their score varying their departure time, transport modes, routes and location of some activities.
+
+The authors led to a modal split model giving plausible results in comparison with real \mbox{data -- the} urban area of Zurich, Switzerland.
+According to the access to the cars and the time dependent fee structure, the model captures the proportion of the total transportation demand that could use carsharing.
+Although they observed general pattern of mobility at macro-scale, the authors also pointed out that results are context specific and computationally intensive.
+
+
+\bigskip
+Actually, in most cases, studies are context specific.
 Trip patterns and travel behaviour can be different from one country to another since it is related to local and regional characteristics (culture, habits, etc.), making the standardization more complex.
-Furthermore, as mentioned in \cite{jorge_carsharing_2013}, demand estimation has not so far been addressed in the literature for one-way carsharing systems, and a relevant model for such models is nowadays not available.
+Furthermore, carsharing demand estimation has not so far been addressed in the literature for one-way carsharing systems, and a relevant model for such models is nowadays not available \cite{jorge_carsharing_2013}.
 This is a real challenge for the future since it's reasonable to think that one-way carsharing systems will be increasingly present in the coming years.
 
-
-
-
-
-
-\cite{leclerc_unraveling_2013} (comportement des utilisateurs carsharing)\\
-
-
-
+%\cite{leclerc_unraveling_2013} (comportement des utilisateurs carsharing)\\
 
 
 \subsubsection{The vehicle imbalance problem}
-As said before, the most challenged carsharing system is the one-way system. Since the arrival station is not necessary the same than the departure station in those systems, it induces and generates imbalance issues.
-Thereby, a lot of efforts are made to understand the dynamics and find possible solutions to handle it.
-The intuitive approach for solving the vehicle imbalance problem is to consider that the operator have to do periodic relocation operations among stations.
-Some studies, using discrete event simulation models (see for example \cite{barth_simulation_1999, kek_relocation_2006, kek_decision_2009}), help operators to manage their systems minimizing available resources (such as vehicles and staff members), while maintaining certain levels of service.
-The model presented in \cite{kek_decision_2009} has been tested and validated using real data (a one-way carsharing system called Honda ICVS) and proposed solutions reducing staff cost of about 50\%.
+%As said before, the carsharing system is the one-way system.
+In one-way systems, the most challenging problem deals with \emph{vehicle relocations} strategies.
+Unlike round-trip models, the departure station and the arrival station are not necessary identical.
+On the one side, empty stations prevent the members to find a vehicle whereas on the other side, full stations prevent them to park.
+This property induces imbalance issues to the system and a lot of efforts are made to understand the dynamics involved and find possible solutions to handle it.
+
+\medskip
+A first intuitive approach for solving the vehicle imbalance problem is to consider that the operator have to do periodic vehicle relocation operations among stations.
+In general, carsharing operator recruit employees (also referred as \emph{jockeys}) to balance the system and avoid critical situations.
+Some studies, using discrete event simulation models, help operators to manage their systems minimizing the available resources (such as vehicles and staff members), while maintaining certain levels of service \cite{barth_simulation_1999, kek_relocation_2006, kek_decision_2009}.
+More specifically, the model presented in \cite{kek_decision_2009} has been tested and validated using real data, a one-way carsharing company in Singapore called Honda ICVS.
+Proposed solutions aimed at reduce the staff cost of about $50$\%.
 
 \medskip
 Other authors have explored the problem under the optimization methods perspective.
 For instance, the model proposed in \cite{nair_fleet_2011} is a stochastic mixed-integer programming (MIP) model with the objective of generating least-cost vehicle redistribution where the demand is known probabilistically.
-In \cite{smith_rebalancing_2013}, the authors find the optimal rebalancing strategy solving two different linear programs in a fluid model of the system : one in order to minimize the number of rebalancing vehicles, the other for minimizing the number of rebalancing drivers (staff members), considering that the number of waiting customers remains bounded.
-The authors state that the ``two objectives are aligned'' and concluded that, for Euclidean network topologies, the numbers of drivers needed is between 1/4 and 1/3 of the number of vehicles.
+In \cite{smith_rebalancing_2013}, the authors find the optimal rebalancing strategy solving two different linear programs in a fluid model of the system: one in order to minimize the number of rebalancing vehicles, the other for minimizing the number of rebalancing drivers (jockeys), considering that the number of waiting customers remains bounded.
+The authors stated that the ``two objectives were aligned'' and concluded that, for Euclidean network topologies, the numbers of jockeys the systems required is between 1/4 and 1/3 of the total number of vehicles.
 
 \medskip
-Another innovative approach is to consider that clients can be used to relocate the vehicles through various incentive mechanisms.
+Very recently, \cite{zakaria_optimization_2015} focuses on the logistic aspects of relocation operations, including the number of jockeys, and specific day-times for relocation and shifting operations.
+Different relocation policies are especially studied.
+The better performance at minimizing the number of rejected demands was obtain using a relocation policy where jockeys can have information on the future state of the system.
+Those anticipations were calculated using historical data of the system and predictions. % Better results where m
+The author suggest that applying policies based on intuitive decisions, such as distance to stations and number of cars at stations, without taking into consideration the effect of these relocation operations on the whole system will not be very efficient in reducing the number of rejected demands.
+
+\medskip
+Another innovative approach is to consider that clients can be used to relocate the vehicles through various incentive mechanisms, mainly based on rewards.
 Prices could be used in order to encourage users to sign up to ``trip splitting'' and ``trip joining'', as showed in \cite{barth_user_based_2004}.
-The principle is very simple: when users wanted to travel from a station with shortage of vehicles to another one with an excess they were prompted to share the ride in a single vehicle (trip joining), while, conversely, when they wanted to travel from a station with too many vehicles to one with a shortage they were encouraged to drive separate vehicles (trip splitting).
-But despite the fact this strategy effectively balances the system in theory, it relies on assumptions that may be unrealistic in practice.
-For instance, it's not relevant if a majority of travellers value privacy and convenience over minor cost saving, or if trip-joining policies make carsharing similar to carpooling (which has severe sociological barriers associated with riding with strangers, mainly for safety and security reasons as said in \cite{chan_ridesharing_2012, correia_carpooling_2011}), or finally, with respect to trip splitting, if users simply do not want to be divided.
-
-
-
-%%%%%%%%%%%%%% intro Sean sur les relocations
-However, the main issue with carsharing optimisation is the vehicle relocation.
-Indeed, in the case of one-way carsharing, the user doesn't have to leave the car where it was picked up.
-This can create uneven distribution of cars depending on the trip which can lead to stations without cars or stations without free parking spaces.
-
-This issue is more and more studied and research tends to lead to two possibilities.
-The first one is to let the operator even out by relocating cars from stations with higher numbers of vehicles to stations with fewer number of vehicles.
-This possibility is studied most of the time using stochastic method \cite{fan_optimizing_2014} or heuristics \cite{duron_analysis_2000}.
-The second one is to reward the user by applying various incentive mechanisms.
-For example, the operator decreases the rental cost if the client accepts to deliver his car not to the original station but to an almost empty station nearby.
-This also means asking a group to use different cars if the station has not enough available parking spaces or asking strangers to regroup in order to use only one car if the station has less cars with a lower rental cost as reward.
-This method has good results with preselected people but depends on the behaviour of the users.
-Thus, in general, the client will choose his safety and privacy over a reward.
-%%%%%%%%%%%%%% fin intro Sean sur les relocations
-
-
+The principle is very simple: when users want to travel from a station with shortage of vehicles to another one with an excess they are prompted to share the ride in a single vehicle (trip joining), while, conversely, when they wanted to travel from a station with too many vehicles to one with a shortage they are encouraged to drive separate vehicles (trip splitting).
+Despite the fact that this strategy effectively balances the system in theory, it relies on assumptions that may be unrealistic in practice.
+For instance, it's not relevant if a majority of travellers value privacy and convenience over minor cost saving.
+Also, this scheme does not work if trip-joining policies make carsharing similar to carpooling, which has severe sociological barriers associated with riding with strangers, mainly for safety and security reasons \cite{chan_ridesharing_2012, correia_carpooling_2011}).
+Finally, with respect to trip splitting, impossibilities could occur if users simply do not want to be divided.
 
 
 \newpage
 \section{Focus on the demand estimation}
+
+
+
+
 
 \subsection{Demand modelling}
 
