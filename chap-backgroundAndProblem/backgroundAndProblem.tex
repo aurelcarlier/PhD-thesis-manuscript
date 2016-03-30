@@ -267,19 +267,41 @@ A complete updated overview on problems arising in such systems can however be f
 In a previous talk, we have already given an overview of the positive impacts carsharing can provide.
 The following sections will consequently focus on market analysis and problems related to system operations and management.
 
-% categories
-% more attention 
+% manque l'explication du fait que le dimensionnement et la localisation des stations sont fait dans les chapitres ultérieurs
+\medskip
+aaaaaaa\\
+aaaaaaa\\
+aaaaaaa\\
+aaaaaaa\\
+aaaaaaa\\
 
-\subsubsection{Social aspects}
+
+\subsubsection{Social aspects and demand modelling}
 Who are the users and why they use the service are probably the major addressed questions about carsharing.
-In the domain of transportation, this popular topic is known as the \emph{demand modelling}.
 Most works aim at characterize and analyse members' behaviour, so that the specific transportation demand associated to carsharing can be estimated mathematically.
+In the domain of transportation, this popular topic is known as the \emph{demand modelling}.
 The outputs of such models are then used to deal with operational research problems and system management.
 By doing so, carsharing decision makers are endowed with accurate inputs helping the resolution of other problems more efficiently.
 
 \medskip
-Using statistical data and user surveys, most studies have demonstrated important tendencies.
-Basically, the average carsharing member has the following characteristics \cite{brook_carsharingstart_2004, millard_ball_car_sharing_2005, lane_phillycarshare_2005, zheng_carsharing_2009, costain_synopsis_2012, efthymiou_which_2012}:
+Unfortunately, the ability to predict the demand for carsharing still is a quite challenging and hard topic.
+Several reasons, manly related to the uneven nature of the demand, can explain why economists and modellers struggle to propose accurate tools \cite{danielis_potential_2015}.
+First, the carsharing demand is highly dependant on the mobility patterns, which is partly recurrent (such as home/work travels or study commuting) and partly random.
+Secondly, involved decisions leading to carsharing joining are many and various.
+In addition, they include both quantitative and qualitative criterion.
+They not only depends on the price, the quality, the travel time, the trip distance and comfort, but also on the supply of the other competing or complementary modes.
+Finally, some side effects due to the dynamics of the system itself may influence the demand.
+The evolution of the service quality over time (\eg the availability of vehicles or parking places) can fluctuate the incoming demand, making its prediction even more complex.
+
+\medskip
+Using statistical data and user surveys, most studies have nevertheless demonstrated important tendencies.
+Basically, the average carsharing member has the following characteristics
+\cite{brook_carsharingstart_2004}
+\cite{millard_ball_car_sharing_2005}
+\cite{lane_phillycarshare_2005}
+\cite{zheng_carsharing_2009}
+\cite{costain_synopsis_2012}
+\cite{efthymiou_which_2012}:
 \begin{itemize}
 \item age between mid-30s to mid-40s,
 \item people highly educated and environmentally aware,
@@ -329,10 +351,10 @@ This is a real challenge for the future since it's reasonable to think that one-
 
 
 \subsubsection{The vehicle imbalance problem}
-%As said before, the carsharing system is the one-way system.
-In one-way systems, the most challenging problem deals with \emph{vehicle relocations} strategies.
+In one-way systems, one of the most challenging problem deals with \emph{vehicle relocations} strategies.
 Unlike round-trip models, the departure station and the arrival station are not necessary identical.
-On the one side, empty stations prevent the members to find a vehicle whereas on the other side, full stations prevent them to park.
+As a result, the dynamics of the system may conduct to critical situations.
+On the one side, empty stations prevent the members to find a vehicle, whereas on the other side, full stations prevent them to park.
 This property induces imbalance issues to the system and a lot of efforts are made to understand the dynamics involved and find possible solutions to handle it.
 
 \medskip
@@ -366,36 +388,102 @@ Finally, with respect to trip splitting, impossibilities could occur if users si
 
 
 \newpage
-\section{Focus on the demand estimation}
+\section{A generator addressing the lack of data}
 
+As pointed out earlier, the carsharing demand is hard to model and forecast.
+As far as we know, there is no available model for one-way carsharing in the literature which is not context specific.
+Besides, operational data from carsharing operators are not accessible.
+Although some global indicators of the service are sometimes reported (such as the stations' locations, the number of vehicles or the number of daily requests) no private company release the details of the registered demand, mainly for users' confidentiality reasons.
 
+\medskip
+The problems addressed in this thesis deal with the design of a one-way carsharing system.
+In this work, we assumed that the carsharing demand is an input and, as such, need to be evaluated.
+This section presents the mechanics of a random data generator developed during the thesis.
+Basically, the generator produces time-dependant one-way carsharing demand among a set on randomly positioned stations.
+The provided data are used to evaluate the developed models proposed in the next chapters.
+The generator can be downloaded freely from an open-source platform \cite{csgen}.
+We hope that it could help other design model implementations and provide benchmark data to compare methodologies.
 
-
-
-\subsection{Demand modelling}
-
-
-A citer :\\
-\cite{modele_deplacement_dreif_2008}\\
-\cite{danielis_potential_2015}\\
-
+%\subsection{Demand modelling}
+%\cite{modele_deplacement_dreif_2008}\\
 
 \subsection{Assumptions}
 
+\begin{figure}[!h]
+\centering
+\includegraphics[width = .75\textwidth]{csgen-mainFrame}
+\caption{Main frame of the generator.}
+\label{fig_randomStationPositioning}
+\end{figure}
+
+% Discrete time
+Some data provided by the generator are time-dependant.
+The purpose of the generator is to provide temporal data during an average day.
+Carsharing demands and travel times are then defined over a $24$ hours period, segmented into $\nbTimeSteps \in \N$ discrete time-steps.
+The total number of time-steps is user-settable.
+It can vary from $24$ to $1440$, representing respectively a $60$ and $1$ min time-step.
+
+% Constant vehicle speed
+\medskip
+The vehicle speed is assumed constant during a trip.
+Although congestion is not directly considered in the model, travel times are penalize during rush hours.
+Two weight factors (one for the morning, one for the evening) allow to extend any trip duration if it is performed during defined time windows.
+
+% Operation chain
+\medskip
+Finally, it is also assumed that the generator neglects the time needed for some operations.
+For instance, the time needed to park a vehicle, borrow it or plug it into a charging point in the case of electric vehicles are not considered.
 
 
+\subsection{Station positioning}
+The first phase positions $\nbStations \in \N$ carsharing stations within a given territory.
+The area is modelled as a square only defined by the length of its side.
+Then, two distinct methods, called respectively the \emph{uniform} method and the \emph{centroid} method, spread the stations among the territory.
+The uniform method merely positions randomly the stations, assigning uniform random values to the station's coordinates.
+The centroid method positions stations over two distinct zones: a central area (in general representing the center of the city) included in a larger one (representing the suburbs area), both defined as a square.
+The generation algorithm takes two additional parameters: the percentage of total area the center must represent and the probability that a station is contained in the center.
+Once the geographic division is made, every station is then positioned randomly in the area where it belongs. 
+Finally, the maximum size for each station is randomly generated using a discrete uniform distribution over an integer interval given by the user. %$[Z_{\min}, Z_{\max}]$
 
-\subsection{MIC integration}
 
-
-
-
-\subsection{Random data generator}
-A generator has been then implemented to emulate real demand data over time. We decided to focus our study on representing an average weekday demand. As a consequence, all the data depending on time are generated over a $24$ hours period, segmented into $\nbTimeSteps \in \N$ time-steps. The total number of time-steps is user-settable and can vary from $24$ to $1440$ (representing respectively a $60$ and $1$ min time-step).
+\subsection{Demand generation}
+The second phase generates randomly $\nbDemands \in \N$ demands over time between stations.
+In a first step, the generator schedules and distributes randomly each request over time.
+The random demand distribution can be specified through a dedicated frame where the user can tune every level demand on an hourly basis.
+Because levels are considered relative to each other, their exact value are not relevant.
+The random distribution is obtained normalizing all the values. % \ie ${\cal P}(t) = Dem(t) \slash \sum_{t}{Dem(t)}$.
+In practice, most profile distributions are very similar to the one presented in Figure \ref{fig:plotDemandProfile} where two noticeable picks during morning and evening demarcate the symmetrical mobility pattern in dense area.
 
 \medskip
-Basically, the generator is based on two phases: station and demand generation. The first phase positions $\nbStations \in \N$ carsharing stations within a given territory. Maximum size for each station is randomly generated using a discrete uniform distribution over an integer interval $[Z_{\min}, Z_{\max}]$ given by the user as a parameter.
-The station positioning is made over two distinct zones: a central area (in general representing the center of the city) included in a larger one (representing the suburbs area), both defined as a square. The generation algorithm takes two additional parameters: the percentage of total area the center must represent and the probability that a station is contained in the center. Once the geographic division is made, every station is then positioned randomly in the area where it belongs. 
+In a second step, the generator identifies origins and destinations of each temporal demands.
+Usually, in urban context, the demand goes globally in the same direction: from the suburbs to the center during the morning and from the center to the suburbs the evening.
+Both morning and evening rush hour slots (traffic peaks) are settable.
+As depicted in Figure \ref{fig:plotDemandProfile}, the morning rush is usually between $7$ and $9$ o'clock whereas the evening rush is between $15$ and $19$ o'clock.
+A fixed demand proportion during rushes can be specified by the user.
+The generator finally calculate the origin and destination stations with respect to the departure time of each demand.
+The travel time is deducted from the distance between stations and the average car speed.
+As stated previously, the time is penalized in case of traffic peaks.
+
+
+\begin{figure}[t]
+\centering
+\input{tikz/plotDemandProfile}
+\caption{Demand profile over the day.}
+\label{fig:plotDemandProfile}
+\end{figure}
+
+
+\subsection{Outputs}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width = \textwidth]{csgen-output}
+\caption{Generator output.}
+\label{fig_randomStationPositioning}
+\end{figure}
+
+
+
 %Figure \ref{fig_randomStationPositioning} illustrates the positioning of $100$ stations in the Paris area where $p_{center}$ is set to $10\%$ and $p_{concentration}$ to $35\%$.
 
 %\begin{figure}[h]
@@ -405,16 +493,7 @@ The station positioning is made over two distinct zones: a central area (in gene
 %\label{fig_randomStationPositioning}
 %\end{figure}
 
-\medskip
-Then, the second phase generates randomly $M$ demands over time between stations. First of all, the generator has to schedule and position randomly each request over time, which means defining a probability distribution. In order to do so, the generator allows to specify the distribution profile the demand will follow. In other words, it consists on defining, for every couple of hours (thus $12$ values), the relative level of demand $Dem(t)$ at this time $t$. Then, the probability distribution $\cP$ is obtained normalizing all the values \ie ${\cP}(t) = Dem(t) \slash \sum_{t}{Dem(t)}$. Typically, most profile distributions are very similar to the one presented in Figure \ref{fig:demandProfile}.
-Now, the next step is to identify the two stations concerned by this demand at that time: where it starts and where it goes. Usually, in dense urban area, there are two rush hour slots, also called traffic peaks (generally the morning between 7 and 10 o'clock; the evening between 16 and 19 o'clock) for which the demand goes globally in the same direction: from the suburbs to the center during the morning and from the center to the suburbs the evening. The generator allows to define such rush time slots as well as the proportion of total demand during those rushes. Finally, it's also possible to specify an average car speed and a penalty coefficient during rush time for the calculation of travel-time between stations.
 
-\begin{figure}[t]
-\centering
-\input{tikz/plotDemandProfile}
-\caption{Demand profile over the day.}
-\label{fig:plotDemandProfile}
-\end{figure}
 
 \newpage
 \section{Problem description}
