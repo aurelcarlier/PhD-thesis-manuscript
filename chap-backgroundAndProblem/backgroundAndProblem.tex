@@ -11,15 +11,17 @@
 \includegraphics[width=.7\textwidth]{cube2}
 \end{minipage}
 \hfill
-\begin{minipage}[c]{0.7\textwidth}
+\begin{minipage}[c]{0.76\textwidth}
 \begin{abstract}
-%This chapter introduces the background interest of this thesis.
-%Carsharing systems and their characteristics are fist described and their legitimacy as an interesting solution to transportation issues is first highlighted.
-%
-%The chapter follows with the demand estimation problem.
-%Assumptions made in this thesis and the approach we considered are exhibited.
-%
-%Finally, the chapter concludes with a focus on the problem addressed in this manuscript.
+This chapter is dedicated to carsharing systems.
+A description of their operational principles and a brief history are firstly presented.
+More particularly, some specificities and characteristics highlight their legitimacy as interesting solutions to actual transportation issues.
+Then, an overview of the related literature is given.
+It addresses numerous problems from demand modelling to system management.
+Specific topics about system design will be given in the next chapters.
+The chapter follows with the description of a random generator produces data for one-way carsharing systems.
+Assumptions, operating principles and outputs are especially detailed.
+Finally, a summary and some outlooks are provided at the end of the chapter.
 \end{abstract}
 \end{minipage}
 
@@ -326,8 +328,8 @@ They suggested and evaluated a carsharing demand model using an open-source acti
 The framework simulates the daily life of individuals (agents) and produces travel demand as a side product.
 The system process iteratively computes transportation plans and traffic flow simulations until a relaxed state is reach.
 A transportation plan is a list of transportation modes deduced from a user activity-chain.
-The latter is the activities a user plans to do during the day with respect to its socio-demographic attributes.
-An aggregated cost function (including carsharing as a mode in itself) returns a score, evaluating quantitatively the plans of each users.
+Activities planned during the day by a user are selected with respect to its socio-demographic attributes.
+An aggregated cost function (including carsharing as a transportation mode in itself) returns a score, evaluating quantitatively the plans of each user.
 The agents continuously try to improve their score varying their departure time, transport modes, routes and location of some activities.
 
 The authors led to a modal split model giving plausible results in comparison with real \mbox{data -- the} urban area of Zurich, Switzerland.
@@ -381,7 +383,6 @@ Also, this scheme does not work if trip-joining policies make carsharing similar
 Finally, with respect to trip splitting, impossibilities could occur if users simply do not want to be divided.
 
 
-\newpage
 \section{A generator addressing the lack of data}
 
 As pointed out earlier, the carsharing demand is hard to model and forecast.
@@ -508,7 +509,7 @@ Figure \ref{fig:csgen-output} gives an example of an instance generated for $50$
 %\end{figure}
 
 
-\section{Synthesis and addressed problems}
+\section{Synthesis and outlooks}
 
 In this literature overview, we have seen that carsharing systems can be a real alternative to private vehicles.
 Mainly located today in dense urban area, they provide positive impacts not only on the environment but also on urban mobility.
@@ -533,6 +534,8 @@ Unfortunately, articles reviewed on demand estimation have generally not taken i
 Moreover, attempts to estimate the proportion of travellers that could join and use a carsharing service are very often context specific which limits the scope and the applicability of the results.
 Since one-way systems will continue to spread out in the near future, it will be crucial to develop realistic models that can handle those specific mechanics in a multimodal environment.
 
+
+\medskip
 We have presented in the end of this chapter a random demand generator for one-way carsharing systems.
 The development of the generator was originally motivated by the lack of available data.
 The resulting outputs produced by the tool emulate a potential carsharing systems with stations and temporal demands during a representative period of $24$ hours.
