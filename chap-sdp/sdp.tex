@@ -32,7 +32,7 @@ In this work, the meaning of optimality will be considered as the will to captur
 Somehow, this objective is aligned with the maximization of the operator's revenues.
 Indeed, the more demands the systems is able to fulfil, the more profits the operator can generate.
 
-As seen in \cite{les_relocs_sont_importantes_et_necessaires}, the optimization process should also integrate vehicle relocation operations.
+As seen in \cite{jorge_testing_2012}, the optimization process should also integrate vehicle relocation operations.
 They are the only known "technique" to re-equilibrate the system and reach a higher satisfied demand.
 
 In the reminder of this work, this system design problem will be refer as the \emph{System Dimensioning Problem} (SDP).
@@ -55,7 +55,6 @@ Section
 
 % finir l'intro : organisation du chapitre
 
-\newpage
 \section{Related work}
 
 The recent emergence of vehicle-sharing systems have greatly stimulated both industrial and academic research.
@@ -72,11 +71,8 @@ The global performance of the system is evaluated through various indicators suc
 Results demonstrate that system concentricity (density of stations) and the number of parking places are important parameters improving the reservation acceptance rate and vehicle utilisation.
 
 
-
-
-
 \medskip
-More recently, an agent-based simulation model developed by \cite{barrios_performance_2012} has been developed to measure and predict the level of service offered to users.
+More recently, an agent-based simulation model developed by \cite{barrios_performance_2012} aimed to measure and predict the level of service offered to users.
 In this study, the carsharing scheme was assumed to be a free-floating and designed to be compared with existing services in Austin, Texas and San Diego, California.
 Using agent-based modelling, the author intended to observe emergent phenomena, integrating stochastic demand and users interactions.
 The level of accessibility (percentage of an area that is within walking distance of an available carsharing vehicle) was proposed as a metric of the system efficiency.
@@ -84,15 +80,19 @@ Simulation results show that the model reasonably estimates the level of service
 The author concluded that the model could help decision makers design the system.
 
 
+\medskip
+Other studies, focussed on optimal policies to relocate vehicles through the system.
+As pointed out before, those operations are necessary to ensure that vehicles are located where they are needed.
+It allows the system to run at a level of efficiency unreachable otherwise \cite{mitchell_reinventing_2010, nair_fleet_2011, febbraro_one_2012}.
+
+Although not exactly aligned with the purpose of dimensioning a carsharing service, several approaches present interesting models holding suitable system dynamics.
+Using mathematical programming, some studies tackle the problem from an operator-based perspective \cite{kek_relocation_2006, kek_decision_2009} whereas others used a station-location approach \cite{correia_optimization_2012, jorge_testing_2012}.
+Rather suited for the system dynamics studies, they all rely on a mathematical representation of the whole system based on time expanded graphs \cite{ahuja_network_1993}.
+The purpose was to identify measures to maximize resources and enhance service levels.
+Results show that the operator profit can be improve when the system runs with suitable vehicle relocation policies.
 
 
 
-
-
-
-
-
-\newpage
 \section{Mathematical model} \label{sec:mathModel}
 \subsection{Formal problem statements}
 \paragraph{Inputs:}
