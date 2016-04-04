@@ -30,7 +30,7 @@ The optimal flow circulating in the Time Expanded Graph (TEG) can be interpreted
 Until then, the problem was to assess the number of vehicles as well as the number of vehicle relocations to run the carsharing system at its better efficiency, considered in this work as the capacity to fulfil the higher number of demands.
 In this chapter, we intend to enhance the initial problem with two new challenged aspects.
 
-\bigskip
+\medskip
 The first one deal with stations' locations.
 We propose to look at the problem from a different perspective by expanding its scope to the selection of a subset of stations contributing to the better system configuration.
 It involves changing the concept of \emph{station} to \emph{possible station location} which can be also understood as \emph{possible carsharing station site}.
@@ -38,7 +38,7 @@ Then, the problem can be expressed as follow: among all possible $\nbStations$ s
 From this perspective, we intend to study the decisional factor that lead to select, or not select, a site.
 Our expectations are to deduce from exact solutions a global scheme that could inquire the site selection without having to run a exact optimization.
 
-\bigskip
+\medskip
 The second challenge aims at introduce energy components.
 In the previous model, vehicles were able to transport customers from station to another without limiting the total distance they travel during the day or even during a specific trip.
 Nowadays, combustion cars can travelled hundred of kilometres a day without the need to refill in gasoline.
@@ -60,7 +60,7 @@ Including battery range constraints means control their charge level at all time
 Until then, the flow model based on TEGs describes macroscopic flows of vehicles.
 Even if individual vehicle routes can be extracted, the numerous possible interpretations lead us to adapt and propose an alternative mathematical model able to consider electric cars and their appropriate functional equipment.
 
-\bigskip
+\medskip
 This chapter is organized as follow.
 
 % We study their impact in the global system optimization and discuss .
@@ -70,16 +70,18 @@ This chapter is organized as follow.
 \section{The Station Location Problem}
 A major difficulty for an operator wishing to set up a carsharing systems is without any doubt the stations' locations over the area he wishes to cover.
 Assuming that potential stations' sites could be identified, the remaining problem of select the ones leading to a system that operates efficiently and captures the higher number of requests still remain a tricky question.
-From a formal point of view, the problem is purely combinatorial and admits $\binom{\nbStations}{\nbMaxStations}$ possible solutions, where $\nbMaxStations$ denotes the number of stations to chose among the $\nbStations$ number of potential stations' sites.\medbreak
+From a formal point of view, the problem is purely combinatorial and admits $\binom{\nbStations}{\nbMaxStations}$ possible solutions, where $\nbMaxStations$ denotes the number of stations to chose among the $\nbStations$ number of potential stations' sites.
 
+
+\medskip
 We have seen previously that the System Dimensioning Problem (SDP) assumed fixed stations in its statement.
 In a way, the SLP will consist in relaxing this assumption and appending some decisions over the stations' locations.
 Its formulation will thus sounds very close to the SDP and can be stated as follow.
 
 \paragraph{Station Location Problem [SLP]:}
-Given a set of $\nbStations$ carsharing stations' sites, it consists in select the subset of $\nbMaxStations \leq \nbStations$ possible stations' sites allowing the system to run at its maximum potential, \ie satisfying the higher number of demands. 
+Given a set of $\nbStations$ carsharing stations' sites, it consists in select the subset of $\nbMaxStations \leq \nbStations$ possible stations' sites allowing the system to run at its maximum potential, \ie satisfying the higher number of demands.
 
-\bigbreak
+\medskip
 Inputs are very similar to the SDP.
 The major difference concerns the carsharing stations which are not longer fixed but are now considered as potential stations' sites.
 We assumed that a maximum capacity (\ie maximum number of parking lots) could still be known for each site.
@@ -100,19 +102,49 @@ We refer to $\nbMaxJockeys \in \N$ as the number of jockeys allowing to relocate
 
 
 \subsection{Related work}
+
+Clearly, the performance of a station-based carsharing system is highly dependent on its station locations.
+Determining the suitable places where vehicles will be available is probably a key factor of its success.
+To the best of our knowledge, very few studies have been conducted on this particular topic.
+
 % 1. stations locations
-$>$ carsharing station selection : \cite{ion_site_2009}
+\medskip
+\cite{ion_site_2009} proposed a dedicated multi-criteria analysis taking into account demographic economic indicators to extend an existing carsharing service located in La Rochelle, France.
+Each potential station site is evaluated with a score depending on the preferences of people living in the proximity area and calibrated from a real user survey using fuzzy logic.
+The authors stated that the resulted classification can be used in complement with the knowledge of specialists to help decision makers (urban planners, local authorities) not only for carsharing systems but also for bus station locations or bike-sharing services.
 
-For now, very few studies have been conducted.
-They all use mathematical integer programming (MIP) models and thus are limited because of the hard complexity of this problem.
-The large number of variables needed to integrate several decisions into the same problem in a real case study context is indeed a real challenge in this field.
+
+\medskip
+More recently, \cite{correia_optimization_2012} described several MIP models determining the best number, location and size for the depots with respect to different operating schemes.
+The authors concluded that satisfying all the demand does not make sense economically and lead to severe financial looses for the private operator, even when customer trips are charged with a high price.
+Indeed, to reach this level of service the operator need to increase drastically its fleet size and consequently most vehicles stay idle (parked in station) during a large part of the day.
+Moreover, the trip selection ability (\ie the possibility to accept or refuse a request) seems to be crucial to achieve positive profits.
+
+In another publication, \cite{correia_added_2014} reused their real data set of Lisbon, Portugal, to analyse the impact of a better user flexibility on the operator's profit.
+They observed that vehicles are used more often when more information is provided to the user about vehicle availability at different stations of the system.
+However, they also noticed that those better operational results came with a greater walking and total travel times.
 
 
-% 2. jockeys
+\medskip
+In general, the problem of locating carsharing stations has been addressed through a system management perspective.
+and most approaches use a mathematical programming formulation.
+Distinctions are made on objectives and operational constraints.
+According to studies, some are economically oriented trying to maximize the operator revenue or minimize global costs whereas others are more oriented toward the user satisfaction maximizing the service level.
+The overall system optimization is generally limited by budget constraints and system dynamics such as vehicle relocation operations and parking places in each station locations.
+Schematically, the problem is viewed through two perspective: minimizing global costs while satisfying all the demand, and maximizing the service level under budget constraints.
 
-One-way carsharing allows to study various problems.
-The first one is the number, the position and the size of the stations.
-The sizing and station location problems were studied using MILP model \cite{rickenberg_decision_2013}.
+\medskip
+The main stated drawback with these MIP approaches concerns the limitations of computation times and solver capability due to the problem complexity.
+In most cases, as the size of the problem increases, the total number of variables become unsustainable and some simplifications are then necessary.
+The large number of carsharing components, integrating several decisions into the same problem in a real case study context is indeed a real challenge in this field.
+
+% 2. jockeys ?
+
+%One-way carsharing allows to study various problems.
+%The first one is the number, the position and the size of the stations.
+%The sizing and station location problems were studied using MILP model \cite{rickenberg_decision_2013}.
+%
+%They all use mathematical integer programming (MIP) models and thus are limited because of the hard complexity of this problem.
 
 
 \subsection{Problem modelling}
@@ -323,11 +355,16 @@ They are more suited when parking time is very limited.
 They grant a higher flexibility covering situations with additional non-planned kilometres.
 
 \subsection{Related work}
+
+% Sean %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 Considering carsharing with electric cars brings up three problems: the energy shortest path problem, the management of the car battery and the impact on electric facilities.
 It also modifies three other problems: the dimensioning, the station location and the vehicle relocation for one-way carsharing.
 Some characteristics of electric cars were simplified in order to reduce the number of problems.
 For instance, the charging model is assumed to be linear.
 
+
+\medskip
 The energy shortest path problem consists in finding the least energy consuming path between two stations.
 This problem arises with the energy recuperation during the deceleration phase.
 It has been studied using MILP \cite{touati_combinatorial_2012} and algorithms based on the shortest path principle on modified graph \cite{artmeier_optimal_2010}.\\
@@ -341,11 +378,15 @@ Two approaches have been developed for this problem.
 The first one uses trucks to move the cars from one station to another.
 The second uses folding bicycles to travel between two stations and stock the bicycle in the car during the relocation trip \cite{bruglieri_vehicle_2014}.
 
+
+\medskip
 The sizing and localisation problems for electric carsharing systems were studied but most of the time, were not in relation with the relocation problem.
 In these articles, vehicle relocations are made by night.
 It increases the size of stations in order to accept the demands \cite{correia_optimization_2012}.
 However, this problem is also studied for bicycles \cite{george_fleet_2011} and hydrogen cars \cite{melaina_initiating_2003} and the methods used in these researches may be applied for the sizing and localisation problem.
 
+
+\medskip
 Despite these researches, there is no model which takes all these problems into account at the moment.
 Trying to resolve them one by one will probably lead to an non optimal solution.
 As far as we know, there is only one paper which tries to make the connexions between these problems \cite{boyaci_optimization_2015}.
