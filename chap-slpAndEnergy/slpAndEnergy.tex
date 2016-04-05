@@ -135,8 +135,8 @@ Schematically, the problem is viewed through two perspective: minimizing global 
 
 \medskip
 The main stated drawback with these MIP approaches concerns the limitations of computation times and solver capability due to the problem complexity.
-In most cases, as the size of the problem increases, the total number of variables become unsustainable and some simplifications are then necessary.
-The large number of carsharing components, integrating several decisions into the same problem in a real case study context is indeed a real challenge in this field.
+In most cases, as the size of the problem increases, the total number of variables become unsustainable and some simplifications are often necessary.
+As far as we know, integrating several decisions into the same problem in a real case study context is still a real challenge in this field.
 
 % 2. jockeys ?
 
@@ -356,44 +356,78 @@ They grant a higher flexibility covering situations with additional non-planned 
 
 \subsection{Related work}
 
-% Sean %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Introducing electric cars in station-based carsharing systems brings up new practical challenges with respect to their design and the management.
+Actual battery range require the vehicles to charge during the day at specific charging points in stations.
+Moreover, depending on the system infrastructure, the power supply may induce long charging times unless expensive fast charging points are provided.
+In this section we give a brief overview of the emerging problems arising when electric vehicles are considered in carsharing context.
+Although the existing literature is today very limited, we focus in this section on two problems: the energy shortest path problem and the carsharing system design including electric vehicles. 
 
-Considering carsharing with electric cars brings up three problems: the energy shortest path problem, the management of the car battery and the impact on electric facilities.
-It also modifies three other problems: the dimensioning, the station location and the vehicle relocation for one-way carsharing.
-Some characteristics of electric cars were simplified in order to reduce the number of problems.
-For instance, the charging model is assumed to be linear.
-
+% the management of the car battery and the impact on electric facilities.
 
 \medskip
 The energy shortest path problem consists in finding the least energy consuming path between two stations.
-This problem arises with the energy recuperation during the deceleration phase.
-It has been studied using MILP \cite{touati_combinatorial_2012} and algorithms based on the shortest path principle on modified graph \cite{artmeier_optimal_2010}.\\
-Few studies take into account the car battery and the charge time.
-They either block the cars that need to be charged at a station for a fixed period of time \cite{boyaci_optimization_2015} or add variables to represent the battery \cite{bruglieri_vehicle_2014}.
-Thus, research tends to maximize the remaining quantity of energy in the battery at the end of the day and only charge during the night.\\
-The impact on electric facilities is nearly null in the U.S. due to the policy on electricity which create oversize network \cite{liu_survey_2011}.
-However, this study shows the importance of taking the hour of demand into account in order to reduce the price of electricity. 
-The problem of redistribution for electric cars was studied with meta-heuristics or with MILP.
-Two approaches have been developed for this problem.
-The first one uses trucks to move the cars from one station to another.
-The second uses folding bicycles to travel between two stations and stock the bicycle in the car during the relocation trip \cite{bruglieri_vehicle_2014}.
+In order to maintain enough energy in vehicles and maintain their availability, the carsharing operator needs to estimate the energy consumption of each trip performed during the day.
+Thereby, accurate information can be provided for users (through dedicated navigation services) and for jockeys rebalancing the fleet.
+In earlier works, \cite{artmeier_optimal_2010} showed that the problem is a \emph{easier} variant of the constrained shortest path problem, known to be ${\cal NP}$-hard.
+From this work, researchers tend to improve the problem complexity proposing more efficient algorithms and exploring other aspects and additional constraints \cite{eisner_optimal_2011, sachenbacher_efficient_2011}.
+
+More recently, other approaches using MIP formulation \cite{touati_combinatorial_2012, wang_energy_2014, arslan_minimum_2015}.
+Some models allow to consider multiple vehicles, involved traffic congestion and non-linear cost functions.
+Finding accurate linear approximations for these functions is often highlighted as a valuable improvement in future works.
 
 
 \medskip
-The sizing and localisation problems for electric carsharing systems were studied but most of the time, were not in relation with the relocation problem.
-In these articles, vehicle relocations are made by night.
-It increases the size of stations in order to accept the demands \cite{correia_optimization_2012}.
-However, this problem is also studied for bicycles \cite{george_fleet_2011} and hydrogen cars \cite{melaina_initiating_2003} and the methods used in these researches may be applied for the sizing and localisation problem.
+Carsharing system design problem including electric vehicles is a very recent topic and very few studies try to integrate electric constraints in strategic planning decisions.
+\cite{boyaci_optimization_2015} proposed a multi-objective MIP model for planning one-way vehicle-sharing systems.
+Vehicle relocation operations and electric vehicle charging requirements are taking onto account.
+However, the charge state of each vehicle's battery is not explicitly considered.
+The authors include vehicles charging periods with specific constraints ensuring that a vehicle stays in stations for a fixed period of time when returned from a rental operation.
+A real case application of their model for to Nice region (France) using data from an existing carsharing system provides useful information regarding the system performance.
+The trade-off between operator and user objectives exhibit the importance of vehicle relocation benefiting to both stake holders.
+The authors plan in a future work to couple their model with a simulation tool which providing more realistic representation of relocation operation costs and allow to consider vehicle charge level among the optimisation process.
 
 
 \medskip
-Despite these researches, there is no model which takes all these problems into account at the moment.
-Trying to resolve them one by one will probably lead to an non optimal solution.
-As far as we know, there is only one paper which tries to make the connexions between these problems \cite{boyaci_optimization_2015}.
-The model considers that the client has to reserve his car in advance so it doesn't simulate the demand.
-Moreover, the model is too complex to be able to run in a reasonable time lapse.
-The authors then choose to relax the problem in order to be able to find a solution.
-They obtained a result with an error of 8\% in less than 3 hours in most of the instances.
+Beyond these results globally tackling many problems individually, no combined approaches has arise. 
+As far as we know, optimizing the global system efficiency and the station locations while taking into account explicitly battery ranges and the power supply has not been addressed.
+The large amount of open problems suggests that those topics may account in the near future for a rich and interesting  research area.
+
+
+% Sean %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%there is no available model which takes all these problems into account at the moment.
+%Trying to resolve them one by one will probably lead to an non optimal solution.
+%As far as we know, there is only one paper which tries to make the connexions between these problems \cite{boyaci_optimization_2015}.
+%The model considers that the client has to reserve his car in advance so it doesn't simulate the demand.
+%Moreover, the model is too complex to be able to run in a reasonable time lapse.
+%The authors then choose to relax the problem in order to be able to find a solution.
+%They obtained a result with an error of 8\% in less than 3 hours in most of the instances.
+
+%supporting strategic and tactical planning decisions for both .
+%Few studies take into account the car battery and the charge time.
+%They either block the cars that need to be charged at a station for a fixed period of time \cite{boyaci_optimization_2015} or add variables to represent the battery \cite{bruglieri_vehicle_2014}.
+%Thus, research tends to maximize the remaining quantity of energy in the battery at the end of the day and only charge during the night.\\
+%
+%The impact on electric facilities is nearly null in the U.S. due to the policy on electricity which create oversize network \cite{liu_survey_2011}.
+%However, this study shows the importance of taking the hour of demand into account in order to reduce the price of electricity. 
+%The problem of redistribution for electric cars was studied with meta-heuristics or with MILP.
+%Two approaches have been developed for this problem.
+%The first one uses trucks to move the cars from one station to another.
+%The second uses folding bicycles to travel between two stations and stock the bicycle in the car during the relocation trip \cite{bruglieri_vehicle_2014}.
+%
+%\medskip
+%The sizing and localisation problems for electric carsharing systems were studied but most of the time, were not in relation with the relocation problem.
+%In these articles, vehicle relocations are made by night.
+%It increases the size of stations in order to accept the demands \cite{correia_optimization_2012}.
+%However, this problem is also studied for bicycles \cite{george_fleet_2011} and hydrogen cars \cite{melaina_initiating_2003} and the methods used in these researches may be applied for the sizing and localisation problem.
+
+%It also modifies three other problems: the dimensioning, the station location and the vehicle relocation for one-way carsharing.
+%Some characteristics of electric cars were simplified in order to reduce the number of problems.
+%For instance, the charging model is assumed to be linear.
+
+%This problem arises with the energy recuperation during the deceleration phase.
+%It has been studied using MILP \cite{touati_combinatorial_2012} and algorithms based on the shortest path principle on modified graph \cite{artmeier_optimal_2010}.\\
+
 
 \subsection{Selected energy components and modelling issues}
 Opt for electric vehicles bring some important constraints, on vehicles themselves of course but also on the system (stations especially) and its dynamics.
