@@ -84,13 +84,81 @@ The energy constraints, brought by electric cars must be considered by the metho
 In addition, it will also be important to propose the operation methods of carsharing systems, taking into account their integration in the global system of multimodal transport.
 
 % \subsection{Research environment}
-\medskip
-IRT SystemX
+% IRT SystemX
 
 \section{Research scope and thesis organization}
-\medskip % présenter le station-based one-way carsharing
+Carsharing development is literally driven by the user flexibility.
+The global trend to make the service more accessible greatly account for its success.
+Historical systems managed by private operators are said \emph{station-based}.
+The fleet of vehicles is spread out diverse locations providing parking places and optional and specific infrastructure as charging points for electric vehicles.
+In this thesis, we focus on stations-based systems allowing \emph{one-way} trips where users can take-off and return a car in different locations.
+
+\medskip
+The scope of this thesis is dedicated to strategic and tactical problem arising in the design of those station-based one-way systems.
+Addressed topic include optimal system dimensioning, optimal station locations and the consideration of energy components.
+Some outputs of this work aim to evaluate the viability of a carsharing service with respect to a given territory.
+Decisions are made at a high level, and measured at both macro and micro scale.
+The global purpose is to help decision makers to stand on the potential of such service before building and operating it.
+
+\medskip
+The next Chapter is dedicated to carsharing systems and their related problems.
+A brief history, today's operating schemes and their benefits for the community and the environment are especially described.
+Then, an overview of the literature look over various topics related to carsharing.
+More especially, demand modelling and strategic vehicles relocation aspects are unfolded as decisive challenges that design methods must encompass.
+Finally, a random generator coping the lack of available carsharing data is described.
+A synthesis and some outlooks are provided at the end of the chapter.
 
 
+\medskip
+Chapter \ref{chap:sdp} addresses the system dimensioning problem for one-way carsharing systems.
+For fixed stations and demands, it consists in determine the relevant system components values (number of vehicles, parking places and relocation operations) allowing the system to run at its maximum efficiency.
+A first sight at the existing literature about this topic is first given.
+Then, we present a mathematical model based on time-expanded graphs and dealing with the system dimensioning optimization.
+The proposed model accounts for vehicle relocation operations and maximize the total number of demands.
+Although its formulation is very closed to a maximum flow problem, the problem complexity is still unknown.
+Nevertheless, a polynomial sub-case of the problem is exhibited in the end of the chapter.
+
+\medskip
+Chapter \ref{chap:sdpExp} is devoted to the evaluation of the system dimensioning MIP formulation.
+Exact methods using both open-source an proprietary solvers are evaluated through four studies.
+The first one computes optimal solutions maximizing the number of satisfied demands according to different values of the maximum number of vehicles and relocation operations during a day.
+Computation times and a 3-pareto frontier are especially analysed.
+Then, we evaluate the model scalability and challenge the exact method resolution on larger problem sizes.
+A coupling between linear program building times and graph densities is detailed.
+Also, important improvements applying another solver (CPLEX) are exposed.
+Next studies focus on vehicle relocation strategies operating the system during a typical weekday.
+More especially, strategies balancing the system at fixed times of the day are evaluated and compared to a baseline situation where vehicles can be relocated at any time.
+The third study focuses on the impact on graph density whereas the last one examines improvements on computation times.
+
+
+\medskip
+Chapter \ref{chap:slp} deals with the station location problem and the electric vehicle inclusion in the optimization models.
+An enhanced mathematical program is introduced and new decision variables cope with the selection of potential carsharing sites.
+Additional constraints also accounts for a limited number of jockeys operating the vehicle relocations.
+Besides, a dedicated reading of the problem highlights its strong dependence with previous statements and apprehends it as a generalized version of the system dimensioning model.
+In the second part of the chapter, we introduce components related to electric cars.
+More especially, the vehicle battery range and the power supply of charging points in stations are considered.
+Then, we discuss the various issues that arise when considering a non-unit flows, especially the flow interpretation as individual vehicle routes.
+We finally introduce the last MIP model including electric vehicles.
+To overcome the combinatorial explosion of the number of variables, some model simplifications are then detailed.
+In order to improve the performance of the solver, the description of a greedy heuristic terminates the chapter.
+The algorithm helps the solver converging to an exact solution in finding rapidly a good lower integer bound.
+A simple example illustrates the algorithm mechanics.
+
+
+\medskip
+Chapter \ref{chap:slpEnergyExp} is dedicated to the study of sufficient electric car batteries for the carsharing usage.
+The optimal system containing $30$ electric vehicles is designed from data randomly generalised.
+The results globally reflect realistic operative indicators similar to existing carsharing systems, such as the time spent on the road ($3$ hours) and the average number of demand each vehicle satisfies during the day ($5$ demands).
+Moreover, specific outputs of the optimization allow to track every vehicle in the system as well as the specific amount of energy delivered in each station.
+Besides, the observed maximum battery range (difference between the largest and the smallest level reach during the day) allows us to state on the minimum required battery capacity.
+This result is especially useful for car makers wishing to dimension their vehicles for carsharing services.
+Finally, we analyse the consequences of an increasing number of demands on the system sustainability and optimal battery range.
+
+
+\medskip
+Chapter \ref{chap:conclusion} ends this dissertation summarizing the results of the previous chapters.
+Perspectives and future works are also suggested.
 
 
 %\subsection{System dimensioning problem}
