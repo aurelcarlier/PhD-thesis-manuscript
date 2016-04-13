@@ -1,6 +1,6 @@
-\chapter{Conclusion and perspectives} \label{chap:conclusion}
+\chapter{Conclusion} \label{chap:conclusion}
 %\begin{bibunit}[ieeetr]
-%\minitoc
+\minitoc
 \vspace{2cm}
 
 \begin{minipage}[c]{0.45\linewidth}
@@ -17,8 +17,101 @@ blabla\\
 \end{abstract}
 \end{minipage}
 
+
+
 \newpage
-The conclusions ans perspectives
+\section{Addressed problems}
+The popularity of station-based carsharing systems has recently led to an increasing interest in behavioural user analysis and system management.
+Especially for the one-way version of the service where users are allow to pick-up and return a vehicle at any dedicated station, the research community intensified its attention on optimal system design and optimal vehicle relocation strategies.
+Indeed, the uneven nature of the demand for mobility in urban areas unbalances the system bringing many operational challenges.
+
+
+\medskip
+In this thesis, we investigated two problems arising in the design of station-based one-way carsharing systems.
+The first one is dedicated to the optimal system dimensioning, referred in this manuscript as the System Dimensioning Problem {\SDP}.
+For fixed and known station locations, it aims at determine global indicators, such as the minimum number of vehicles and the optimal station capacities (number of parking places), allowing the system to run at its highest potential.
+Throughout this report, we considered the system efficiency (or the system potential) as the number of carsharing demands vehicles can satisfied along a specific time period.
+In practice, we based our experimentations on data randomly generated or estimated during a typical weekday.%, where demand profiles are easily .
+
+The second problem deals with optimal station locations and is referred as the Station Location Problem {\SLP}.
+A key factor in increasing the performance of carsharing system is the ability to make the service accessible at relevant places.
+As a generalisation of the {\SDP}, this problem focus on identifying the right sub-set of stations among a set of potential carsharing sites that captures the highest number of demands.
+
+
+\medskip
+Besides determining optimal system components related to the system design (\eg the optimal fleet size, the station locations or the stations' capacities), many studies underlined that the approach must include important mechanics inherent to one-way carsharing systems.
+For instance, the necessity for the carsharing operator to balance its vehicle fleet during the day is absolutely necessary to achieve a good service quality.
+Those operations imply having its own resources (operator's employees also known as jockeys) to move vehicles among stations, generally from ones where there is an exceeding of vehicles to one in deficit.
+As a consequence, additional constraints coping with the total number of jockeys and total number of relocation operations were also included.
+
+
+\medskip
+Today, carsharing operators are increasingly incorporating electric vehicles in their vehicle fleet. 
+Despite the fact that such vehicles reinforced the positive impacts of carsharing on the environment, they also bring out some technological and practical challenges.
+More particularly, the battery range and the power supply at charging points may constitute significant factors to be considered in the global system design process including electric cars.
+The relatively limited autonomy of currently available electric cars constraint the vehicles to stay in station to be recharge.
+The charging time depending on the power supply granted in stations, recharging a vehicle can make it unavailable for a long time ($6$ hours to fully recharge a $22$ kWh battery).
+
+
+\bigskip
+We recall in this chapter the main results obtained in this thesis with respect to the above mentioned problems.
+Both theoretical and industrial contributions are summarized.
+Some perspectives and future work are finally discussed.
+
+
+\newpage
+\section{Results and contributions}
+\subsection{Mathematical models for carsharing system design}
+
+
+
+
+
+
+\subsection{Random data generator}
+Dealing with the lack of data is currently a critical issue. %with respect to carsharing 
+On the one hand, today's operating systems do not shared their data or \emph{open} them to the community.
+At this time, only sporadic and limited data is available, even for research purposes.
+In addition, reported data (often press releases) concern the physical description of the system (number and location of stations, number of vehicles, etc.) or global statistics about operational indicators, such as the average number of requests a vehicle satisfies during a day and its average time spent on road.
+Neither the users daily requests, nor the detailed vehicles relocation operations are today available.
+
+On the other hand, the actual research on demand modelling and demand estimation is not enough accurate to predict and anticipate the observed patterns in urban contexts.
+Numerous incentives at determining the modal part of carsharing among the global transportation demand have been carried out but in practice, their usage admits some hard limitations.
+Often context specific or neglecting the structural configuration of the systems (which is known to slightly influence the demand), advanced studies have not yet succeed to come up with models that accurately estimate a real carsharing demand.
+
+\medskip
+In order to test and evaluate the different mathematical models, we developed and released an open-source software designed to randomly generate data for one-way carsharing systems \cite{csgen}.
+The tool positions a set of carsharing stations over a configurable territory, and generates temporal demands over the system with respect to a global demand profile.
+Over the day, the mobility pattern emulates a centroid configuration where most of the morning demands are oriented to the center of the city, whereas the opposite phenomenon is observed in the evening.
+The generator also produces travel times based on inter-station distances and an average vehicle speed.
+Note that they are penalized for settable pick hours (morning and evening) in order to handle and reproduce travel conditions during traffic congestion.
+More details are given in Chapter \ref{chap:backAndPb}, page \pageref{csgeneratorDescription}.
+
+%Despite the
+%is para many 
+%mitigate
+
+
+\subsection{Industrial decision support tool}
+
+
+
+
+
+
+
+
+
+\section{Perspectives}
+
+
+
+
+
+
+% In the last part of the thesis, we presented and evaluated 
+
+
 
 %\newpage
 %\addcontentsline{toc}{section}{Bibliography of chapter \thechapter}

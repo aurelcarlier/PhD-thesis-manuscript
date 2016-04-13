@@ -6,7 +6,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\includepdf[pages={1,{}}]{front_page/front_page_fr} % page 1 + une page vide
 %\includepdf[pages={1,{}}]{front_page/front_page_en} % page 1 + une page vide
-%%%
+%%%%
 %\pagenumbering{roman}
 %\include{remerciements-acknowledgments/remerciements-acknowledgments}
 %\include{resume-abstract/resume-abstract}
@@ -16,19 +16,19 @@
 \cleardoublepage
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
-%\tableofcontents
+\tableofcontents
 \cleardoublepage
-%\pagenumbering{arabic}
-%\setcounter{page}{1}
-%\setcounter{chapter}{2}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\listoffigures
-%\listoftables
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\include{chap-introduction/intro}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\include{chap-backgroundAndProblem/backgroundAndProblem}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{arabic}
+%%\setcounter{page}{1}
+%%\setcounter{chapter}{2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%\listoffigures
+%%\listoftables
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\include{chap-introduction/intro}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{chap-backgroundAndProblem/backgroundAndProblem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%\part{The System Dimensioning Problem}
 %\include{chap-sdp/sdp}
 %\include{chap-sdpExp/sdpExp}
@@ -39,10 +39,10 @@
 %\include{chap-slpAndEnergyExp/slpAndEnergyExp}
 %%\include{chap-conclusionPart2/conclusionPart2}
 %%%%
-%\include{chap-conclusion/conclusion}
+\include{chap-conclusion/conclusion}
 %\include{publications/publications}
-%%%
-% biblio
+%%%%
+%% biblio
 \addcontentsline{toc}{chapter}{General bibliography}
 \renewcommand{\bibname}{General bibliography}
 \bibliographystyle{apalike} % ieeetr
