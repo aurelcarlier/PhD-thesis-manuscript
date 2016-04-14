@@ -62,9 +62,57 @@ Some perspectives and future work are finally discussed.
 \newpage
 \section{Results and contributions}
 \subsection{Mathematical models for carsharing system design}
+Linear programming is an intuitive approach often used in the literature to deal with carsharing system design.
+Whether to evaluate the system performance, sizing different components such as the number of vehicles or even to find accurate station locations, many studies report on a system modelling based on Time Expanded Graphs (TEG).
+Indeed, since carsharing systems are strongly time-dependant (users' requests, travel times, electric recharge, vehicle relocation operations, etc.), models may account somehow for their temporal evolution during the day.
+
+Carsharing TEGs are directed weighted graphs where nodes and arcs stand respectively for carsharing stations and vehicle operations.
+Nodes are duplicated over a set of discrete time-steps, expanding the original network in the time dimension.
+Arcs describe temporal linkage between nodes (carsharing stations) and are classified into three categories according to the nature of the operation.
+The list includes stock arcs (when vehicles are parked in station), demand arcs (when vehicles are used to satisfy a request) and relocation arcs (when vehicles are relocated by a jockey).
+Considering those operations led to the fact that at any time, each vehicle is either parked in a station or in transit between two stations.
+Arc weights denote maximal station capacities (\ie maximum number of parking places) on stock arcs and number of requests on demand arcs.
+Finally, note that considering a representative period of time makes the graph highly cyclical.
+Indeed, the resulting arrival time of any operation is calculated modulo the global time period.
+In practice, when an operation starts near the end of the day, it terminates early in the morning.
+Required inputs to build such TEG are temporal sets of carsharing demands, travel times between stations and vehicles relocation strategies.
 
 
+\medskip
+Based on the TEGs representation of carsharing systems, Chapter \ref{chap:sdp} presented an Integer Linear Programming model (ILP) dealing with the {\SDP}.
+The model considers integer flow variables over arcs accounting for vehicle flows moving in the system.
+The objective is to find a flow passing through the maximum number of demand arcs.
+Classical flow constraints (flow conservation on nodes and flow capacities on arcs) ensure the flow feasibility.
+Additional constraints limits the total number of vehicles relocation operations, jockeys and vehicles.
 
+The optimal system dimensioning can then be deduced from any feasible solution.
+The resulting flow can be interpreted as vehicle routes, \ie vehicle itineraries, since every unitary cycle flow represents a single vehicle moving though the system (\see Theorem \ref{th:decomp}, page \pageref{th:decomp}).
+Looking at the maximum flow transiting in a station over time allow to deduce the minimum number of requiered parking places in this particular site.
+Finally, the total number of vehicles can be recover from the flows passing though temporal cuts (\see Theorem \ref{NbVoiture}, page \pageref{NbVoiture}).
+
+\medskip
+Dealing with the {\SLP} in Chapter \ref{chap:slp} led to enhanced the ILP model with additional variables.
+For this problem, instead of carsharing stations, nodes in the TEG stand for potential carsharing sites.
+Decisional boolean variables associated with each site indicate its operational status (selected or not selected).
+Dedicated constraints control the inner and outer flow at nodes so that vehicles can park or pass through stations if and only if the corresponding site is selected.
+Finally adding a specific constraint under the maximum number of opened sites complete the linear model. 
+The latter produces the same outputs that the previous one and  provides additional information about the opened sub-set of stations allowing the system to capture the highest number of demands.
+
+\medskip
+We have seen in a dedicated part that including energy components was not possible with the current TEG.
+Because flows are not unitary, interpret an optimal solution as a set of unitary cycles can lead to multiple possibilities.
+Besides, since energetic components are not considered in the ILP, there is no guaranty that the interpretation asserts the induced constraints.
+As a consequence, we presented in Section (\ref{sec:graphTransformations}) a graph transformation supporting unitary flows.
+The ILP model is also enhanced with an additional group of decisional variables, referred as \emph{flow affectation} variables, which report the direction (\ie the upcoming arc) taken by the flow at each node of the TEG.
+We show that their number can be significantly reduced identifying symmetrical situations.
+Finally, additional costs on arcs account for the energy consumption it takes to perform the related operation.
+For demand or vehicle relocation arcs, the consumption is the travel distance (penalized during traffic peaks) whereas for stock arcs the negative value (negatived cost) represents the number of kilometres the battery can be recharged during one time-step.
+For each arcs, a dedicated variable tracks the remaining battery level of the flow passing by before the operation.
+
+
+% From a theoretical perspective
+
+\subsection{Experimental observations}
 
 
 
@@ -88,14 +136,22 @@ Note that they are penalized for settable pick hours (morning and evening) in or
 More details are given in Chapter \ref{chap:backAndPb}, page \pageref{csgeneratorDescription}.
 
 %Despite the
-%is para many 
 %mitigate
 
 
 \subsection{Industrial decision support tool}
 
+As an active actor of the numerical transformation, the IRT SystemX develops and deploys innovative services dedicated to both academic and industrial actors.
+In the domain of smart territories, industrial challenges includes the conception of suitable models at different scales, the design of modular and re-usable architectures and the development of platforms supporting services for stakeholders.
+In this context, a dedicated platform called MOST provides the IT environment for model developments, simulation, supervision and optimization tools for the study of smart territories.
+
+The mathematical linear models presented along this thesis have been implemented and integrated into this platform.
+As a Java Application Programming Interface (API), the tool provides the information and the routines to build and resolve any instance of carsharing problems addressed in this manuscript.
 
 
+%\begin{figure}
+%\includegraphics[width=\textwidth]{decisionSupportTool}
+%\end{figure}
 
 
 
@@ -104,10 +160,14 @@ More details are given in Chapter \ref{chap:backAndPb}, page \pageref{csgenerato
 
 \section{Perspectives}
 
+% problem complexity
+
+% ameliorate the solver calculation times > heuristic
 
 
+% In a future work, we aim to ...
 
-
+% Putting these features together in addition to a good graphical simulation tool can offer an excellent decision tool for the carsharing decision makers.
 
 % In the last part of the thesis, we presented and evaluated 
 
