@@ -138,33 +138,66 @@ More details are given in Chapter \ref{chap:backAndPb}, page \pageref{csgenerato
 %Despite the
 %mitigate
 
-
+\newpage
 \subsection{Industrial decision support tool}
 
 As an active actor of the numerical transformation, the IRT SystemX develops and deploys innovative services dedicated to both academic and industrial actors.
 In the domain of smart territories, industrial challenges includes the conception of suitable models at different scales, the design of modular and re-usable architectures and the development of platforms supporting services for stakeholders.
 In this context, a dedicated platform called MOST provides the IT environment for model developments, simulation, supervision and optimization tools for the study of smart territories.
 
+\medskip
 The mathematical linear models presented along this thesis have been implemented and integrated into this platform.
-As a Java Application Programming Interface (API), the tool provides the information and the routines to build and resolve any instance of carsharing problems addressed in this manuscript.
+As a Java Application Programming Interface (API), the tool provides functionalities and routines to build and resolve any instance of carsharing problems addressed in this manuscript.
+Dedicated methods allow to specify and set all the problem parameters (inputs of the problem) including upper bounds for the number of vehicles, jockeys, station capacities, vehicle relocation operations, station locations as well as carsharing demands, temporal set and relocation strategies.
+The tool also offers the possibility to produce realistic data using the random generator for one-way carsharing demand presented previously.
+In addition, its integration within a multi-modal demand estimation software allow to recover real data processed from mobility surveys.
+Although still under development, the tool aims to extracts the specific carsharing demand (O/D temporal matrices) from macroscopic transportation flows providing valuable data for the carsharing application.
+
+\medskip
+In practice, the carsharing API is supported by graphical interfaces facilitate the program usage.
+Temporal data can be apprehended and examined through coloured maps, charts and global indicators.
+Outputs and results of an optimization can also be visualized in detail.
+Especially the vehicles itineraries and the stations' energetic consumption profile can be displayed over time.
+Figures \ref{fig:donnees} and \ref{fig:resultats} illustrate the visualisation provided by the tool.
+
+\begin{figure}[t]
+\includegraphics[width=\textwidth]{donnees}
+\caption{A caption}
+\label{fig:donnees}
+\end{figure}
 
 
-%\begin{figure}
-%\includegraphics[width=\textwidth]{decisionSupportTool}
-%\end{figure}
-
-
-
-
+\begin{figure}[t]
+\includegraphics[width=\textwidth]{resultats}
+\caption{A caption}
+\label{fig:resultats}
+\end{figure}
 
 
 \section{Perspectives}
+% limitations
+% ameliorations > better demand estimation
+In this thesis, we addressed strategical aspects of carsharing system design problem.
+To come up with relevant results, the model must be set up with realistic data and deal with real size instances.
+Unfortunately, as said before, neither real carsharing data nor accurate estimation demand models for carsharing demand that are not context-specific and applicable for one-way travels are yet available.
+Hence, we believe that significant efforts in this direction may result in more valuable and accurate analysis.
+The software integration of the carsharing module into the estimation demand tool has been achieve in that sense and several studies are currently ongoing.
 
-% problem complexity
-
+\medskip
 % ameliorate the solver calculation times > heuristic
+With respect to the mathematical approach using linear programming, some limitations about solver capabilities have been observed and experienced in practice.
+Clearly, solving times depend on the computing power and problem one chose to solve.
+The inclusion of the energy for instance requires much more memory (the TEG is larger) and generates higher solving times since the resulting problem induced more decisions.
+Basically, the {\SDP} model can solve instances with $100$ stations and $5$ minutes times steps whereas {\ENERGY} model has difficulties to accept instances exceeding $20$ stations and $20$ minutes times steps within reasonable time.
+Most of the time, combinatorial issues make the solver unable to converge.
+Improving the heuristic proposed in Chapter \ref{chap:slp} may help to initialise and start the exact searching method with a feasible solution.
+Moreover, since the solver is using Branch-And-Cut method to deal with MIP problems, propose better node evaluations during the searching routine can be a promising feature.
 
+\medskip
+% problem complexity
+From a theoretical point of view, 
 
+% 
 % In a future work, we aim to ...
 
 % Putting these features together in addition to a good graphical simulation tool can offer an excellent decision tool for the carsharing decision makers.
