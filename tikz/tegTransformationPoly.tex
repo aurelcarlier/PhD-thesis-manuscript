@@ -1,0 +1,29 @@
+\begin{tikzpicture}[>=stealth, thick, scale=2]
+
+\begin{scope} % LEFT SIDE
+\node[station] (x) {$x$};
+\node[station, below right of = x, node distance = 5cm] (y) {$y$};
+\path[arcDemand] (x) edge[bend right, out=-15, in=160] node[swap, capacity]{$u(a)$} (y);
+\end{scope}
+%
+\begin{scope}[shift={(3,0)}] % RIGHT SIDE
+\node[station] (x) {$x$};
+\node[station, below right of = x, node distance = 5cm] (y) {$y$};
+\path[arcDemand, dashed] (x) edge[bend right, out=-15, in=160] (y);
+
+\node[station, right of = x, node distance = 2.3cm] (ta) {$t_a$};
+\node[station, left of = y, node distance = 2.3cm] (sa) {$s_a$};
+\node[station, above left of = sa, node distance = 2.3cm] (ssource) {$s^\star$};
+\node[station, below right of = ta, node distance = 2.3cm] (ssink) {$t^\star$};
+
+\draw[->] (ssource) -> node[capacity, below left]{$u(a)$} (sa);
+\draw[->] (sa)      -> node[capacity, below]{$u(a)$} (y);
+\draw[->] (x)  -> node[capacity]{$u(a)$} (ta);
+\draw[->] (ta) -> node[capacity]{$u(a)$} (ssink);
+
+\node[left of = ssource, node distance = 2cm](dumb1){};
+\node[right of = dumb1, node distance = 1cm](dumb2){};
+\draw [->, >=stealth, line width = 4pt] (dumb1) -- (dumb2);
+\end{scope}
+
+\end{tikzpicture}

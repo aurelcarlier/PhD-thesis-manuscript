@@ -150,7 +150,7 @@ Finally, the following list summarizes the problem's inputs:
 
 \paragraph{Outputs:}
 A carsharing system dimensioning consists in quantifying the system components in order to get a realistic and runnable system.
-To be more specific, dimensioning a carsharing system expect the following output values:
+To be more specific, dimensioning a carsharing system expects the following output values:
 \begin{itemize}
 \item a set of satisfied demands;
 \item a set of vehicle relocation to be operate during the period;
@@ -164,17 +164,17 @@ A formal definition of our main optimization problem, referred as the System Dim
 
 \noindent{\SDP}:
 \begin{description}
-\item[Inputs:] A set of $\nbStations$ stations with their capacity $Z(i) \in \sCapaSet$, $i \in \stationSet$, time periods set ${\timeStepSet = \{1, \cdots, \nbTimeSteps\}}$, travel times $\delta(i,j,t) \in \travelTimeSet$ for each triplet $(i,j,t)\in \stationSet^2 \times \timeStepSet$, a set $\demandSet$ of $\nbDemands$ time-dependant demands, fixed number of vehicles $\nbVehicles$ and relocation operations $\nbVROs$.
+\item[Inputs:] A set of $\nbStations$ stations with their maximum capacity $Z(i) \in \sCapaSet$, $i \in \stationSet$, time periods set ${\timeStepSet = \{1, \cdots, \nbTimeSteps\}}$, travel times $\delta(i,j,t) \in \travelTimeSet$ for each triplet $(i,j,t)\in \stationSet^2 \times \timeStepSet$, a set $\demandSet$ of $\nbDemands$ time-dependant demands, fixed number of vehicles $\nbVehicles$ and relocation operations $\nbVROs$.
 \item[Question:]
 What is the maximum number of demands $d \leq \nbDemands$ that can be captured by a vehicle routing of at most $\nbVehicles$ vehicles and $\nbVROs$ vehicle relocation operations during the considered period $\timeStepSet$?
 \end{description}
 We refer later on at SDP($\timeStepSet, \stationSet, \sCapaSet, \demandSet, \relocTimeStepSet, \travelTimeSet, \nbVROs, \nbVehicles$) to indicate a particular SDP instance.
 We will show that {\SDP} belongs to ${\cal NP}$ by modelling feasible solutions as a non classical flow problem.
 
-\subsection{Time Expanded Graph}
+\subsection{Time Expanded Graphs}
 In the Station Dimensioning Problem, time is an essential ingredient.
-To deal with discrete-time dynamic networks, Ahuja {\em et al.} \cite{ahuja_network_1993} suggested the use of \emph{time-space networks}, also known as \emph{Time Expanded Graphs} (TEG). 
-It is a static network constructed by expanding the original (dynamic) network in the time dimension.
+To deal with discrete-time dynamic networks, \cite{ahuja_network_1993} suggested the use of \emph{time-space networks}, also referred as \emph{Time Expanded Graphs} (TEGs). % Ahuja {\em et al.} 
+They are static networks constructed by expanding the original (dynamic) networks in the time dimension.
 The strength of such models arises from the fact that we benefit from results of static flow models while account properly for the evolution of the underlying system over time.
 The basic idea is to consider a separate copy of every node at every discrete time-step. % allows to describe the system over time
 Arcs that link these static ``snapshots'' of the network describe temporal linkage in the system.
@@ -231,7 +231,7 @@ It is formally defined as the following equation.
 \tegArcSet \subseteq \{a=(x,y) \mid x \in \tegNodeSet \text{ and } y \in \tegNodeSet\}
 \end{equation}
 
-In this study, we consider tree temporal operations among stations: park a vehicle in a station, satisfy a carsharing demand and relocate a vehicle.
+In this study, we consider three temporal operations among stations: park a vehicle in a station, satisfy a carsharing demand and relocate a vehicle.
 Those operations are modelled with arcs in $\teg$ and partitioned into tree distinct sets denoted by $\tegArcSet_1$, $\tegArcSet_2$ and $\tegArcSet_3$.
 
 \paragraph{Stay Parked:}
@@ -297,7 +297,7 @@ y_2 = (1, \nbTimeSteps + \delta_2 \mbox{ mod } \nbTimeSteps = 2) = (1, 2) & ~ \n
 
 \paragraph{Relocate a vehicle between stations:}
 $\tegArcSet_3$ represents all the possible vehicle relocation operations over time.
-Let define $\relocTimeStepSet \subseteq \timeStepSet$ \label{def:relocTimeStepSet}, the subset of time-steps when the system could be balanced through vehicle relocation operations.
+Let define $\relocTimeStepSet \subseteq \timeStepSet$\label{def:relocTimeStepSet}, the subset of time-steps when the system could be balanced through vehicle relocation operations.
 Then it comes that any relocation arc can be model as arcs starting from every station at every time-steps in $\relocTimeStepSet$.
 
 \medskip
@@ -350,9 +350,8 @@ In this case, we observe that $|\tegArcSet_3|\gg |\tegArcSet_1 \cup \tegArcSet_2
 \medskip
 Figure \ref{fig:teg} illustrates a complete TEG configuration with $\nbStations$ stations, $\nbTimeSteps$ time-steps and $\relocTimeStepSet = \timeStepSet$.
 \begin{figure}[t]
-\begin{center}
-\input{tikz/tegBis}
-\end{center}
+\centering
+\input{tikz/teg}
 \caption{Complete TEG with $\nbStations$ stations and $\nbTimeSteps$ time-steps. Maximum capacities for stations $1$ and $\nbStations$ are respectively $8$ and $4$. The two demands are the same as those in figure (\ref{fig:tegDemandArcs})(1.3).}
 \label{fig:teg}
 \end{figure}
@@ -495,7 +494,7 @@ We show in the following that a feasible solution can be described by only consi
 \medskip
 For each arc $a =(x,y) \in \tegArcSet$, we call $\varphi(a)$ the flow of vehicles transiting through the arc $a$. 
 It can be interpreted as the number of vehicle staying in station $\eta(x)$ between two consecutive time-steps if $a \in \tegArcSet_1$, or the number of vehicle moving from station $\eta(x)$ at time $\theta(x)$ to station $\eta(y)$ otherwise.
-Since the total number of vehicles transiting by any node $x \in \tegNodeSet$ is constant, the flow verify the following flow conservation equation:
+Since the total number of vehicles transiting by any node $x \in \tegNodeSet$ is constant, the flow verifies the following flow conservation equation:
 \begin{equation}\label{eqn:flowconservation}
 \sum_{{y\in \Gamma^-(x)}} \varphi((y,x))= \sum_{{y\in \Gamma^+(x)}} \varphi((x,y)),
 \end{equation}
@@ -624,22 +623,24 @@ The total number of equations is around $2|\tegArcSet| + \nbStations \times \nbT
 \end{numcases}
 
 
-\section{Theoretical result}
-\subsection{Problem complexity}
-intro.
+\section{A polynomial sub-case}
 
-\subsection{Polynomial sub-case}
-This section aims to prove that the determination of a flow that satisfies all the demands 
-without a constraint on the total number of relocations or vehicles is a polynomial problem.
-The formal definition of this problem, designated by {\SDPALLDEMANDS}, follows.
+Although the {\SDP} formulation sounds very close to the circulation problem definition, it presents some particularities that prevent us from its complexity evaluation.
+As far as we know, the fact that the optimization is focused on a sub-set of arcs (carsharing demand arcs) and tries to find a feasible flow in the graph is not present in the literature neither as a standard problem nor related to some known one.
+As a consequence, and despite our attempts, we do not succeeded in positioned this problem into a complexity class.
+Probably, reduce or transform it into a classic flow problem may answer this question.
+
+\medskip
+Nevertheless, we obtained a complexity result for a specific instance of the problem. 
+This section aims to prove that the determination of a flow satisfying all the carsharing demands without the constraints on the total number of relocation operations or vehicles is a polynomial problem.
+Its formal definition, designated by {\SDPALLDEMANDS}, follows.
 
 \bigskip
 \noindent{\SDPALLDEMANDS}:
 \begin{description}
 \item[Inputs :] A Time Expanded Graph $\teg = (\tegNodeSet, \tegArcSet, u)$.
-\item[Question :]
-Is there a feasible flow $\varphi$ such that all the demands are fulfilled,\\
-~~~~~~~~~\ie $\forall a \in \tegArcSet_2$, $\varphi(a)=u(a)$?
+\item[Question :] Is there a feasible flow $\varphi$ in $\teg$ such that all the demands are fulfilled,\newline
+\mbox{~~~~~~~~} \ie $\forall a \in \tegArcSet_2$, $\varphi(a) = u(a)$?
 \end{description}
 
 Let $I$ be an instance of \textsc{all-demands}.
@@ -654,7 +655,18 @@ Arc set is $\widehat{\tegArcSet} = \tegArcSet_1 \cup \tegArcSet_3 \cup \{ (x,t_a
 Maximum capacity of arcs are $\widehat{w}(a) = u(a)$ for $a \in \tegArcSet_1 \cup \tegArcSet_3$.
 Otherwise, for any arc $a=(x,y) \in \tegArcSet_2$, $\widehat{w}((x,t_a))=\widehat{w}((t_a,t^\star))=\widehat{w}((s^\star, s_a))=\widehat{w}( (s_a,y))=u(a)$.
 \end{enumerate}
+
+
+\begin{figure}[t]
+\centering
+\input{tikz/tegTransformationPoly}
+\caption{Transformation of an arc $a = (x,y) \in \tegArcSet_2$ into four arcs and two additional vertices $s_a$ and $t_a$  in $\widehat{\cal G}$. The corresponding maximum capacities are set to $u(a)$. Nodes $s^\star$ and $t^\star$ are unique and denote respectively the source and the sink nodes.}
+\label{fig:tegTransformationPoly}
+\end{figure}
+
+Figure \ref{fig:tegTransformationPoly} illustrates the graph transformation and focuses on the adding graph components for a specific carsharing demand arc $a \in \tegArcSet_2$.
 Note that this transformation is a polynomial function and does not depend on the structure of $\teg$.
+
 
 \begin{theorem}\label{theo:pol}
 Let an instance of \emph{\SDPALLDEMANDS} expressed by a TEG $\teg$.
@@ -681,34 +693,38 @@ Thus,
 \[\sum_{a \in \Gamma^-(\widehat{\teg}, x)} \widehat{\varphi}(a)=
 \sum_{a \in \Gamma^-(\teg, x)} \varphi(a)=\sum_{a \in \Gamma^+(\teg, x)} \varphi(a)=
 \sum_{a \in \Gamma^+(\widehat{\teg}, x)} \widehat{\varphi}(a)\text{.}\]
+
 \item
 For any arc $a=(z,y)\in \tegArcSet_2$, the two vertices $t_a$ and $s_a$ are such that
 \[\sum_{e \in \Gamma^-(\widehat{\teg}, t_a)} \widehat{\varphi}(e)=\widehat{\varphi}((x, t_a))=\widehat{\varphi}((t_a, t^\star))=\sum_{e \in \Gamma^+(\widehat{\teg}, t_a)} \widehat{\varphi}(e)\]
 and
 \[\sum_{e \in \Gamma^-(\widehat{\teg}, s_a)} \widehat{\varphi}(e)=\widehat{\varphi}((s^\star,s_a))=\widehat{\varphi}((s_a, y))=\sum_{e \in \Gamma^+(\widehat{\teg}, s_a)} \widehat{\varphi}(e)\text{.}\]
+
 \item
 Lastly, \[\sum_{e \in \Gamma^-(\widehat{\teg}, t^\star)} \widehat{\varphi}(e)=\sum_{a\in \tegArcSet_2} u(a) \text{ ~~ and } \sum_{e \in \Gamma^+(\widehat{\teg}, s^\star)} \widehat{\varphi}(e)=\sum_{a\in \tegArcSet_2} u(a)\text{.}\]
 \end{enumerate}
 The consequence is that $\widehat\varphi$ is a feasible flow of $\widehat{\teg}$ of value $\sum_{a\in \tegArcSet_2} u(a)$. 
 
+\medskip
 Conversely, any feasible flow of $\widehat{\teg}$ of value $\sum_{a\in \tegArcSet_2} u(a)$ verifies
-that, for any arc $a=(x,y)\in \tegArcSet_2$, 
-$\widehat{\varphi}((x,t_a))=\widehat{\varphi}((t_a,t^\star))=\widehat{\varphi}((s^\star, s_a))=\widehat{\varphi}( (s_a,y))=u(a)$.
+that, for any arc ${a=(x,y) \in \tegArcSet_2}$, 
+$\widehat{\varphi}((x,t_a)) = \widehat{\varphi}((t_a,t^\star)) = \widehat{\varphi}((s^\star, s_a)) = \widehat{\varphi}( (s_a,y))=u(a)$.
 A feasible flow for ${\teg}$ can be easily obtained by setting:
 \begin{enumerate}
 \item
 $\forall a\in \tegArcSet_1 \cup \tegArcSet_3$, 
 ${\varphi}(a)=\widehat{\varphi}(a)$;
+
 \item
 For any arc $a=(x,y)\in \tegArcSet_2$, $\varphi(a)=u(a)$,
 \end{enumerate}
 the theorem.
 \end{proof}
 
-According to \cite{ahuja1993}, the existence of a maximum-flow of a fixed value is a polynomial problem. The following corollary is thus a consequence
-of Theorem \ref{theo:pol}:
+According to \cite{ahuja1993}, the existence of a maximum-flow of a fixed value is a polynomial problem.
+The following corollary is thus a consequence of Theorem \ref{theo:pol}:
 \begin{corollary}
-\textsc{all-demands} is polynomial.
+\emph{\SDPALLDEMANDS} is polynomial.
 \end{corollary}
 
 \section{Conclusion}
