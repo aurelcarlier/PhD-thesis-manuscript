@@ -1,7 +1,44 @@
-\chapter*{Résumé}
-Le résumé de la thèse en français
+%\chapter*{Résumé}
+%Le résumé de la thèse en français
 
 
 \chapter*{Abstract}
-The thesis abstract in english
+Carsharing is a mobility service allowing people to use and share a dedicated fleet of vehicles to satisfy transportation necessities.
+As a excellent candidate to cope with environmental issues affecting nowadays several dense urban areas, it offers the flexibility of private vehicles without the drawbacks of car ownership.
+In the field of mobility, the new economic model associated with sharing common goods has begun to reveal a new paradigm leading to numerous benefits.
+Carsharing user behaviour evolves from a property-based application of the vehicles, to an usage aligned with real mobility needs.
 
+\medskip
+Many schemes are today implemented all around the world, and the evolution of carsharing  is promise to operate great expansion for the upcoming years.
+The trend is toward more flexibility and more accessibility.
+Although the round-trip model is still predominant, the implementation of one-way schemes, and more recently free-floating systems, have begun to emerged.
+The carsharing one-way version allows the user to drop off the vehicles at any dedicated station of the system.
+This gain of flexibility poses however several additional challenges, especially from a management and operational perspective.
+The possibility to leave cars at any places of the system causes a resource imbalance that must be corrected to maintain a good level of service.
+
+\medskip
+Moreover, the recent introduction of electric cars in carsharing systems brings additional technical and practical constraints.
+Indeed, shared vehicles spent more time on the roads and are more used than private ones.
+The relatively limited autonomy of today's electric batteries may restrain the service in providing  reduced reachable range distances and committing the vehicles to recharge, making them unavailable.
+Therefore, carsharing is a interesting and challenging topic, addressing various problems and dealing with strategic, tactical and operational aspect of those systems.
+
+\medskip
+This thesis focuses on the optimal design of one-way station-based carsharing systems.
+We consider the system design through two structural aspects: the optimal system dimensioning (number of parking places, vehicles, battery capacities, etc.) and the identification of appropriate stations' locations.
+Although the addressed problems do not directly concern the system management, some relevant aspects (like vehicle relocation operations) are nonetheless part of the models.
+The modelling approach uses graph theory to represent the system dynamics over time and various optimization models (ILPs and MILPs) are proposed.
+The objective is to deduce a optimal shape of the whole system (number of vehicles, parking places, jockeys, stations' locations, etc.) allowing to capture the maximum number of estimated time-dependant requests.
+Mathematical programs consider integer flow variables accounting for vehicles moving dynamically in the system.
+Electric vehicles are also included in an enhanced version and context related constraints ensure that vehicles cannot travel distances exceeding their battery range.
+Power supply at charging points are also taken into account.
+Then, the optimization allows to study the impact of different power supply technologies and settle the minimal autonomy a shared vehicle necessitate in this environment.
+
+\medskip
+All the models developed in this manuscript are applied to realistic case studies, using both random generated data and real estimated outputs of simulation tools.
+To account for the necessary vehicle rebalancing, strategies including vehicle relocation operations managed by jockeys (employees of the carsharing operator) are considered.
+We propose some graph simplifications reducing the problem size and leading to greatly improve solver capabilities as well as computation times.
+A greedy heuristic helping to quickly find feasible solutions and initialize the solver is also proposed and illustrated.
+
+\medskip
+From an industrial perspective, several versions of the models have been implemented in a dedicated tool released as a Java Application Programming Interface (API).
+The software, today  integrated into a dedicated IT platform devoted to the study of smart territories, provides ergonomic graphical interfaces and resolution methods, helping the actors of mobility design one-way carsharing systems with electric vehicles.

@@ -19,7 +19,7 @@ Some perspectives and opened problems are finally provided.
 \newpage
 \section{Addressed problems}
 The popularity of station-based carsharing systems has recently led to an increasing interest in behavioural user analysis and system management.
-Especially for the one-way version of the service where users are allow to pick-up and return a vehicle at any dedicated station, the research community intensified its attention on optimal system design and optimal vehicle relocation strategies.
+Especially for the one-way version of the service where users are allowed to pick-up and return a vehicle at any dedicated station, the research community intensified its attention on optimal system design and optimal vehicle relocation strategies.
 Indeed, the uneven nature of the demand for mobility in urban areas unbalances the system bringing many operational challenges.
 
 
@@ -32,7 +32,7 @@ In practice, we based our experimentations on data randomly generated or estimat
 
 The second problem deals with optimal station locations and is referred as the Station Location Problem {\SLP}.
 A key factor in increasing the performance of carsharing system is the ability to make the service accessible at relevant places.
-As a generalisation of the {\SDP}, this problem focus on identifying the right sub-set of stations among a set of potential carsharing sites that captures the highest number of demands.
+As a generalisation of the {\SDP}, this problem focuses on identifying the right sub-set of stations among a set of potential carsharing sites that captures the highest number of demands.
 
 
 \medskip
@@ -46,7 +46,7 @@ As a consequence, additional constraints coping with the total number of jockeys
 Today, carsharing operators are increasingly incorporating electric vehicles in their vehicle fleet. 
 Despite the fact that such vehicles reinforced the positive impacts of carsharing on the environment, they also bring out some technological and practical challenges.
 More particularly, the battery range and the power supply at charging points may constitute significant factors to be considered in the global system design process including electric cars.
-The relatively limited autonomy of currently available electric cars constraint the vehicles to stay in station to be recharge.
+The relatively limited autonomy of currently available electric cars constraint the vehicles to stay in station to be recharged.
 The charging time depending on the power supply granted in stations, recharging a vehicle can make it unavailable for a long time ($6$ hours to fully recharge a $22$ kWh battery).
 
 
@@ -85,7 +85,7 @@ Additional constraints limits the total number of vehicles relocation operations
 The optimal system dimensioning can then be deduced from any feasible solution.
 The resulting flow can be interpreted as vehicle routes, \ie vehicle itineraries, since every unitary cycle flow represents a single vehicle moving though the system (\see Theorem \ref{th:decomp}, page \pageref{th:decomp}).
 Looking at the maximum flow transiting in a station over time allow to deduce the minimum number of required parking places in this particular site.
-Finally, the total number of vehicles can be recover from the flows passing though temporal cuts (\see Theorem \ref{NbVoiture}, page \pageref{NbVoiture}).
+Finally, the total number of vehicles can be recovered from the flows passing though temporal cuts (\see Theorem \ref{NbVoiture}, page \pageref{NbVoiture}).
 
 \medskip
 Dealing with the {\SLP} in Chapter \ref{chap:slp} led to enhanced the ILP model with additional variables.
@@ -97,7 +97,7 @@ The latter produces the same outputs that the previous one and  provides additio
 
 \medskip
 We have seen in a dedicated part that including energy components was not possible with the current TEG.
-Because flows are not unitary, interpret an optimal solution as a set of unitary cycles can lead to multiple possibilities.
+Because flows are not unitary, the interpretation of an optimal solution as a set of unitary cycles can lead to multiple possibilities.
 Besides, since energetic components are not considered in the ILP, there is no guaranty that the interpretation asserts the induced constraints.
 As a consequence, we presented in Section (\ref{sec:graphTransformations}) a graph transformation supporting unitary flows.
 The ILP model is also enhanced with an additional group of decisional variables, referred as \emph{flow affectation} variables, which report the direction (\ie the upcoming arc) taken by the flow at each node of the TEG.
@@ -184,7 +184,7 @@ Outputs and results of an optimization can also be visualized in detail.
 Especially the vehicles itineraries and the stations' energetic consumption profile can be displayed over time.
 Figures \ref{fig:donnees} and \ref{fig:resultats} illustrate some graphical frames provided by the tool.
 Both depicted a specific carsharing use-case on the city of Paris.
-Figure \ref{fig:donnees} represents the global demand over the different districts of the city whereas Figure \ref{fig:resultats} show the results of an optimization with the proportion of satisfied demands over the territory.
+Figure \ref{fig:donnees} represents the global demand over the different districts of the city whereas Figure \ref{fig:resultats} shows the results of an optimization with the proportion of satisfied demands over the territory.
 
 
 
@@ -192,7 +192,7 @@ Figure \ref{fig:donnees} represents the global demand over the different distric
 % limitations
 % ameliorations > better demand estimation
 In this thesis, we addressed strategical aspects of carsharing system design problem.
-To come up with relevant results, the model must be set up with realistic data and deal with real size instances.
+To come up with relevant results, the model must be set up with realistic data and deals with real size instances.
 Unfortunately, as said before, neither real carsharing data nor accurate estimation demand models for carsharing demand that are not context-specific and applicable for one-way travels are yet available.
 Hence, we believe that significant efforts in this direction may result in more valuable and accurate analysis.
 The random data generator as well as the software integration of the carsharing module into the estimation demand tool has been achieve in that sense and several studies are currently ongoing.
@@ -201,12 +201,12 @@ The random data generator as well as the software integration of the carsharing 
 \medskip
 % problem complexity
 From a theoretical point of view, the {\SDP} problem complexity remains unknown.
-Despite the fact that a polynomial sub-case has been exhibited in Chapter \ref{chap:sdp} and that the problem presents many similarities with a max-flow formulation, its exact definition do not fit with standard flow problems description.
+Despite the fact that a polynomial sub-case has been exhibited in Chapter \ref{chap:sdp} and that the problem presents many similarities with a max-flow formulation, its exact definition does not fit with standard flow problems description.
 The closer formulation seems to be the one of the circulation problem where there is no sources, no sinks and attempt to find a feasible flow in the graph \cite{ahuja_network_1993}.
-As far as we know, the objective to maximize the flow passing through a specific subset of arcs (in our case the set of carsharing demand arcs) do not exists in the literature.
+As far as we know, the objective to maximize the flow passing through a specific subset of arcs (in our case the set of carsharing demand arcs) does not exist in the literature.
+
+
 \medskip
-
-
 % ameliorate the solver calculation times > heuristic
 With respect to the mathematical approach using linear programming, some limitations about solver capabilities have been observed and experienced in practice.
 Clearly, solving times depend on the available computing power and the size of the carsharing system you chose to design.
@@ -214,7 +214,7 @@ The inclusion of the energy for instance requires much more memory (the TEG is l
 Basically, the {\SDP} model can solve instances with $100$ stations and $5$ minutes times steps whereas {\ENERGY} model has difficulties to accept instances exceeding $20$ stations and $20$ minutes times steps within reasonable time.
 Most of the time, combinatorial issues make the solver unable to converge.
 Improving the heuristic proposed in Chapter \ref{chap:slp} may help to initialise and start the exact searching method with a feasible solution.
-Moreover, since the solver is using Branch-And-Cut method to deal with MIP problems, propose better node evaluations during the searching routine can be a promising feature.
+Moreover, since the solver is using a Branch-And-Cut method to deal with MIP problems, propose better node evaluations during the searching routine can be a promising feature.
 
 
 

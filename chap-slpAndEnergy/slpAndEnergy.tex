@@ -15,8 +15,8 @@ This chapter is dedicated to the study of the Station Location Problem (SLP).
 The problem, its challenges and related work are first described.
 We then present a mathematical program expanding the SDP model seen in Chapter \ref{chap:sdp} and including new features in the model like the number of jockeys.
 Next section is dedicated to the integration of energy components in the model.
-After having exhibit some modelling issues with respect to the model we previously developed, a new model is presented.
-The latter include battery range and power supply constraints.
+After having exhibited some modelling issues with respect to the previously developed model, a enhanced linear program is presented.
+The latter includes battery range and power supply constraints.
 The chapter terminates giving some discussions and improvements about the model.
 More particularly, an heuristic is detailed and a basic example illustrates its mechanics.
 \end{abstract}
@@ -26,7 +26,7 @@ More particularly, an heuristic is detailed and a basic example illustrates its 
 \section{Introduction}
 We have presented in Chapter \ref{chap:sdp} a mathematical linear program resolving the system dimensioning problem.
 The optimization dealt with the optimal sizing of a carsharing system when stations were fixed.
-The optimal flow circulating in the Time Expanded Graph (TEG) can be interpreted as vehicle routes and some global dimensioning parameters can be deduce from it.
+The optimal flow circulating in the Time Expanded Graph (TEG) can be interpreted as vehicle routes and some global dimensioning parameters can be deduced from it.
 Until then, the problem was to assess the number of vehicles as well as the number of vehicle relocations to run the carsharing system at its better efficiency, considered in this work as the capacity to fulfil the higher number of demands.
 In this chapter, we intend to enhance the initial problem with two new challenged aspects.
 
@@ -34,9 +34,9 @@ In this chapter, we intend to enhance the initial problem with two new challenge
 The first one deal with stations' locations.
 We propose to look at the problem from a different perspective by expanding its scope to the selection of a subset of stations contributing to the better system configuration.
 It involves changing the concept of \emph{station} to \emph{possible station location} which can be also understood as \emph{possible carsharing station site}.
-Then, the problem can be expressed as follow: among all possible $\nbStations$ station's locations, what are the $P \leq \nbStations$ sites constituting the most effective carsharing system?
+Then, the problem can be expressed as follow: among all possible $\nbStations$ station's locations, what is the number of $P \leq \nbStations$ sites constituting the most effective carsharing system?
 From this perspective, we intend to study the decisional factor that lead to select, or not select, a site.
-Our expectations are to deduce from exact solutions a global scheme that could inquire the site selection without having to run a exact optimization.
+Our expectation is to deduce from exact solutions a global scheme that could inquire the site selection without having to run an exact optimization.
 
 \medskip
 The second challenge aims at introduce energy components.
@@ -60,8 +60,19 @@ Including battery range constraints means control their charge level at all time
 Until then, the flow model based on TEGs describes macroscopic flows of vehicles.
 Even if individual vehicle routes can be extracted, the numerous possible interpretations lead us to adapt and propose an alternative mathematical model able to consider electric cars and their appropriate functional equipment.
 
-\medskip
+\bigskip
 This chapter is organized as follow.
+The first section specifies the addressed problem and its associated constraints.
+Its formulation as a Mixed Integer Linear Program (MILP) is especially presented.
+Related variables and constraints are listed and discussed.
+Two mathematical models are provided and a master-slave scheme with respect to the system dimensioning problem is exhibited.
+
+Then, section \ref{sec:addingEnergy} presents how to integrate energetic components into the current models.
+Considering electric vehicles instead of cars propelled by combustion engines bring interesting challenges that can not be tackled with the actual models.
+Thus, after having selected the components we wish include and described the required graph transformations, a new enhanced linear program is exposed.
+
+The chapter terminates giving some modelling improvements to reduce the graph density and the total number of variables.
+To cope with solver capabilities, a greedy heuristic is proposed and illustrated on a basic example.
 
 % We study their impact in the global system optimization and discuss .
 %of considering electric vehicles on
@@ -69,7 +80,7 @@ This chapter is organized as follow.
 
 \section{The Station Location Problem}
 A major difficulty for an operator wishing to set up a carsharing systems is without any doubt the stations' locations over the area he wishes to cover.
-Assuming that potential stations' sites could be identified, the remaining problem of select the ones leading to a system that operates efficiently and captures the higher number of requests still remain a tricky question.
+Assuming that potential stations' sites could be identified, the remaining problem of select the ones leading to a system that operates efficiently and captures the higher number of requests stills remain a tricky question.
 From a formal point of view, the problem is purely combinatorial and admits $\binom{\nbStations}{\nbMaxStations}$ possible solutions, where $\nbMaxStations$ denotes the number of stations to chose among the $\nbStations$ number of potential stations' sites.
 
 
@@ -180,21 +191,21 @@ It can be obtained using $\nbMaxStations = \sum_{i=1}^\nbStations b_i$.
 Every instance of the SDP with $\nbMaxStations$ stations correspond to an instance of the SLP where $b$ contains $\nbMaxStations$ ones.
 
 \subsubsection{Constraints}
-First note that limit the number of selected sites can be easily be expressed by limiting the number of ones in $b$ to $\nbMaxStations$.
+First, note that limiting the number of selected sites can be easily expressed by bounding the number of ones in $b$ to $\nbMaxStations$.
 Formally, the constraint can be written as follow:
 \begin{equation} \label{const:nbMaxStations}
 \sum_{i=1}^\nbStations b_i \leq \nbMaxStations
 \end{equation}
 
 \medskip
-Secondly, limit the number of opened sites imply to close some of them.
+Secondly, the limitation of the number of opened sites implies to close some of them.
 When a carsharing site is closed, no vehicle can stop or either pass through it.
 In our model, vehicles are represented as flows and until then, no restriction on the possibility to enter the nodes have been considered.
 Using the new decisional vector $b$, it is now easy to limit the inner (\resp outer) flow entering (\resp leaving) each nodes (carsharing sites).
 These constraints are defined as follows:
 \begin{align}
 \varphi(a) \leq b_{\eta(x)} \cdot \tegCapacity(a) \quad & , \forall a = (x, y) \in \tegArcSet \label{const:stationInnerFlow} \\
-\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) \quad & , \forall a = (x, y) \in \tegArcSet_2 \cap \tegArcSet_3 \label{const:stationOuterFlow}
+\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) \quad & , \forall a = (x, y) \in \tegArcSet_2 \cup \tegArcSet_3 \label{const:stationOuterFlow}
 \end{align}
 Constraints (\ref{const:stationInnerFlow}) limit the outer flow in every arcs of the TEG to the arc's capacity if the site is selected and zero otherwise.
 Similarly, if the site is active, constraints (\ref{const:stationOuterFlow}) bound the inner flow to the arc's capacity but only for demand and vehicle relocation arcs.
@@ -253,7 +264,7 @@ Basically, the mathematical program reused the transportation network expanded o
 
 \medskip
 We present in this section two sights of seeing the model.
-The first one aims at highlight the sub-problem dependence between the SDP and the SLP.
+The first one aims at highlighting the sub-problem dependence between the SDP and the SLP.
 Then, the full version is detailed.
 
 \subsubsection{The master-slave scheme}
@@ -276,7 +287,7 @@ As a master problem, the SLP can now be formally expressed.
 \begin{numcases}{s.t.}
 \sum_{i=1}^\nbStations b_i \leq \nbMaxStations \label{constr:MS:nbStations}\\
 \varphi(a) \leq b_{\eta(x)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet$ \label{constr:MS:stationInnerFlow} \\
-\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet_2 \cap \tegArcSet_3$ \label{constr:MS:stationOuterFlow}\\
+\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) &$\forall a = (x, y) \in \tegArcSet_2 \cup \tegArcSet_3$ \label{constr:MS:stationOuterFlow}\\
 \sum_{a \in \tegArcSet_3^t} \varphi(a) \leq \nbMaxJockeys &$\forall t \in \relocTimeStepSet$ \label{constr:MS:nbJockeys}\\
 \varphi(a) \in \N & $\forall a\in\tegArcSet$ \label{constr:MS:varFlows}\\
 b_i \in \{0, 1\} & $\forall i \in \{1, \dots, \nbStations\}$ \label{constr:MS:varStations}
@@ -299,7 +310,7 @@ The detailed linear program of the {\SLP} is given bellow.
 \begin{numcases}{s.t.}
 \sum_{i=1}^\nbStations b_i \leq \nbMaxStations \label{constr:SLP:nbStations}\\
 \varphi(a) \leq b_{\eta(x)} \cdot \tegCapacity(a) & $\forall a = (x, y) \in \tegArcSet$ \label{constr:SLP:stationInnerFlow} \\
-\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) & $\forall a = (x, y) \in \tegArcSet_2 \cap \tegArcSet_3$ \label{constr:SLP:stationOuterFlow}\\
+\varphi(a) \leq b_{\eta(y)} \cdot \tegCapacity(a) & $\forall a = (x, y) \in \tegArcSet_2 \cup \tegArcSet_3$ \label{constr:SLP:stationOuterFlow}\\
 \sum_{a \in \tegArcSet_3^t} \varphi(a) \leq \nbMaxJockeys & $\forall t \in \relocTimeStepSet$ \label{constr:SLP:nbJockeys}\\
 \sum_{a \in \tegArcSet_3} \varphi(a) \leq \nbVROs \label{constr:SLP:nbVROs}\\
 \sum_{a\in \tegArcSet} \varphi(a) \cdot \epsilon_a \leq \nbVehicles \label{constr:SLP:nbVehicles}\\
@@ -324,7 +335,7 @@ Finally, Equations \eqref{constr:SLP:varFlows} and \eqref{constr:SLP:varStations
 
 
 \newpage
-\section{Adding energy components}
+\section{Adding energy components} \label{sec:addingEnergy}
 Throughout most of our discussion to this point, we have not talk about the vehicles themselves.
 For the last decades, the rise of the number of vehicles on roads has grown to the point where traffic jams and pollution have become an issue.
 In order to reduce dependence on oil, electric cars have retrieved a high interest since 2008 \cite{sperling_two_2009}.

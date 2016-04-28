@@ -9,14 +9,13 @@
 %%%%
 %\pagenumbering{roman}
 %\include{remerciements-acknowledgments/remerciements-acknowledgments}
-%\include{resume-abstract/resume-abstract}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \renewcommand*\contentsname{Table of contents}
 \dominitoc
 \cleardoublepage
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
-\tableofcontents
+%\tableofcontents
 \cleardoublepage
 \pagenumbering{arabic}
 %%\setcounter{page}{1}
@@ -25,12 +24,14 @@
 %%\listoffigures
 %%\listoftables
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{resume-abstract/resume-abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\include{chap-introduction/intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\include{chap-backgroundAndProblem/backgroundAndProblem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%\part{The System Dimensioning Problem}
-\include{chap-sdp/sdp}
+%\include{chap-sdp/sdp}
 %\include{chap-sdpExp/sdpExp}
 %%%%%%
 %%%%\part{The Station Location Problem and energy aspects}
@@ -44,7 +45,7 @@
 \addcontentsline{toc}{chapter}{General bibliography}
 \renewcommand{\bibname}{General bibliography}
 \bibliographystyle{apalike} % ieeetr
-\bibliography{bib/biblio}
+%\bibliography{bib/biblio}
 %%%
 %\appendix
 %\include{appendix/appendix}
