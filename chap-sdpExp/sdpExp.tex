@@ -1,18 +1,18 @@
 \chapter{Some SDP experiments} \label{chap:sdpExp}
-\begin{bibunit}[ieeetr]
 \minitoc
-\vspace{2cm}
-
+\vfill
+%\epigraph{test epigraph...}{\textit{in a book \\ by an author}}
+\noindent
 \begin{minipage}[c]{0.3\linewidth}
 \includegraphics[width=\textwidth]{experiments}
 \end{minipage}
 \hfill
 \begin{minipage}[c]{0.7\linewidth}
 \begin{abstract}
-In the last chapter, we have proved that the System Dimensioning Problem (SDP) can be approached using an integer linear program.
-Although a polynomial sub case of the SDP has been highlighted, the global problem complexity is still unknown.
+In the last chapter, we have proved that the System Dimensioning Problem {\SDP} can be approached using an integer linear program.
+Although a polynomial sub case of the {\SDP} has been highlighted, the global problem complexity is still unknown.
 It rises the question of an acceptable computing time and resources according to our industry context.
-Can the program deal with real instances, or at least realistic instances ?
+Can the program deal with real instances, or at least realistic case studies?
 We propose in this chapter to evaluate the problem from a computational perspective.
 \end{abstract}
 \end{minipage}
@@ -22,14 +22,14 @@ We propose in this chapter to evaluate the problem from a computational perspect
 The lack of available real carsharing demand data prevents us from a meaningful confrontation between an actual operating carsharing system and an optimal system dimensioning configuration computed from the linear program solution.
 
 \bigskip
-We presented in Chapter \ref{??} a random data generator that has been developed especially to cope with that lack.
+We presented in Chapter \ref{chap:backAndPb} a random data generator that has been developed especially to cope with that lack.
 It defines a specific time environment, generates a random set of stations with settable maximum capacities and a realistic set of carsharing demands from origins to destinations during a typical weekday.
 
 \bigskip
 This chapter focuses on computational experiments based on the random data generator.
 It explores several computing aspects of the linear program, from the maximum problem size the program can solve to observed solver computation times.
 Generator parameter values will be specified at the beginning of each experiment.
-For more details on the random data generator, see Section \ref{?} page \pageref{?}.
+For more details on the random data generator, see Section \ref{csgeneratorDescription} page \pageref{csgeneratorDescription}.
 
 \bigskip
 This chapter is organize as follow.
@@ -47,7 +47,7 @@ The will to transfer easily our methodology and tools in an industrial environme
 Although the solutions we obtained with GLPK were quite good, some hard limitations related to the program build time lead us to use later on CPLEX, a more flexible and powerfull solver.
 
 \subsection{3-pareto fontier}
-First experiment aims at assessing solver computation times of "small" SDP instances.
+First experiment aims at assessing solver computation times of ``small'' SDP instances.
 Considering $\nbStations = 10$ stations, $\nbTimeSteps = 144$ time-steps and $\nbDemands = 500$ demands, we collected program building time and solver computation times of $30$ random instances.
 We assumed here that the system could be balanced using vehicle relocation operations at any time-step in $\timeStepSet$ (\ie $\relocTimeStepSet = \timeStepSet$).
 
@@ -346,10 +346,30 @@ The surprise is that the optimal number of fulfilled demands are almost not impa
 The optimal values following  the different strategies remain very close to the baseline one for both LP or ILP resolutions,
 with a gap varying from $0,4$\% in (S1) to $5$\% in (S4).
 
-\section{Conclusions}
+\section{Conclusion}
+
+This chapter evaluates the {\SDP} model from a computational perspective.
+First experiments based on random generated data studied the resolution of small instances with an open-source solver (GLPK).
+Computation times remained acceptable, less than a second on average, for instances with $10$ stations and 10-minutes time-steps.
+We confirmed that the number of vehicles and the number of relocation operations were in opposition and we represented a 3-pareto barrier surface where the trade-off is well highlighted.
+We also observed that the major part of the computation comes from the linear program building time and not from its computation.
+
+\medskip
+A second study focussing on the model scalability investigated graph densities and LP building times evolution when the problem grows in size.
+We show that both are highly correlated and that better generation times could be obtained using an alternative solver (CPLEX).
+We observed that relocation arcs played a major role in the graph densities and we thus suggested that decreasing their number considering other relocation strategies should reduce the total number of variables.
+
+\medskip
+Indeed, investigating strategies where relocations are made at fixed time-steps allow to highly decrease graph densities from $65$\% to almost $94$\% with respect to the previous model.
+Computation times obtained with CPLEX was also better than before, especially for the exact method considering integer variables.
+Solutions' qualities were almost not impacted by this density reduction and a maximum gap of $5$\% was observed with respect to the value of the optimal solution.
+Next chapter will now investigated the optimal station positioning and inclusion of energy components.
 
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
 \renewcommand{\bibname}{Bibliography of chapter \thechapter}
-\putbib[bib/biblio]
-\end{bibunit}
+\bibliographystyle{apalike}
+\bibliography{bib/biblio}
+
+%\putbib[bib/biblio]
+%\end{bibunit}

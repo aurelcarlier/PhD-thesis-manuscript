@@ -4,48 +4,50 @@
 %
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-%\includepdf[pages={1,{}}]{front_page/front_page_fr} % page 1 + une page vide
-%\includepdf[pages={1,{}}]{front_page/front_page_en} % page 1 + une page vide
+\includepdf[pages={1,{}}]{front_page/front_page_fr} % page 1 + une page vide
+\includepdf[pages={1,{}}]{front_page/front_page_en} % page 1 + une page vide
 %%%%
-%\pagenumbering{roman}
+\pagenumbering{roman}
+%\setcounter{chapter}{0}
 %\include{remerciements-acknowledgments/remerciements-acknowledgments}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{resume-abstract/resume-abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% > COMMENTS
 \renewcommand*\contentsname{Table of contents}
 \dominitoc
 \cleardoublepage
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
-%\tableofcontents
+\tableofcontents
 \cleardoublepage
 \pagenumbering{arabic}
 %%\setcounter{page}{1}
 %%\setcounter{chapter}{2}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%\listoffigures
-%%\listoftables
+\listoffigures
+\listoftables
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\include{resume-abstract/resume-abstract}
+\include{chap-introduction/intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\include{chap-introduction/intro}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\include{chap-backgroundAndProblem/backgroundAndProblem}
+\include{chap-backgroundAndProblem/backgroundAndProblem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%\part{The System Dimensioning Problem}
-%\include{chap-sdp/sdp}
-%\include{chap-sdpExp/sdpExp}
+\part{The System Dimensioning Problem}
+\include{chap-sdp/sdp}
+\include{chap-sdpExp/sdpExp}
 %%%%%%
-%%%%\part{The Station Location Problem and energy aspects}
-%\include{chap-slpAndEnergy/slpAndEnergy}
-%\include{chap-slpAndEnergyExp/slpAndEnergyExp}
+\part{The Station Location Problem and energy aspects}
+\include{chap-slpAndEnergy/slpAndEnergy}
+\include{chap-slpAndEnergyExp/slpAndEnergyExp}
 %%%%%
-%\include{chap-conclusion/conclusion}
-%\include{publications/publications}
+\include{chap-conclusion/conclusion}
+\include{publications/publications}
 %%%%
+%% > END COMMENTS
 %% biblio
 \addcontentsline{toc}{chapter}{General bibliography}
 \renewcommand{\bibname}{General bibliography}
-\bibliographystyle{apalike} % ieeetr
-%\bibliography{bib/biblio}
+\bibliographystyle{apalike} % ieeetr apalike
+\bibliography{bib/biblio}
 %%%
 %\appendix
 %\include{appendix/appendix}

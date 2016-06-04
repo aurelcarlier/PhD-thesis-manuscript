@@ -24,7 +24,8 @@
 \usepackage{icomma} % gestion des séparateurs de décimales: pas d'espace après une vigule
 
 %\usepackage[authoryear]{natbib} % ---------------------------- https://www.ctan.org/pkg/natbib ------------- harmonisation des citations
-\usepackage[globalcitecopy,sectionbib]{bibunits} % -------- https://www.ctan.org/pkg/bibunits sectionbib
+\usepackage[]{chapterbib}
+%\usepackage[globalcitecopy,sectionbib]{bibunits} % -------- https://www.ctan.org/pkg/bibunits sectionbib
 \usepackage{url} % ---------------------------------------- https://www.ctan.org/pkg/url ---------------- insertion de liens url
 \usepackage[pdftex,colorlinks=true,
                    urlcolor=black,
@@ -126,11 +127,12 @@
 \fancypagestyle{plain}{ % définition du style plain
 \fancyhf{} % nettoyage des entete et pied de page precedents
 % pied de page des pages paires
-\fancyhf[FL]{\bfseries \slshape Titre thèse.}
+\fancyhf[FL]{\bfseries \slshape Optimal design of a one-way carsharing system.}
 \fancyhf[FR]{\bfseries \slshape   Aur{\'e}lien CARLIER}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0.5pt}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 % définitions des répertoires figures
 \graphicspath{

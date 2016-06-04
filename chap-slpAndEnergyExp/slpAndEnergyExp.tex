@@ -1,8 +1,8 @@
 \chapter{Electric battery range study} \label{chap:slpEnergyExp}
-\begin{bibunit}[ieeetr]
 \minitoc
-\vspace{2cm}
-
+\vfill
+%\epigraph{test epigraph...}{\textit{in a book \\ by an author}}
+\noindent
 \begin{minipage}[c]{.3\linewidth}
 \includegraphics[width=\textwidth]{electricity}
 \end{minipage}
@@ -27,7 +27,7 @@ Fundamentally, for large systems and narrow time-steps, the solving process may 
 In this chapter, we study a realistic and practicable model based on $15$ stations.
 As detailed thereafter, the data has been made so that the system could be similar to the Parisian carsharing system Autoblib' in terms of operational performance (average number of satisfied requests captured by vehicles and average daily time spent on road).
 
-On the one hand, we have seen at the beginning of this thesis that carsharing vehicles were more used than private vehicles (\see Chapter \ref{chap:}, page \pageref{chap:}).
+On the one hand, we have seen at the beginning of this thesis that carsharing vehicles were more used than private vehicles (\see Chapter \ref{chap:backAndPb}, page \pageref{urbanMobility}).
 Especially the time spent on the road is much more higher due to the higher utilisation rate of the vehicle.
 %Consequently, the total distance a shared vehicle travelled during a day is approximately 
 
@@ -76,7 +76,7 @@ This section presents some global model parameters leading after the solver comp
 Mathematical programs were solved using the Java API of IBM ILOG CPLEX 12.5.1.
 
 \medskip
-Using the random data generator describes in Chapter \ref{chap:}, we investigate a specific carsharing use-case.
+Using the random data generator describes in Chapter \ref{chap:backAndPb}, we investigate a specific carsharing use-case.
 It addresses a common scenario where an area poorly served by public transport is covered by two emitter poles.
 A maximum inter-station distance of $30$ kilometres was assumed and the centroid area is $15$ kilometres far from each pole.
 In addition, no demand intra-pole was considered.
@@ -353,5 +353,8 @@ However, actual battery range still appeared well suited and the maximum battery
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
 \renewcommand{\bibname}{Bibliography of chapter \thechapter}
-\putbib[bib/biblio]
-\end{bibunit}
+\bibliographystyle{apalike}
+\bibliography{bib/biblio}
+
+%\putbib[bib/biblio]
+%\end{bibunit}

@@ -1,17 +1,17 @@
-\chapter{Background} \label{chap:backAndPb} %and Problem description
-\begin{bibunit}[ieeetr]
+\chapter{Background} \label{chap:backAndPb}
 \minitoc
-\vspace{2cm}
-%
+\vfill
+%\epigraph{A clever person solves a problem. A wise person avoids it.}{\textit{Albert Einstein}}
 \noindent
-\begin{minipage}[c]{0.3\textwidth}
+\begin{minipage}[b]{0.25\linewidth}
 \centering
-\includegraphics[width=\textwidth]{carsharing}\\
+\includegraphics[width=.75\textwidth]{cube2}\\
 ~\\
-\includegraphics[width=.7\textwidth]{cube2}
+\flushleft
+\includegraphics[width=\textwidth]{carsharing}
 \end{minipage}
 \hfill
-\begin{minipage}[c]{0.76\textwidth}
+\begin{minipage}[b]{0.8\linewidth}
 \begin{abstract}
 This chapter is dedicated to carsharing systems.
 A description of their operational principles and a brief history are firstly presented.
@@ -201,7 +201,7 @@ In the last decade, several authors have showed that carsharing systems have pos
 Although not all of these commonly attested benefits are documented with empirical data, next sections present substantial agreements about carsharing on the urban mobility, financial gains and the environment.
 
 
-\subsubsection{Urban mobility}
+\subsubsection{Urban mobility}\label{urbanMobility}
 
 The carsharing economic model is founded on the use of the vehicles.
 The cost for moving from point A to point B depends on the distance and the time the user spend on the road.
@@ -493,7 +493,7 @@ Figure \ref{fig:csgen-output} gives an example of an instance generated for $50$
 \begin{figure}[!h]
 \centering
 \includegraphics[width = \textwidth]{csgen-output}
-\caption{Generator output.}
+\caption{An example of a generator output producing $50$ stations and $500$ demands over a typical weekday.}
 \label{fig:csgen-output}
 \end{figure}
 
@@ -563,9 +563,8 @@ In this chapter, we have intentionally eluded those particular topics because a 
 %Actually, this last problem represents the core of this thesis and the scope of our research.
 %Therefore, the next chapter will introduce more precisely the reasons why we were especially interested by those aspects and give a mathematical formulation of the problem we are working on.
 
-
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
 \renewcommand{\bibname}{Bibliography of chapter \thechapter}
-\putbib[bib/biblio]
-\end{bibunit}
+\bibliographystyle{apalike}
+\bibliography{bib/biblio}

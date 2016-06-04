@@ -1,22 +1,19 @@
 \chapter{The System Dimensioning Problem} \label{chap:sdp}
-\epigraph{test epigraph...}{\textit{in a book \\ by an author}}
-\begin{bibunit}[ieeetr]
 \minitoc
-\vspace{2cm}
-
+\vfill
+%\epigraph{test epigraph...}{\textit{in a book \\ by an author}}
+\noindent
 \begin{minipage}[c]{0.3\linewidth}
 \includegraphics[width=\textwidth]{systemDimensionning}
 \end{minipage}
 \hfill
 \begin{minipage}[c]{0.7\linewidth}
 \begin{abstract}
-%This section aims at modelling our optimization problem using an integer linear program.
-%The inputs and the outputs of the problem are first described.
-%Second subsection is dedicated to the building of an oriented valued graph, namely the Timed Extended Graph.
-%This graph, previously introduced by Ahuja {\em et al.} \cite{ahujaNetwork1993}, allows to express all the constraints of the problem following the time and the space dimensions.
-%The third subsection introduces the decision variables of our optimization problem. More precisely, it is shown that vehicles can be equivalently aggregated into flows to express all the constraints and the criteria of our optimization problem.
-%Last subsection presents its formulation using integer linear programming.
-The abstract
+This chapter introduces the optimal system dimensioning problem arising in the design of a carsharing service.
+A formal statement helps to apprehend its challenging aspects and a mathematical approach using graphs expanded over time is detailed.
+An integer linear program considering flow variables on those specific graphs and maximizing the total number of satisfied demands is provided.
+We prove than any flow solution can be interpreted as vehicle itineraries and translated into an optimal system dimensioning.
+The end of the chapter is dedicated to the study the problem complexity and a polynomial sub-case is exhibited.
 \end{abstract}
 \end{minipage}
 
@@ -26,36 +23,42 @@ The first part of this thesis is dedicated to the optimal design of a carsharing
 We assume that a time-dependant carsharing demand can be estimated from origins to destinations.
 This demand covers a geographical area where a carsharing operator is interested to established its service.
 Without any doubt, the demand estimation model as well as the time period considered in the study are critical inputs in the decision process.
-This bias will be discussed afterwards.
+This bias is discussed afterwards.
 
+\medskip
 In this work, the meaning of optimality will be considered as the will to capture the maximum number of demands.
 Somehow, this objective is aligned with the maximization of the operator's revenues.
 Indeed, the more demands the systems is able to fulfil, the more profits the operator can generate.
-
 As seen in \cite{jorge_testing_2012}, the optimization process should also integrate vehicle relocation operations.
 They are the only known "technique" to re-equilibrate the system and reach a higher satisfied demand.
 
-In the reminder of this work, this system design problem will be refer as the \emph{System Dimensioning Problem} (SDP).
+\medskip
+In the reminder of this work, this system design problem will be refer as the \emph{System Dimensioning Problem} {\SDP}.
 Its concise formulation follows:
-\begin{quote}
-``Considering potential one-way carsharing station locations and demands over time, what is the optimal \emph{system configuration} capturing the higher number of demands ?''
-\end{quote}
+\paragraph{System Dimensioning Problem [SDP]:}
+Considering potential one-way carsharing station locations and demands over time, what is the optimal \emph{system configuration} capturing the higher number of demands?
 
-We define a system configuration as the quantification and/or the description of the following components:
+\bigskip
+We define a system configuration as the quantification or the numerical description of the following components:
 \begin{enumerate}
-\item the number of demands satisfied;
-\item the number of vehicles needed to run the system;
-\item the vehicle relocation operations.
+\item the number of \emph{demands} satisfied, accounting for the global satisfaction level,
+\item the number of \emph{vehicles} needed to run the system,
+\item the \emph{vehicle relocation operations}, supported by the operator.
 \end{enumerate}
 
+\medskip
 This chapter is organised as follow.
-A first section is devoted to a brief state of the art and related models found in the literature.
-Then, Section \ref{sec:mathModel} describes the mathematical materials and defines the problem mathematically.
-Section 
+Section \ref{sec:sdp:sota} is devoted to a brief state of the art and related models found in the literature.
+Then, Section \ref{sec:sdp:mathModel} gives a formal statement of the problem.
+Assumed inputs and expected outputs are especially specified.
+A mathematical model based on graphs expanded over time helps to represent the system dynamics.
+Then, an integer linear program dealing with the optimization of the system dimensioning is finally described.
+Particularly, it is shown that vehicles can be equivalently aggregated into flows to express all the constraints and the criteria of our optimization problem.
+The chapter terminates with Section \ref{sec:sdp:polySubCase} presenting a polynomial sub-case of the problem where all demands have to be satisfied.
+A conclusion summarizing the obtained results is finally provided.
 
-% finir l'intro : organisation du chapitre
 
-\section{Related work}
+\section{Related work} \label{sec:sdp:sota}
 
 The recent emergence of vehicle-sharing systems have greatly stimulated both industrial and academic research.
 In the last chapter, various topics from demand modelling to system management have been discussed.
@@ -86,28 +89,28 @@ As pointed out before, those operations are necessary to ensure that vehicles ar
 It allows the system to run at a level of efficiency unreachable otherwise \cite{mitchell_reinventing_2010, nair_fleet_2011, febbraro_one_2012}.
 
 Although not exactly aligned with the purpose of dimensioning a carsharing service, several approaches present interesting models holding suitable system dynamics.
-Using mathematical programming, some studies tackle the problem from an operator-based perspective \cite{kek_relocation_2006, kek_decision_2009} whereas others used a station-location approach \cite{correia_optimization_2012, jorge_testing_2012}.
+Using mathematical programming, some studies tackle the problem from an operator-based perspective \cite{kek_relocation_2006, kek_decision_2009} whereas others used a station-location approach\\ \cite{correia_optimization_2012, jorge_testing_2012}.
 Rather suited for the system dynamics studies, they all rely on a mathematical representation of the whole system based on time expanded graphs \cite{ahuja_network_1993}.
 The purpose was to identify measures to maximize resources and enhance service levels.
 Results show that the operator profit can be improve when the system runs with suitable vehicle relocation policies.
 
 
 
-\section{Mathematical model} \label{sec:mathModel}
+\section{Mathematical model} \label{sec:sdp:mathModel}
 \subsection{Formal problem statements}
 \paragraph{Inputs:}
 % In order to describe the mathematical problem, let us define first the required inputs.
 % As discussed later, those data can be extracted from various sources such as simulation tools or real operating carsharing system data for example. 
 
 % time
-As seen previously, the SDP is time-dependant.
+As seen previously, the {\SDP} is time-dependant.
 A carsharing system evolves over time.
 Vehicles are moving among stations, taking more or less time to join a destination according to their departure time.
 As a consequence, a formal description of the time component is first needed.
 In this work, we decided to consider a discrete set of time-steps, numbered from $1$ to $\nbTimeSteps \in \N$ and denoted by $\timeStepSet$.
 The time period between consecutive steps, noted $\Delta t$, is set constant and expressed in minutes.
 For relevance issues, and especially for experiment purposes, $\timeStepSet$ has to cover a representative period of time, as an average weekday or an average week for instance.
-For the record, note that a $24$h period segmented into $10$ minutes time-steps represents a total of $144$ steps (\ie $\nbTimeSteps = 144$).
+For the record, note that a $24$ hours period segmented into $10$ minutes time-steps represents a total of $144$ steps (\ie $\nbTimeSteps = 144$).
 Some discussions about the assessment of the time component are given in the next chapter.
 
 
@@ -126,7 +129,7 @@ In this latter case, $i$ is simply equal to $j$.
 \medskip
 
 % travel times
-Similarly, $\delta(i,j,t)$ represents the travel time it takes for a car-user picking up a vehicle at station $i \in \stationSet$ to reach station $j \in \stationSet$, when departure time from $i$ is $t \in \timeStepSet$.
+Similarly, $\delta(i,j,t)$ represents the time spent in travel of a car-user picking up a vehicle at station $i \in \stationSet$ to reach station $j \in \stationSet$, when departure time from $i$ is $t \in \timeStepSet$.
 Usually, travel times are expressed in minutes, but for the sake of clarity, this value will be converted in number of time-steps as previously defined in $\timeStepSet$.
 More generally, any travel time $tt_{min}$ expressed in minutes can be converted using Equation \ref{eqn:travelTimeConversion}.
 \begin{equation}\label{eqn:travelTimeConversion}
@@ -200,7 +203,7 @@ In this figure, $\nbTimeSteps$ time-steps are dispatched horizontally whereas th
 \bigskip
 The graph accounts for a total of $\nbStations \cdot \nbTimeSteps$ nodes and each one of them represents a station's state at a given time-step.
 \end{minipage}
-\caption{The TEG's node configuration}
+\caption{The TEG's node configuration.}
 \label{fig:tegNodes}
 \end{figure}
 
@@ -248,7 +251,7 @@ Equation (\ref{eqn:sameStation}) ensures that nodes $x$ and $y$ model the same c
 \begin{center}
 \input{tikz/tegStockArcs}
 \end{center}
-\caption{Stock arcs in the TEG}
+\caption{Stock arcs in the TEG for a single station.}
 \label{fig:tegStockArcs}
 \end{figure}
 
@@ -291,7 +294,7 @@ y_2 = (1, \nbTimeSteps + \delta_2 \mbox{ mod } \nbTimeSteps = 2) = (1, 2) & ~ \n
 \begin{center}
 \input{tikz/tegDemandArcs}
 \end{center}
-\caption{Graph representation of two arc demands}
+\caption{Graph representation of two demand arcs $a_1$ and $a_2$\\ between two stations.}
 \label{fig:tegDemandArcs}
 \end{figure}
 
@@ -336,7 +339,7 @@ Finally, sets $\tegArcSet_1$, $\tegArcSet_2$, $\tegArcSet_3$ are then formally d
 Together, they form a mathematical partition of the set of arcs.
 Assuming that $\demandSet \not= \emptyset$, the three subsets hold the following relations:
 \begin{enumerate}
-\item $\tegArcSet = \bigcup\limits_{k=1}^3 \tegArcSet_k$;
+\item $\tegArcSet = \bigcup\limits_{k=1}^3 \tegArcSet_k$,
 \item $\tegArcSet_i \cap \tegArcSet_j = \emptyset, \quad\forall i,j \in \{1,2,3\}, \quad i\not= j$.
 \end{enumerate}
 The total number of arcs is given by:
@@ -352,7 +355,7 @@ Figure \ref{fig:teg} illustrates a complete TEG configuration with $\nbStations$
 \begin{figure}[t]
 \centering
 \input{tikz/teg}
-\caption{Complete TEG with $\nbStations$ stations and $\nbTimeSteps$ time-steps. Maximum capacities for stations $1$ and $\nbStations$ are respectively $8$ and $4$. The two demands are the same as those in figure (\ref{fig:tegDemandArcs})(1.3).}
+\caption[A complete TEG illustration.]{Complete TEG with $\nbStations$ stations and $\nbTimeSteps$ time-steps. Maximum capacities for stations $1$ and $\nbStations$ are respectively $8$ and $4$. The two demands are the same as those in figure (\ref{fig:tegDemandArcs})(1.3).}
 \label{fig:teg}
 \end{figure}
 
@@ -565,7 +568,7 @@ is feasible with $n(\hat{\varphi}) < n(\varphi)$, thus the theorem.
 \end{proof}
 
 Note that the  number of flow variables is a polynomial function on the size of the problem.
-This is not true anymore for vehicle tours, which number can be exponential.
+This is not true anymore for vehicle tours, for which the number can be exponential.
 The consequence is that the determination of a flow is in ${\cal NP}$, which is not the case for the determination of vehicle tours.
 
 \begin{theorem} \label{NbVoiture}
@@ -623,12 +626,12 @@ The total number of equations is around $2|\tegArcSet| + \nbStations \times \nbT
 \end{numcases}
 
 
-\section{A polynomial sub-case}
+\section{A polynomial sub-case} \label{sec:sdp:polySubCase}
 
 Although the {\SDP} formulation sounds very close to the circulation problem definition, it presents some particularities that prevent us from its complexity evaluation.
 As far as we know, the fact that the optimization is focused on a sub-set of arcs (carsharing demand arcs) and tries to find a feasible flow in the graph is not present in the literature neither as a standard problem nor related to some known one.
-As a consequence, and despite our attempts, we do not succeeded in positioned this problem into a complexity class.
-Probably, reduce or transform it into a classic flow problem may answer this question.
+As a consequence, and despite our attempts, we do not succeeded in position this problem into a complexity class.
+Probably, reducing or transforming it into a classic flow problem may answer this question.
 
 \medskip
 Nevertheless, we obtained a complexity result for a specific instance of the problem. 
@@ -660,7 +663,7 @@ Otherwise, for any arc $a=(x,y) \in \tegArcSet_2$, $\widehat{w}((x,t_a))=\wideha
 \begin{figure}[t]
 \centering
 \input{tikz/tegTransformationPoly}
-\caption{Transformation of an arc $a = (x,y) \in \tegArcSet_2$ into four arcs and two additional vertices $s_a$ and $t_a$  in $\widehat{\cal G}$. The corresponding maximum capacities are set to $u(a)$. Nodes $s^\star$ and $t^\star$ are unique and denote respectively the source and the sink nodes.}
+\caption[An arc transformation.]{Transformation of an arc $a = (x,y) \in \tegArcSet_2$ into four arcs and two additional vertices $s_a$ and $t_a$  in $\widehat{\cal G}$. The corresponding maximum capacities are set to $u(a)$. Nodes $s^\star$ and $t^\star$ are unique and denote respectively the source and the sink nodes.}
 \label{fig:tegTransformationPoly}
 \end{figure}
 
@@ -721,16 +724,44 @@ For any arc $a=(x,y)\in \tegArcSet_2$, $\varphi(a)=u(a)$,
 the theorem.
 \end{proof}
 
-According to \cite{ahuja1993}, the existence of a maximum-flow of a fixed value is a polynomial problem.
+According to \cite{ahuja_network_1993}, the existence of a maximum-flow of a fixed value is a polynomial problem.
 The following corollary is thus a consequence of Theorem \ref{theo:pol}:
 \begin{corollary}
 \emph{\SDPALLDEMANDS} is polynomial.
 \end{corollary}
 
 \section{Conclusion}
+In this chapter, we presented a mathematical modelling approach to represent the dynamics of a one-way carsharing system over time and deal with the determination of an optimal system configuration when stations are fixed.
+The problem includes strategical vehicle relocation operations to cope with the system imbalance and  is studied through the prism and recommendations of existing literature.
+
+\medskip
+Time expanded graphs (TEGs) are often used to model systems assuming a strong time dependency.
+The idea consists in construing static networks enlarged through the time dimension.
+Using those graphs, we proposed an integer linear program {\SDP} based on a specific TEG where nodes and arcs account respectively for carsharing stations over time and vehicle operations.
+The ILP considers integer flow variables which can be interpreted as vehicle flows (vehicles routes or itineraries) transiting through the system over time.
+The objective is to found a feasible flow in the graph satisfying the maximum number of demands, modelled as a specific subset of arcs.
+We proved that any feasible solution can be expressed and interpreted as a set of vehicle itineraries, thereby determining the optimal dimension of the whole system.
+
+\medskip
+Although the problem complexity has not been determined, a polynomial sub-case where all the demands have to be satisfied has been exhibited.
+However, we prove that the determination of a solution as a global flow in the graph is in {$\cal NP$}.
+The next chapter examines solver capabilities and computation improvements to tackle interesting size of the problem.
+
+
+
+%the determination of a flow is in ${\cal NP}$
+
+%We will show that {\SDP} belongs to ${\cal NP}$ by modelling feasible solutions as a non classical flow problem.
+
+
+
+
 
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
 \renewcommand{\bibname}{Bibliography of chapter \thechapter}
-\putbib[bib/biblio]
-\end{bibunit}
+\bibliographystyle{apalike}
+\bibliography{bib/biblio}
+
+%\putbib[bib/biblio]
+%\end{bibunit}

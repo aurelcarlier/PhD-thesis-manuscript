@@ -1,15 +1,14 @@
 \chapter{The Station Location Problem and energy aspects} \label{chap:slp}
-\begin{bibunit}[ieeetr]
 \minitoc
-\vspace{2cm}
-
+\vfill
+%\epigraph{test epigraph...}{\textit{in a book \\ by an author}}
 \noindent
-\begin{minipage}[c]{0.25\linewidth}
+\begin{minipage}[c]{0.3\linewidth}
 \flushleft
 \includegraphics[width=\linewidth]{stationLocations}
 \end{minipage}
 \hfill
-\begin{minipage}[c]{0.8\linewidth}
+\begin{minipage}[c]{0.7\linewidth}
 \begin{abstract}
 This chapter is dedicated to the study of the Station Location Problem (SLP).
 The problem, its challenges and related work are first described.
@@ -264,7 +263,7 @@ Basically, the mathematical program reused the transportation network expanded o
 
 \medskip
 We present in this section two sights of seeing the model.
-The first one aims at highlighting the sub-problem dependence between the SDP and the SLP.
+The first one aims at highlighting the sub-problem dependence between the {\SDP} and the {\SLP}.
 Then, the full version is detailed.
 
 \subsubsection{The master-slave scheme}
@@ -276,11 +275,13 @@ The idea is to use the vector $b$ as a component selector of the station set $\s
 \stationSet(b) = \{ s_i \in \stationSet, i\in \{1, \dots, \nbStations\} \mid b_i=1\}
 \end{equation}
 
+\medskip
 Now, we clearly have $\stationSet(b) \subseteq \stationSet$, for any value of $b$.
 According to Equation \eqref{eq:subStationSet}, each value of $b$ generates a fixed subset of stations picked in $\stationSet$.
 The initial set corresponds to the situation where $b=1$.
 %In the following we refer to $\text{SDP}^\star(\timeStepSet, \stationSet(b), \sCapaSet, \demandSet, \travelTimeSet, \nbVROs, \nbVehicles)$ as the maximum number of demands the optimal system configuration of the SDP instance resolution have given.
 As a master problem, the SLP can now be formally expressed.
+\medskip
 \begin{equation}\label{obj:master-slave}
 \text{[SLP]:} \max\limits_{b \in \{0, 1\}^\nbStations} \text{SDP}^\star(\timeStepSet, \stationSet(b), \sCapaSet, \demandSet, \relocTimeStepSet, \travelTimeSet, \nbVROs, \nbVehicles)
 \end{equation}
@@ -453,12 +454,12 @@ In this section we discuss some energetic components we thought essential or int
 Although not all of them were selected in the detailed model presented in the next section, we still wanted to give here some insights to be familiar with each of them.
 Afterwards, some modelling issues are highlighted.
 
-\subsubsection{The battery capacity}
+\subsubsection*{The battery capacity}
 Despite there exists a large diversity of electric batteries, the most common are based on the lithium ion technology.
 Their light weight make them suitable for numerous applications such as portable devices, power tools or electric vehicles.
 Today, the typical battery range for carsharing electric vehicles varies on average from 160 to 250 kilometres, depending on the driving context and the weather conditions.
 
-\subsubsection{The power supply}
+\subsubsection*{The power supply}
 For now, charging an electric car takes from 30 minutes to 6 hours depending on the charging technology.
 Moreover, the charge is not linear.
 It is very fast during approximately the 80 first percents of the battery capacity and became more and more slower until reaching the full capacity.
@@ -466,12 +467,12 @@ But for reasons of simplicity, we will assume in this work that the battery char
 
 %This is due to the fact that the charger need to check the level of charge of each cell of the battery during the electric transfer.
 
-\subsubsection{The discharge}
+\subsubsection*{The discharge}
 Modelling the discharge of an electric vehicle can be difficult because electric cars can restore some energy during decelerating and braking phases.
 Additionally, note that the discharge when the vehicle is neither used or plug into a charging point is negligible, about 1 to 2\% per month.
 In this work, we assume the battery discharge to be linear over time.
 
-\subsubsection{The number of charging points per station}
+\subsubsection*{The number of charging points per station}
 Carsharing systems with electric vehicles have to equip their stations with charging points.
 During the design phase of the system, it could be interesting not to consider systematically that all the parking spot are equipped with charging points. 
 A better solution would be providing power supply where the system need to, according to the estimated stations' attractiveness.
@@ -479,18 +480,14 @@ Thereby, the operator save money while maintaining a good level of service.
 
 %This allows us to see how the system reacts if all the parking spots don't have a charging borne;
 
-\subsubsection{Price of electricity}
+\subsubsection*{Price of electricity}
 In France, the price of electricity constantly varies during the day.
 It is fixed at the European Power Exchange SE (EPEX SPOT SE), the exchange operating the power spot market for short-term trading power in some European country, including France.
 Integrate this price in a system design context could certainly be a interesting feature.
 Fostering the recharge by night for instance, when the price of electricity is the lowest, could be a significant  economic argument.
 
 
-\bigskip
-Conclusion. What are the selected components?
-
-
-\subsubsection{Modelling issues: the flow interpretation}
+\subsubsection*{Modelling issues: the flow interpretation}
 In a carsharing system with electric vehicles, accept or reject a request will not only depend on the vehicle availability.
 The battery level become a important parameter impacting the decision to provide or not the resource, in this case the electric car.
 It has to be sufficient enough at least to travel the distance between the origin and the destination.
@@ -511,7 +508,7 @@ However, in order to identify the route of each vehicle in the system, an interp
 
 \medskip
 Figure \ref{fig:flowInterpretation} illustrates a unit flow interpretation even when the flow is unitary.
-Suppose that an optimal flow admits a baseline situation as illustrated by the above graph of the figure.
+Suppose that an optimal flow admits a baseline situation, as illustrated by the above graph of the figure.
 This solution is feasible since the conservation flow is respected; the number of inner and outer flow is the same in each node.
 Now the question is to recover from this situation vehicles' itineraries as unit flow paths starting and ending at time $t=1$.
 Obviously, a first interpretation could lead to the left figure, where the two colors indicate the vehicles itineraries.
@@ -645,6 +642,7 @@ Since $|\tegArcSet_1| \gg |\tegArcSet_2 \cup \tegArcSet_3|$ with the TEG transfo
 \nbTimeSteps \cdot \sum\limits_{i=1}^\nbStations Z_i^2 = \Theta(|\tegArcSet|^2).
 \end{equation*}
 
+\newpage
 \subsubsection{Mathematical program}
 Using the notations above, we can formulate the energy model as follows:
 
@@ -798,6 +796,7 @@ In our experimentations, we only used binary rules.
 For instance, suppose a binary variable $x$.
 For an observed non-integer optimum value $x^\star$, its rounded value is set to $\lfloor x^\star \rfloor$ if $x^\star \leq v \in (0, 1)$ and $\lceil x^\star \rceil$ otherwise.
 
+\medskip
 Unfortunately, neither the vehicles' trip profiles or the station attendances showed notable patterns what could help us defining that could be a good quality solution.
 Although we tested numerous rounding configurations, we have not succeeded in decreasing solver computation times using rounded solutions.
 
@@ -977,5 +976,8 @@ A formal description of the algorithm as well as a detailed example are provided
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
 \renewcommand{\bibname}{Bibliography of chapter \thechapter}
-\putbib[bib/biblio]
-\end{bibunit}
+\bibliographystyle{apalike}
+\bibliography{bib/biblio}
+
+%\putbib[bib/biblio]
+%\end{bibunit}

@@ -1,15 +1,238 @@
-%\chapter*{Résumé}
-%Le résumé de la thèse en français
+\newpage
+\chapter*{Résumé}
+\section*{Contexte et objectifs de la thèse}
+
+Aujourd'hui, les pays industrialisés jouissent d'une facilité d'accès à l'automobile privé.
+L'histoire industrielle du XX$^{ème}$ siècle témoigne des nombreuses avancées technologiques qui ont permis la démocratisation de la voiture et sa production de masse à travers le globe.
+La voiture joue un rôle fondamental dans le développement des sociétés actuelles, tant dans leurs performances économiques que dans la mobilité de leur citoyens.
+Pour certains pays, elle reste d'ailleurs l'unique solution de transport des biens et des personnes, particulièrement lorsque les zones habitées sont peu ou pas déservies par les transports en commun.
+
+\medskip
+Les avantages de l'automobile par rapport aux autres moyens de transport sont multiples.
+En particulier, leur capacité à couvrir de grandes distances ainsi que leur habilité à effectuer des trajets ``à la demande'' et ``porte à porte'' en font une solution de mobilité flexible et très compétitive.
+De plus, le confort de l'automobile par rapport aux autres alternatives de transport explique en grande partie pourquoi la voiture reste encore aujourd'hui la solution  privilégiée dans de nombreux pays.
+% couplé aux trois derniers points
+
+\medskip
+Cependant, l'intense utilisation de l'automobile depuis plus d'un siècle à l'échelle planétaire n'est pas sans générer de nombreux problèmes.
+Réchauffement climatique, sécurité, santé des personnes, épuisement des ressources naturelles, et en particulier des réserves de pétrole comptent parmi les principaux points négatifs souvent évoqués.
+Du point de vue de la mobilité urbaine, nombre de métropoles dans le monde souffrent également de pollution, de congestion et de manque de places de stationnement.
+Ces questions environnementales et écologiques, d'intérêt publique, sont aujourd'hui au cœur des débats scientifiques et sociologiques concernant l'automobile.
+
+\medskip
+C'est dans ce contexte que s'est peu à peu démocratisée depuis la fin des années 1990 une solution de mobilité alternative basée sur le partage de la voiture : l'autopartage (\emph{carsharing} en anglais).
+Là où les transports publiques traditionnels comme le métro, le bus, ou le tramway peinent à fournir une qualité de service et une flexibilité suffisante, ces systèmes apportent de nombreux avantages en tirant parti des atouts de la voiture.
+Le service consiste à mettre à disposition d'un certain nombre d'utilisateurs une flotte de véhicules, disponibles dans une zone géographique définie.
+Ces véhicules peuvent être localisés dans des stations dédiées (systèmes basés stations) ou bien à n'importe quelle place de stationnement du territoire (systèmes libres).
+Ils ont l'avantage d'exempter les utilisateurs des coûts inhérents à la possession d'un véhicule privé.
+Ainsi l'entretien, l'amortissement du véhicule, l'assurance, le carburant (ou électricité pour les voitures électriques), etc. sont supportés par le système lui-même.
+
+\medskip
+D'un point de vue plus fondamental, l'autopartage introduit un nouveau paradigme quand à l'utilisation des voitures individuelles.
+En effet, le modèle économique repose sur le fait que le prix de la mobilité est fonction de la distance et du temps et non plus de la possession du véhicule.
+En conséquence, les utilisateurs ont tendance à utiliser moins la voiture et parcourent de plus faibles distances.
+Ces observations expliquent en partie la réduction du nombre de véhicules sur les routes, aidant alors à diminuer la congestion et la quantité de CO2 dégagée par les véhicules.
+%, bénéfices souvent attribués à l'autopartage dans la littérature.
+% L'autopartage est aujourd'hui un service de mobilité en plein développement.
+
+\medskip
+On distingue souvent deux types de systèmes : ceux gérés par des organisations privées et ceux s'organisant directement entre les particuliers.
+Dans ce manuscrit, nous nous intéressons aux systèmes dirigés par des compagnies privées, dont l'implantation est stratégiquement et majoritairement établie dans des zones urbaines denses.
+En France, et plus largement autour du globe, de plus en plus de compagnies conçoivent et opèrent des systèmes d'autopartage.
+Le défi majeur que doit relever un opérateur consiste alors à concevoir le futur service qu’il souhaite mettre en place avant de le piloter.
+Cet aspect conceptuel, en avance de phase par rapport à la supervision et à la gestion dynamique de la flotte, est fondamental.
+La réussite financière du service et son efficacité opérationnelle sont en effet fortement liées à l’utilisation des véhicules partagés mis à disposition.
+En règle générale, un fort taux d’utilisation garantit l’intégrité globale du système.
+
+\medskip
+Il existe aujourd'hui plusieurs modèles d'autopartage, qui peuvent tout à fait coexister ensemble au sein d'un même contexte urbain. %S'il est aujourd'hui courant de rencontrer p
+Nous nous focalisons dans ce manuscrit sur le modèle dit ``\emph{one-way}'' et dont la mise à disposition des véhicules s'effectue dans des stations propres à l'opérateur.
+Ces dernières, prévues pour le stationnement, dispose généralement de bornes de recharge lorsque la flotte de véhicules est électrique.
+%  Les systèmes d’autopartage étudiés 
+Les systèmes \emph{one-way} permettent aux usagers d’emprunter un véhicule sans la contrainte de le déposer à la station de départ, contrairement aux modèles ``\emph{round-trip}''.
+Récemment, de nouveaux modèles sans station tendent à apporter de plus en plus de flexibilité pour l'usager (modèles ``\emph{free-floating}'').
+
+\medskip
+En pratique, la flexibilité des systèmes \emph{one-way} a tendance à perturber la disponibilité des véhicules et des places disponibles dans les stations.
+Particulièrement aux horaires de pointe, il est assez courant de ne pas trouver de véhicule ou de place pour se garer et ces désagréments nuisent fortement aux usagers.
+Afin de maintenir un certain équilibre du système, il est possible d'inciter les utilisateurs à changer leur destination initiale pour une autre plus appropriée via une tarification plus avantageuse par exemple.
+Cependant, cette méthode, dépendante de l'agrément de l'usager, est peu efficace en pratique et ne permet pas d'obtenir un contrôle suffisant du système.
+Ainsi, une méthode souvent employée par les opérateurs d’autopartage consiste à repositionner eux-mêmes les véhicules à des emplacements stratégiques où ils seront susceptibles d’être réempruntés.
+Ces opérations sont effectuées par des employés appelés \emph{jockeys}.
+Notons que l'inclusion de ces opérations dans l’évaluation du dimensionnement du système ou de sa performance est essentiel et mis en évidence dans de nombreux travaux.
+
+\medskip
+Les objectifs de la thèse consistent en l'élaboration de modèles mathématiques et de méthodes de résolution permettant d'aider un opérateur d'autopartage à concevoir son futur service de mobilité.
+Sur la base d'un environnement urbain connu et d'une demande en transport intégrant plusieurs modes de déplacement, les modèles proposés permettent d'évaluer le potentiel d'implantation d'un service ``one-way'' incluant des véhicules électriques.
+Ces modèles s'inspirent de travaux antérieurs déjà éprouvés, et leur performance est évaluée à partir de jeux de données réalistes (générés aléatoirement) et concrets (à partir d'enquêtes de déplacement).
+
+%\newpage
+\section*{Problèmes et hypothèses}
+
+Dans ce manuscrit nous nous plaçons du point de vue d'un opérateur d'autopartage désirant concevoir un système d'autopartage ``\emph{one-way}'' en contexte urbain.
+L’infrastructure du système et ces hypothèses fonctionnelles se composent des éléments suivants :
+\begin{enumerate}
+\item
+Un ensemble de stations, dont le nombre de places de parking est fini et réservé aux utilisateurs du système.
+Dans le cas d’un système disposant de véhicules électriques, nous supposons que toutes les places disposent d’une borne de recharge.
+\item
+Une flotte de véhicules, thermiques ou électriques.
+La possibilité de cohabitation des deux technologies n’est pas traitée dans ce manuscrit.
+De plus, dans le cas de véhicules électriques, nous supposons que leurs caractéristiques techniques sont identiques (e.g. leur autonomie).
+\item
+Un nombre de jockeys, responsables du repositionnement des véhicules entre les stations du système.
+Différentes stratégies de relocalisation de véhicules sont abordées.
+\end{enumerate}
+
+\medskip
+Plusieurs problèmes d'optimisation sont formalisés, modélisés puis évalués à l'aide des outils de la programmation linéaire en nombre entiers.
+Les questions abordées concernent essentiellement la conception du système avant sa mise en place effective.
+Plus précisément, les modèles étudiés s'intéressent :
+\begin{enumerate}
+\item au dimensionnement optimal du système (Chapitres \ref{chap:sdp} et \ref{chap:sdpExp}) ;
+\item au positionnement stratégique des stations (Chapitre \ref{chap:slp}) ;
+\item au dimensionnement de la capacité des batteries en présence de véhicules électriques (Chapitres \ref{chap:slp} et \ref{chap:slpEnergyExp}).
+\end{enumerate}
 
 
+\noindent Les informations nécessaires à cette évaluation sont : 
+\begin{enumerate}
+\item 
+l’inventaire des sites potentiels d’implantation des stations, avec une estimation du nombre maximal de places de parking constructibles ;
+\item
+les demandes estimées temporellement entre les sites ;
+\item 
+les temps de parcours routiers, potentiellement variables au cours du temps.
+\end{enumerate}
+
+\newpage
+\section*{Contributions et résultats}
+Les modèles mathématiques développés dans ce manuscrit s'appuient tous sur une typologie commune empruntée à la théorie des graphes.
+Un graphe orienté et étendu dans le temps (appelé en anglais \emph{time expanded graph}) permet de représenter les dynamiques du système d'autopartage en tenant compte de la dimension temporelle de certaines opérations.
+En effet, le temps de trajet effectué par un utilisateur ou par un jockey peut être variable selon l'horaire de la journée.
+Pour un même trajet, il est commun d'observer d'importantes variations du temps de parcours, qui dépend fortement des conditions de circulation.
+Un ensemble discret de pas de temps (\eg dix minutes) défini le cadre temporel de l'étude, généralement une journée type de la semaine (horizon temporel de $24$ heures).
+
+\medskip
+Les nœuds du graphe représentent les différentes stations, ou les sites d'implantation potentiels selon le modèle.
+Chaque nœud est ensuite dupliqué en autant de pas de temps définis dans l'espace temporel, permettant ainsi de représenter son état au cours de la journée.
+
+Trois familles d'arcs reliant les nœuds entre eux modélisent les opérations du système :
+\begin{enumerate}
+\item le stationnement d'un véhicule dans une station ;
+\item la satisfaction d'une demande ;
+\item la réalisation d'une relocalisation de véhicule entre deux stations.
+\end{enumerate}
+
+\medskip
+L'instant d'arrivée dans une station est calculé lors de la construction du graphe.
+Il dépend directement de l'instant de départ et du temps de parcours connu du réseau routier entre les stations d'origine et de destination.
+Les relocalisations de véhicules peuvent être définies à partir de patterns très divers, couvrant l'ensemble des pas de temps de l'étude ou une sélection d'instants stratégiques.
+
+\medskip
+La modélisation des problèmes, sous la forme de programmes linéaires en nombres entiers, se base sur des variables de type flots définies pour chacun des arcs du graphe.
+Un flot représente le nombre de véhicules effectuant l'opération correspondante à l'arc auquel il est assigné.
+Des capacités sur les arcs permettent de limiter le nombre de ces véhicules selon les opérations et les données du problème.
+Ainsi, les arcs de stationnement (correspondants aux places de parking) admettent une capacité égale au nombre maximal de places  dans cette station et les arcs de satisfaction de demande au nombre de requêtes.
+Les arcs de relocalisation de véhicules ne sont pas limités en capacité.
+
+\newpage
+\subsection*{Dimensionnement optimal du système}
+Le modèle mathématique présenté au Chapitre \ref{chap:sdp} évalue le nombre maximal de requêtes pouvant être satisfaites, pour un ensemble de stations fixées.
+La détermination d'un flot optimal permet d'évaluer le nombre minimum de véhicules et de relocalisations nécessaires à ce niveau de satisfaction de demande.
+Nous prouvons que tout flot réalisable peut être interprété comme un ensemble d'itinéraires de véhicules, à partir desquels peut être calculé un dimensionnement du système, \ie le nombre minimal de places par station, de véhicules et de jockeys.
+
+\medskip
+D'un point de vue théorique, la complexité du problème reste encore toutefois inconnue bien que la détermination du flot réalisable est ${\cal NP}$ complexe.
+Un sous-cas polynomial dans lequel toutes les demandes doivent être satisfaites est cependant exposé.
+
+\medskip
+Afin d'évaluer les modèles d'optimisation, un générateur de données réalistes a été développé et publié publiquement sur une plateforme open-source (voir Chapitre \ref{chap:backAndPb}).
+Cet outil permet de générer un ensemble de stations réparties dans un territoire géographique donné, ainsi que des requêtes temporelles entre les stations et des temps de parcours tenant compte des effets pulmonaires de la demande de transport et de la congestion.
+
+A partir de ces données, des instances de topologies et de tailles diverses ont été résolues à l'aide de deux solveurs distincts (GLPK et CLPEX).
+Une première étude sur de petites instances (\ie $10$ stations, $500$ demandes journalières et un découpage temporel de $10$ minutes) montre que les temps de résolution restent en deçà de la seconde.
+Concernant GLPK, la majeure partie du temps de calcul est monopolisé par la construction du programme linéaire ($34$ secondes en moyenne).
+D'autres implémentations ultérieures avec CPLEX ont permis de réduire ce temps de génération à une demi seconde.
+
+\medskip
+Un résultat intéressant concernant la résolution des programmes dans leur version relaxé a également été observé.
+Dans près de $10$\% des cas, la valeur optimale obtenue n'est pas entière mais ne s'éloigne jamais de plus d'une unité de valeur de la solution entière.
+
+\medskip
+Pour une instance du problème donné, la variation du nombre maximal de véhicules et de relocalisations journalières a permis de mettre en évidence une frontière de Pareto bien distincte qui confirme l'opposition de ces deux critères.
+Un opérateur d'autopartage peut alors aisément déterminer, pour différents niveaux de satisfaction de la demande, le compromis idéal entre ces deux objectifs.
+
+\medskip
+Une autre étude faisant intervenir des relocalisations de véhicules à instants fixes de la journée (toutes les heures, toutes les deux heures, etc.) a montré que des temps de calculs bien plus intéressants pouvaient être obtenus tout en concervant une qualité de solution (nombre de demandes satisfaites) très convenable.
+En comparaison d'une stratégie de relocalisation toutes les $10$ minutes, relocaliser toute les heures par exemple permet d'obtenir les gains de temps de calcul qui s'élèvent à $94$\% en moyenne, avec un écart de valeur optimale de $1$\%.
+Ce résultat est directement lié à la réduction de densité des graphes lorsque les stratégies de relocalisation sont plus étalées dans le temps, diminuant drastiquement le nombre d'arcs et facilitant la résolution du problème.
+
+\newpage
+\subsection*{Localisation des stations et prise en compte des contraintes énergétiques}
+
+La modélisation du problème de localisation des stations s'appuie directement sur le modèle de dimensionnement optimal précédemment étudié.
+Cependant, les stations ne sont plus considérées comme telles mais en tant que sites potentiels d'implantation.
+Le problème consiste alors à déterminer le sous-ensemble de sites, dont la dimension est donnée en paramètre, permettant de capturer le plus grand nombre de demandes, \ie de dimensionnement optimal.
+L'ajout de variables booléennes et de contraintes relatives à la sélection des sites permet d'exprimer le problème sous la forme d'un programme linéaire mixte en nombre entier.
+
+\medskip
+Notre aspiration à étudier ce problème avec les véhicules électriques nous a amené à adapter nos modèles de façon à tenir compte de deux composantes additionnelles : la capacité des batteries et la puissance de charge des bornes en station.
+La première limite la distance maximale parcourue par chaque véhicule (aujourd'hui à environ $160$ kilomètres sans recharge) et la seconde influe sur le temps requis pour recharger les batteries.
+
+Pour intégrer ces composants, il devient alors nécessaire de suivre les véhicules au cours de leur exercice journalier.
+Les précédents modèles ne permettant pas cette possibilité, un nouveau modèle contournant la problématique d'interprétation des flots a été élaboré puis amélioré.
+Une heuristique gloutonne proposée à la fin du Chapitre \ref{chap:sdp} permet en outre d'identifier une solution réalisable vérifiant les contraintes énergétiques.
+
+
+\medskip
+Une étude d'évaluation des capacités minimales des batteries électriques est proposée au Chapitre \ref{chap:slpEnergyExp}.
+Basée sur un cas d'application concret, elle montre que des batteries d'une autonomie de $80$ kilomètres suffisent dans le contexte d'un système d'autopartage comparable à ceux observés dans la réalité.
+Ce résultat ouvre de nombreuses ouvertures quant à l'utilisation de la capacité résiduelle non utilisée.
+Diverses applications sont exposées et misent en perspective à travers le point de vue des acteurs de la mobilité et de l'énergie.
+
+Un seconde étude basée sur ce même système ($15$ stations, $30$ véhicules et $200$ demandes journalières) montre qu'un niveau de demande deux fois plus élevé peut être géré avec des capacités de batterie actuelles.
+
+\newpage
+\section*{Perspectives de recherche}
+\subsection*{L'acquisition de données réelles}
+
+L'accès à des données réelles d'opérateurs d'autopartage reste aujourd'hui un frein à l'évaluation des modèles proposés.
+Bien qu'un générateur aléatoire permette de générer des données réalistes émulant certaines dynamiques de la demande en transport en zone urbaine, l'interprétation des solutions provenant de ces données reste limitée.
+La récente émergence de ces systèmes, à laquelle s'ajoute une évolution constante, explique en grande partie la difficulté à estimer précisément les demandes en autopartage.
+De plus en plus de recherches tentent cependant de capturer ces demandes spécifiques.
+Les résultats actuels, bien que prometteurs, restent encore inexploitables en pratique et très liés au contexte urbain.
+La mise à disposition de données ``terrain'' permettrait d'identifier certains schémas de déplacements récurrents alimentant ainsi les modèles d'estimation.
+
+\subsection*{L'évaluation de la complexité des problèmes}
+D'un point de vue théorique, la complexité du problème de dimensionnement reste inconnue.
+Sa formulation admet de nombreuses similarités avec celle du flot maximal, sans qu'aucune réduction polynomiale n'ait put être mise en lumière.
+Le problème de circulation dans un graphe semble également présenter quelques similitudes.
+Il consiste en la détermination d'un flot réalisable circulant dans un graphe, sans considération de sources ou de puits.
+Déterminer la classe de complexité du problème de dimensionnement permettrait d'en améliorer la résolution, à plus forte raison si le problème est polynomial.
+
+\subsection*{La performance des outils de résolution}
+Les problèmes traités dans ce manuscrit sont modélisés à travers la programmation linéaire en nombres entiers.
+Aujourd'hui, de nombreux solveurs mettent à disposition divers outils pour résoudre ce type de problèmes.
+Dans ces travaux, deux d'entre eux ont été utilisés (GLPK et CPLEX) pour résoudre des instances de grande taille.
+
+\medskip
+En pratique, les temps de calculs dépendent essentiellement de la taille et de la complexité des problèmes.
+Au cours de nos études, nous avons observé des temps de calculs rédhibitoires en résolvant des instances pourtant de taille raisonnable.
+La plupart du temps le solveur rencontre de grandes difficultés à évaluer une borne inférieure réalisable, et par conséquent à converger vers la solution optimale.
+Ainsi, la détermination d'une solution réalisable de bonne qualité pendant l'instanciation du solveur permettrait d'accélérer le processus de calcul et pourrait constituer une avancée prometteuse.
+
+
+\newpage
 \chapter*{Abstract}
+%\addcontentsline{toc}{chapter}{Abstract}
 Carsharing is a mobility service allowing people to use and share a dedicated fleet of vehicles to satisfy transportation necessities.
 As a excellent candidate to cope with environmental issues affecting nowadays several dense urban areas, it offers the flexibility of private vehicles without the drawbacks of car ownership.
 In the field of mobility, the new economic model associated with sharing common goods has begun to reveal a new paradigm leading to numerous benefits.
 Carsharing user behaviour evolves from a property-based application of the vehicles, to an usage aligned with real mobility needs.
 
 \medskip
-Many schemes are today implemented all around the world, and the evolution of carsharing  is promise to operate great expansion for the upcoming years.
+Many schemes are today implemented all around the world, and the evolution of carsharing is intended to greatly expand in the upcoming years.
 The trend is toward more flexibility and more accessibility.
 Although the round-trip model is still predominant, the implementation of one-way schemes, and more recently free-floating systems, have begun to emerged.
 The carsharing one-way version allows the user to drop off the vehicles at any dedicated station of the system.
@@ -19,7 +242,7 @@ The possibility to leave cars at any places of the system causes a resource imba
 \medskip
 Moreover, the recent introduction of electric cars in carsharing systems brings additional technical and practical constraints.
 Indeed, shared vehicles spent more time on the roads and are more used than private ones.
-The relatively limited autonomy of today's electric batteries may restrain the service in providing  reduced reachable range distances and committing the vehicles to recharge, making them unavailable.
+The relatively limited autonomy of today's electric batteries may restrain the service in providing  reduced reachable distances and committing the vehicles to recharge, making them unavailable.
 Therefore, carsharing is a interesting and challenging topic, addressing various problems and dealing with strategic, tactical and operational aspect of those systems.
 
 \medskip
@@ -29,7 +252,7 @@ Although the addressed problems do not directly concern the system management, s
 The modelling approach uses graph theory to represent the system dynamics over time and various optimization models (ILPs and MILPs) are proposed.
 The objective is to deduce a optimal shape of the whole system (number of vehicles, parking places, jockeys, stations' locations, etc.) allowing to capture the maximum number of estimated time-dependant requests.
 Mathematical programs consider integer flow variables accounting for vehicles moving dynamically in the system.
-Electric vehicles are also included in an enhanced version and context related constraints ensure that vehicles cannot travel distances exceeding their battery range.
+Electric vehicles are also included in an enhanced model version and context related constraints ensure that vehicles cannot travel distances exceeding their battery range.
 Power supply at charging points are also taken into account.
 Then, the optimization allows to study the impact of different power supply technologies and settle the minimal autonomy a shared vehicle necessitate in this environment.
 

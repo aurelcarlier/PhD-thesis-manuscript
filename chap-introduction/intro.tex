@@ -1,20 +1,17 @@
 \chapter{Introduction} \label{chap:introduction}
-\begin{bibunit}[ieeetr]
 \minitoc
-\vspace{2cm}
+\vspace{5cm}
 %
 \noindent
-\begin{minipage}[c]{0.45\textwidth}
-\includegraphics[width=\textwidth]{theBegining}
+\begin{minipage}[c]{\textwidth}
+\centering
+\includegraphics[width=.5\textwidth]{theBegining}
 \end{minipage}
-\hfill
-\begin{minipage}[c]{0.45\textwidth}
-\begin{abstract}
-%This chapter introduces the industrial background of the thesis.
-%It presents carsharing systems, their characteristics and specificities.
-%Finally, the thesis organization is exposed.
-\end{abstract}
-\end{minipage}
+%\hfill
+%\begin{minipage}[c]{0.45\textwidth}
+%\vspace{2cm}
+%%\epigraph{Begin at the beginning... and go on till you come to the end: then stop.}{\textit{Lewis Carroll}}
+%\end{minipage}
 
 \newpage
 \section{Context}
@@ -169,5 +166,7 @@ Perspectives and future works are also suggested.
 \newpage
 \addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
 \renewcommand{\bibname}{Bibliography of chapter \thechapter}
-\putbib[bib/biblio]
-\end{bibunit}
+%\putbib[bib/biblio]
+\bibliographystyle{apalike}
+\bibliography{bib/biblio}
+%\end{bibunit}

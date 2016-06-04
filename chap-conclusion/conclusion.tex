@@ -1,7 +1,8 @@
 \chapter{Conclusion} \label{chap:conclusion}
-%\begin{bibunit}[ieeetr]
 \minitoc
-\vspace{4cm}
+\vfill
+%\epigraph{test epigraph...}{\textit{in a book \\ by an author}}
+\noindent
 \begin{minipage}[c]{0.35\linewidth}
 \includegraphics[width=\textwidth]{conclusion}
 \end{minipage}
@@ -13,7 +14,6 @@ After recalling the addressed problems and the context of this research, main re
 Some perspectives and opened problems are finally provided.
 \end{abstract}
 \end{minipage}
-
 
 
 \newpage
@@ -216,25 +216,14 @@ Most of the time, combinatorial issues make the solver unable to converge.
 Improving the heuristic proposed in Chapter \ref{chap:slp} may help to initialise and start the exact searching method with a feasible solution.
 Moreover, since the solver is using a Branch-And-Cut method to deal with MIP problems, propose better node evaluations during the searching routine can be a promising feature.
 
-
-
+\newpage
+\addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
+\renewcommand{\bibname}{Bibliography of chapter \thechapter}
+\bibliographystyle{apalike}
+\bibliography{bib/biblio}
 % Clearly, determine the complexity of this problem can provide interesting results for its computation 
 %, the complexity of the {\SDP} problem 
-
-
-
-
 % 
 % In a future work, we aim to ...
-
 % Putting these features together in addition to a good graphical simulation tool can offer an excellent decision tool for the carsharing decision makers.
-
 % In the last part of the thesis, we presented and evaluated 
-
-
-
-%\newpage
-%\addcontentsline{toc}{section}{Bibliography of chapter \thechapter}
-%\renewcommand{\bibname}{Bibliography of chapter \thechapter}
-%\putbib[bib/biblio]
-%\end{bibunit}
